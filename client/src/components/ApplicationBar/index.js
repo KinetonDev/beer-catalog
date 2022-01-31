@@ -1,5 +1,4 @@
-import React, {useState} from 'react';
-import {useNavigate} from "react-router-dom";
+import React from 'react';
 import {
     AppBar,
     Drawer,
@@ -16,10 +15,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import applicationItems from "./applicationItems";
 import useStyles from "./styles";
 
-
-const ApplicationBar = () => {
-    const [isDrawerOpened, setIsDrawerOpened] = useState(false);
-    const navigate = useNavigate();
+const ApplicationBar = (props) => {
     const classes = useStyles();
 
     return (
@@ -30,7 +26,7 @@ const ApplicationBar = () => {
                 disableGutters={true}
             >
                 <IconButton
-                    onClick={() => setIsDrawerOpened(isOpened => !isOpened)}
+                    onClick={() => props.setIsDrawerOpened(isOpened => !isOpened)}
                 >
                     <MenuIcon className={classes.menuIcon}/>
                 </IconButton>
@@ -42,8 +38,8 @@ const ApplicationBar = () => {
                 <Drawer
                     anchor="left"
                     variant="temporary"
-                    open={isDrawerOpened}
-                    onClose={() => setIsDrawerOpened(isOpened => !isOpened)}
+                    open={props.isDrawerOpened}
+                    onClose={() => props.setIsDrawerOpened(isOpened => !isOpened)}
                     ModalProps={{
                         BackdropProps: {
                             className: classes.transparentBackdrop
@@ -74,7 +70,7 @@ const ApplicationBar = () => {
                             return (
                                 <ListItemButton
                                     key={item.title}
-                                    onClick={() => navigate(item.path)}
+                                    onClick={() => props.onNavigate(item.path)}
                                 >
                                     <ListItemIcon>
                                         {item.icon}
