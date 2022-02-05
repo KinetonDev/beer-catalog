@@ -1,51 +1,26 @@
-import React, {useCallback, useState} from 'react';
+import React from 'react';
 import { Stack } from "@mui/material";
 import AdvancedFilter from "./AdvancedFilter";
 import SearchField from "./SearchField";
-import {useDispatch} from "react-redux";
-import {searchBeersRequest} from "../../redux/actions/actions";
+import useStyle from "./style";
 
-const BeersFilter = () => {
-    const [filter, setFilter] = useState({
-        abv: 2,
-        ibu: 0,
-        ebc: 4,
-        searchQuery: ''
-    });
-    const [wasSearchPerformed, setWasSearchPerformed] = useState(false);
-    const dispatch = useDispatch();
-
-    const handleSubmit = useCallback((e) => {
-        e.preventDefault();
-
-        if(!wasSearchPerformed) {
-            setWasSearchPerformed(true);
-        }
-
-        dispatch(searchBeersRequest({
-            filter,
-            wasSearchPerformed
-        }))
-    }, [wasSearchPerformed, setWasSearchPerformed, dispatch, filter]);
-
-    const handleFilterChange = useCallback((newFilter) => {
-        setFilter(newFilter)
-    }, [setFilter]);
-
+const BeersFilter = (props) => {
+    const classes = useStyle();
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={props.handleSubmit} className={classes.beerFilter}>
             <Stack
                 alignItems="center"
             >
                 <SearchField
-                    filter={filter}
-                    onChangeFilter={handleFilterChange}
-                    onSubmit={handleSubmit}
+                    filter={props.filter}
+                    onChangeFilter={props.handleFilterChange}
+                    onSubmit={props.handleSubmit}
                 />
-                {wasSearchPerformed && <AdvancedFilter
-                    filter={filter}
-                    changeFilter={handleFilterChange}
+                {props.wasSearchPerformed && <AdvancedFilter
+                    filter={props.filter}
+                    changeFilter={props.handleFilterChange}
+                    changeFilterCommitted={props.handleFilterChangeCommitted}
                 />}
             </Stack>
         </form>

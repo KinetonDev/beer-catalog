@@ -1,32 +1,34 @@
 import {
-    GET_BEERS_FAILED,
-    GET_BEERS_REQUEST,
-    GET_BEERS_SUCCESS,
-    SEARCH_BEERS_FAILED,
-    SEARCH_BEERS_REQUEST,
-    SEARCH_BEERS_SUCCESS
+    CHANGE_FILTER,
+    GET_BEERS_SUCCESS, INCREMENT_PAGE,
+    SET_WAS_SEARCH_PERFORMED
 } from "../types/types";
 
 const initialState = {
-    beers: [],
-    searchedBeers: [],
-    filteredBeers: []
+    filter: {
+        abv: [2,14],
+        ibu: [0,120],
+        ebc: [4,80],
+        searchQuery: ''
+    },
+    page: 1,
+    perPage: 9,
+    wasSearchPerformed: false,
+    beers: []
 }
 
 export const beerReducer = (state = initialState, action) => {
+    console.log(action.type);
+
     switch (action.type) {
-        case GET_BEERS_REQUEST:
-            return state;
         case GET_BEERS_SUCCESS:
-            return {...state, beers: action.payload};
-        case GET_BEERS_FAILED:
-            return state;
-        case SEARCH_BEERS_REQUEST:
-            return state;
-        case SEARCH_BEERS_SUCCESS:
-            return {...state, searchedBeers: action.payload};
-        case SEARCH_BEERS_FAILED:
-            return state;
+            return {...state, beers: [...state.beers, ...action.payload.response]};
+        case SET_WAS_SEARCH_PERFORMED:
+            return {... state, wasSearchPerformed: action.payload};
+        case CHANGE_FILTER:
+            return {...state, filter: action.payload.filter, page: 1, beers: []};
+        case INCREMENT_PAGE:
+            return {...state, page: state.page + 1};
         default:
             return state;
     }

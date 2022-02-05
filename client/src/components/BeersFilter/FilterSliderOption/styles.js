@@ -11,6 +11,7 @@ const useStyle = makeStyles({
         marginRight: "auto"
     },
     filterValue: {
+        width: "20px",
         fontWeight: 600,
         padding: "0 20px",
         display: "flex",

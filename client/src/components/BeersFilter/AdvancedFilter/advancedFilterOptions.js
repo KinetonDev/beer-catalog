@@ -11,7 +11,7 @@ const advancedFilterOptions = [
         value: "ibu",
         max: 120,
         min: 0,
-        step: 1
+        step: 0.1
     },
     {
         label: "Color by EBC",

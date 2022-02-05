@@ -15,7 +15,7 @@ const BeerCard = (props) => {
     const classes = useStyles();
 
     return (
-        <Card>
+        <Card className={classes.card}>
             <CardMedia
                 className={classes.cardMedia}
                 component="img"
@@ -36,7 +36,7 @@ const BeerCard = (props) => {
                         {props.tagline}
                     </Typography>
                 </CardContent>
-                <CardActions>
+                <CardActions className={classes.cardActions}>
                     <WhiteTextButton variant="text">OPEN</WhiteTextButton>
                     <WhiteTextButton variant="text">FAVORITE</WhiteTextButton>
                 </CardActions>

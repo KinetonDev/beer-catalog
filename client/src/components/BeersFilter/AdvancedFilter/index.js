@@ -24,6 +24,10 @@ const AdvancedFilter = (props) => {
                             ...props.filter,
                             [option.value]: newValue
                         })}
+                        onChangeCommitted={(newValue) => props.changeFilterCommitted({
+                           ...props.filter,
+                           [option.value]: newValue
+                        })}
                         max={option.max}
                         min={option.min}
                         step={option.step}

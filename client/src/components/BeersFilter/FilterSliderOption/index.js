@@ -13,18 +13,21 @@ const FilterSliderOption = (props) => {
             >
                 {props.label}
             </Typography>
-            <Typography className={classes.filterValue}>{props.currentValue}</Typography>
+            <Typography className={classes.filterValue}>{props.currentValue[0]}</Typography>
             <Slider
                 size="small"
-                aria-label="Small"
+                getAriaLabel={() => "Small"}
                 valueLabelDisplay="auto"
                 max={props.max}
                 min={props.min}
                 value={props.currentValue}
                 step={props.step}
                 onChange={(e, newValue) => props.onChange(newValue)}
+                onChangeCommitted={(e, newValue) => props.onChangeCommitted(newValue)}
                 className={classes.filterSlider}
+                valueLabelDisplay="off"
             />
+            <Typography className={classes.filterValue}>{props.currentValue[1]}</Typography>
         </div>
     );
 };

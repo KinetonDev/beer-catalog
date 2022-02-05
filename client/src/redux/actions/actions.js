@@ -1,4 +1,9 @@
-import {GET_BEERS_REQUEST, SEARCH_BEERS_REQUEST} from "../types/types";
+import {
+    CHANGE_FILTER,
+    GET_BEERS_REQUEST,
+    INCREMENT_PAGE,
+    SET_WAS_SEARCH_PERFORMED
+} from "../types/types";
 
 export function getBeersRequest(payload) {
     return {
@@ -7,9 +12,22 @@ export function getBeersRequest(payload) {
     }
 }
 
-export function searchBeersRequest(payload) {
+export function changeFilter(payload) {
     return {
-        type: SEARCH_BEERS_REQUEST,
+        type: CHANGE_FILTER,
         payload: payload
+    }
+}
+
+export function setWasSearchPerformed(payload) {
+    return {
+        type: SET_WAS_SEARCH_PERFORMED,
+        payload: payload
+    }
+}
+
+export function incrementPage() {
+    return {
+        type: INCREMENT_PAGE
     }
 }

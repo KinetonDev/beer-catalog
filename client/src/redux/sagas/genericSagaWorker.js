@@ -8,12 +8,10 @@ export function* genericSagaWorker (action) {
 
     try {
         const response = yield callMethods[methodName](payload);
-        console.log(response);
         const successType = type.replace("REQUEST", "SUCCESS");
-        console.log(successType);
-        yield put({type: successType, payload: response});
+        yield put({type: successType, payload: {...payload, response}});
     } catch (e) {
         const failedType = type.replace("REQUEST", "FAILED");
-        yield put({type: failedType, payload: e});
+        yield put({type: failedType, payload: {...payload, e}});
     }
 }

@@ -2,7 +2,8 @@ import {makeStyles} from "@mui/styles";
 
 const useStyles = makeStyles({
     advancedFilterTitle: {
-        fontWeight: "bold"
+        fontWeight: "bold",
+        margin: "13px 0"
     },
     advancedFilterSliders: {
         fontWeight: "700"
