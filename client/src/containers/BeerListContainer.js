@@ -1,44 +1,31 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {useDispatch, useSelector} from "react-redux";
-import {selectBeers, selectFilter, selectPage, selectPerPage} from "../redux/selectors";
-import BeersList from "../components/BeersList";
-import {getBeersRequest, incrementPage} from "../redux/actions/actions";
-import useObserver from "../hooks/useObserver";
-import createUrlFromFilter from "../helpers/createUrlFromFilter";
+import React, {useState} from 'react';
+import BeerList from "../components/BeerList";
+import favoritesMock from "../pages/FavoritesPage/favoritesMock";
+import {Pagination} from "@mui/material";
+import BeerListPagination from "../components/BeerListPagination";
 
 const BeerListContainer = () => {
-    const beers = useSelector(state => selectBeers(state));
-    const filter = useSelector(state => selectFilter(state));
-    const page = useSelector(state => selectPage(state));
-    const perPage = useSelector(state => selectPerPage(state));
-    const [totalPages, setTotalPages] = useState(25);
-    const dispatch = useDispatch();
+    const favorites = [...favoritesMock];
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(10);
 
-    useEffect(() => {
-        console.log(createUrlFromFilter("beers", filter, page, perPage))
-
-        dispatch(getBeersRequest({
-            page,
-            perPage,
-            filter
-        }));
-    }, [page, perPage, filter]);
-
-    const observableElement = useRef(null);
-    useObserver(observableElement, (entries) => {
-        const [entry] = entries;
-        if (!entry.isIntersecting) return;
-
-        dispatch(incrementPage());
-    });
-
+    const handlePageChange = (_, page) => {
+        setPage(page)
+        console.log(page)
+    };
 
     return (
-        <BeersList
-            beers={beers}
-            endNotReached={page < totalPages}
-            observableElement={observableElement}
-        />
+        <div>
+            <BeerList
+                favorites={favorites}
+            />
+            <BeerListPagination
+                totalPages={totalPages}
+                page={page}
+                onPageChange={handlePageChange}
+            />
+        </div>
+
     );
 };
 
