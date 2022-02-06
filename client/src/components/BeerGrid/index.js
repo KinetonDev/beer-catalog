@@ -3,7 +3,7 @@ import {CircularProgress, Grid} from "@mui/material";
 import BeerCard from "../BeerCard";
 import useStyle from "./styles";
 
-const BeersList = (props) => {
+const BeerGrid = (props) => {
     const classes = useStyle();
 
     return (
@@ -46,4 +46,4 @@ const BeersList = (props) => {
     );
 };
 
-export default React.memo(BeersList);
+export default React.memo(BeerGrid);

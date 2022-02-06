@@ -1,12 +1,12 @@
 import React from 'react';
-import BeerListContainer from "../../containers/BeerListContainer";
+import BeerGridContainer from "../../containers/BeerGridContainer";
 import BeersFilterContainer from "../../containers/BeersFilterContainer";
 
 const LandingPage = () => {
     return (
         <div>
             <BeersFilterContainer/>
-            <BeerListContainer/>
+            <BeerGridContainer/>
         </div>
     );
 };

@@ -1,12 +1,12 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {selectBeers, selectFilter, selectPage, selectPerPage} from "../redux/selectors";
-import BeersList from "../components/BeersList";
+import BeerGrid from "../components/BeerGrid";
 import {getBeersRequest, incrementPage} from "../redux/actions/actions";
 import useObserver from "../hooks/useObserver";
 import createUrlFromFilter from "../helpers/createUrlFromFilter";
 
-const BeerListContainer = () => {
+const BeerGridContainer = () => {
     const beers = useSelector(state => selectBeers(state));
     const filter = useSelector(state => selectFilter(state));
     const page = useSelector(state => selectPage(state));
@@ -34,7 +34,7 @@ const BeerListContainer = () => {
 
 
     return (
-        <BeersList
+        <BeerGrid
             beers={beers}
             endNotReached={page < totalPages}
             observableElement={observableElement}
@@ -42,4 +42,4 @@ const BeerListContainer = () => {
     );
 };
 
-export default BeerListContainer;
+export default BeerGridContainer;
