@@ -12,9 +12,6 @@ const BeerGrid = (props) => {
                  container
                  spacing={10}
                  alignItems="stretch"
-                 style={{
-                     padding: "0 15%"
-                 }}
              >
                  {props.beers.map(beer => {
                      return (
