@@ -1,9 +1,12 @@
-import React, {useState} from 'react';
+import React from 'react';
+import BeerListContainer from "../../containers/BeerListContainer";
+import BeersFilterContainer from "../../containers/BeersFilterContainer";
 
 const LandingPage = () => {
     return (
         <div>
-            Landing
+            <BeersFilterContainer/>
+            <BeerListContainer/>
         </div>
     );
 };

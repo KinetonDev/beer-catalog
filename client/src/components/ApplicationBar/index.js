@@ -21,6 +21,7 @@ const ApplicationBar = (props) => {
     return (
         <AppBar
             position="static"
+            className={classes.appBar}
         >
             <Toolbar
                 disableGutters={true}

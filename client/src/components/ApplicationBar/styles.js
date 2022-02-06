@@ -12,6 +12,9 @@ const useStyles = makeStyles({
     },
     drawerTopBox: {
         padding: "20"
+    },
+    appBar: {
+        marginBottom: "50px"
     }
 });
 
