@@ -17,3 +17,7 @@ export function selectPage(state) {
 export function selectPerPage(state) {
     return state.beer.perPage;
 }
+
+export function selectCurrentBeer(state) {
+    return state.beer.currentBeer;
+}

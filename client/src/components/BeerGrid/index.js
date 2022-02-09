@@ -21,6 +21,9 @@ const BeerGrid = (props) => {
                                  alt={beer.name}
                                  tagline={beer.tagline}
                                  name={beer.name}
+                                 onNavigate={() => {
+                                     props.handleNavigation(beer.id);
+                                 }}
                              />
                          </Grid>
                      )

@@ -1,5 +1,5 @@
 import {
-    CHANGE_FILTER,
+    CHANGE_FILTER, GET_BEER_BY_ID_REQUEST, GET_BEER_BY_ID_SUCCESS, GET_BEERS_REQUEST,
     GET_BEERS_SUCCESS, INCREMENT_PAGE,
     SET_WAS_SEARCH_PERFORMED
 } from "../types/types";
@@ -14,7 +14,11 @@ const initialState = {
     page: 1,
     perPage: 9,
     wasSearchPerformed: false,
-    beers: []
+    beers: [],
+    currentBeer: {
+        value: { },
+        isLoading: true
+    }
 }
 
 export const beerReducer = (state = initialState, action) => {
@@ -23,8 +27,12 @@ export const beerReducer = (state = initialState, action) => {
     switch (action.type) {
         case GET_BEERS_SUCCESS:
             return {...state, beers: [...state.beers, ...action.payload.response]};
+        case GET_BEER_BY_ID_REQUEST:
+            return {...state, currentBeer: {...state.currentBeer, isLoading: true} }
+        case GET_BEER_BY_ID_SUCCESS:
+            return {...state, currentBeer: {...state.currentBeer, value: action.payload.response[0], isLoading: false}};
         case SET_WAS_SEARCH_PERFORMED:
-            return {... state, wasSearchPerformed: action.payload};
+            return {...state, wasSearchPerformed: action.payload};
         case CHANGE_FILTER:
             return {...state, filter: action.payload.filter, page: 1, beers: []};
         case INCREMENT_PAGE:

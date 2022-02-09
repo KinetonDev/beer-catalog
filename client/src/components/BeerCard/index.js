@@ -37,7 +37,7 @@ const BeerCard = (props) => {
                     </Typography>
                 </CardContent>
                 <CardActions className={classes.cardActions}>
-                    <WhiteTextButton variant="text">OPEN</WhiteTextButton>
+                    <WhiteTextButton variant="text" onClick={props.onNavigate}>OPEN</WhiteTextButton>
                     <WhiteTextButton variant="text">FAVORITE</WhiteTextButton>
                 </CardActions>
             </div>

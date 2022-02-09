@@ -16,6 +16,9 @@ const BeerList = (props) => {
                     description={favorite.description}
                     alt={favorite.alt}
                     image={favorite.image_url}
+                    onNavigate={() => {
+                        props.handleNavigation(favorite.id);
+                    }}
                 />
             ))}
         </Stack>
