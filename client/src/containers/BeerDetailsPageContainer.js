@@ -4,10 +4,11 @@ import {useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {selectCurrentBeer} from "../redux/selectors";
 import {getBeerByIdRequest} from "../redux/actions/actions";
+import Loader from "../components/BeerDetailsPageLoader";
 
 const BeerDetailsPageContainer = () => {
     const { beerId } = useParams();
-    const currentBeer = useSelector(state => selectCurrentBeer(state));
+    const { value: beer, isLoading } = useSelector(state => selectCurrentBeer(state));
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -17,9 +18,12 @@ const BeerDetailsPageContainer = () => {
     }, []);
 
     return (
-        (currentBeer.name ? <BeerDetailsPage
-            currentBeer={currentBeer}
-        /> : <div>Nothing</div>)
+        (isLoading ?
+            <Loader/> :
+            <BeerDetailsPage
+                currentBeer={beer}
+            />
+        )
     );
 };
 
