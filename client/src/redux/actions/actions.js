@@ -1,5 +1,5 @@
 import {
-    CHANGE_FILTER,
+    CHANGE_FILTER, GET_BEER_BY_ID_REQUEST,
     GET_BEERS_REQUEST,
     INCREMENT_PAGE,
     SET_WAS_SEARCH_PERFORMED
@@ -29,5 +29,12 @@ export function setWasSearchPerformed(payload) {
 export function incrementPage() {
     return {
         type: INCREMENT_PAGE
+    }
+}
+
+export function getBeerByIdRequest(payload) {
+    return {
+        type: GET_BEER_BY_ID_REQUEST,
+        payload: payload
     }
 }

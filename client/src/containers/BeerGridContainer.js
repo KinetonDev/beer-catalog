@@ -1,10 +1,11 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {selectBeers, selectFilter, selectPage, selectPerPage} from "../redux/selectors";
 import BeerGrid from "../components/BeerGrid";
 import {getBeersRequest, incrementPage} from "../redux/actions/actions";
 import useObserver from "../hooks/useObserver";
 import createUrlFromFilter from "../helpers/createUrlFromFilter";
+import {useNavigate} from "react-router-dom";
 
 const BeerGridContainer = () => {
     const beers = useSelector(state => selectBeers(state));
@@ -13,6 +14,7 @@ const BeerGridContainer = () => {
     const perPage = useSelector(state => selectPerPage(state));
     const [totalPages, setTotalPages] = useState(25);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     useEffect(() => {
         console.log(createUrlFromFilter("beers", filter, page, perPage))
@@ -32,12 +34,16 @@ const BeerGridContainer = () => {
         dispatch(incrementPage());
     });
 
+    const handleNavigation = useCallback((beerId) => {
+        navigate(`/${beerId}`);
+    });
 
     return (
         <BeerGrid
             beers={beers}
             endNotReached={page < totalPages}
             observableElement={observableElement}
+            handleNavigation={handleNavigation}
         />
     );
 };

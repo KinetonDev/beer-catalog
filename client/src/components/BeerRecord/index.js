@@ -36,7 +36,7 @@ const BeerRecord = (props) => {
                     </Typography>
                 </CardContent>
                 <CardActions className={classes.cardActions}>
-                    <BlackTextButton variant="text">OPEN</BlackTextButton>
+                    <BlackTextButton variant="text" onClick={props.onNavigate}>OPEN</BlackTextButton>
                     <BlackTextButton variant="text">REMOVE FAVORITE</BlackTextButton>
                 </CardActions>
             </div>
