@@ -4,6 +4,10 @@ const useStyles = makeStyles({
     listItem: {
         flexDirection: "column",
         alignItems: "start",
+    },
+    listItemOutlined: {
+        flexDirection: "column",
+        alignItems: "start",
         borderBottom: "1px solid lightGray",
         "&:last-child" : {
             borderBottom: "none",

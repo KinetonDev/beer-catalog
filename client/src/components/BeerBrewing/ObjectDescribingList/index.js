@@ -17,16 +17,13 @@ const ObjectDescribingList = (props) => {
     }, []);
 
     return(
-        <List className={classes.listOutlined}>
+        <List className={props.outlined ? classes.listOutlined : ""}>
             {Object.getOwnPropertyNames(props.describing).map(propName => {
                 if (props.describing[propName])
                     return (
                         <ListItem
                             key={propName}
-                            className={classes.listItem + (
-                                props.outlined !== undefined ?
-                                    (" " + classes.listItemOutlined) :
-                                "")}
+                            className={props.outlined ? classes.listItemOutlined : classes.listItem}
                         >
                             <Typography
                                 variant="body1"
