@@ -9,7 +9,11 @@ const stepLabels = ["Email and username", "Password", "Confirmation"];
 const RegistrationForm = (props) => {
     const classes = useStyle();
     const [step, setStep] = useState(1);
-    const [user, setUser] = useState({});
+    const [user, setUser] = useState({
+        email: "",
+        userName: "",
+        password: ""
+    });
 
     const stepProps = useMemo(() => {
         return {

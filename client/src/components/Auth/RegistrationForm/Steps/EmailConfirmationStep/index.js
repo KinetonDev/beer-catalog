@@ -2,7 +2,7 @@ import React from 'react';
 import {TextField, Typography} from "@mui/material";
 import useStyle from './styles'
 
-const EmailConfirmationStep = (props) => {
+const EmailConfirmationStep = () => {
     const classes = useStyle();
 
     return (

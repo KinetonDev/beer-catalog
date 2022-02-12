@@ -5,11 +5,12 @@ const useStyle = makeStyles({
         padding: "20px 0"
     },
     registerForm: {
-        border: "1px solid blue",
         padding: "20px 30px",
         borderRadius: "12px",
         display: "flex",
-        flexDirection: "column"
+        flexDirection: "column",
+        zIndex: 10,
+        backgroundColor: "white"
     }
 });
 

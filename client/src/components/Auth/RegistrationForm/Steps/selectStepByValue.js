@@ -22,7 +22,7 @@ function selectStepByValue(step, props) {
         case 3:
             return (
                 <EmailConfirmationStepContainer
-                    setUser={props.setUser}
+                    
                 />
             );
         default:

@@ -5,7 +5,7 @@ import ArrowBackIcon from "@mui/icons-material/Close";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import useStyle from './styles'
 
-const IdentificationStep = (props) => {
+const IdentificationStep = ({nextStep, onUsernameChange, onEmailChange}) => {
     const classes = useStyle();
 
     return (
@@ -14,10 +14,12 @@ const IdentificationStep = (props) => {
                 <TextField fullWidth variant={"outlined"} label={"Username"}
                            placeholder={"Write your username here."}
                            className={classes.input}
+                           onChange={onUsernameChange}
                 />
                 <TextField fullWidth variant={"outlined"} label={"Email"}
                            placeholder={"And email here."}
                            className={classes.input}
+                           onChange={onEmailChange}
                 />
             </div>
             <div className={classes.buttons}>
@@ -29,7 +31,7 @@ const IdentificationStep = (props) => {
                 </Button>
                 <Button
                     endIcon={<ArrowForwardIcon/>}
-                    onClick={() => props.nextStep()}
+                    onClick={() => nextStep()}
                     variant={"contained"}
                 >
                     Next
@@ -40,7 +42,9 @@ const IdentificationStep = (props) => {
 };
 
 IdentificationStep.propTypes = {
-    nextStep: PropTypes.func.isRequired
+    nextStep: PropTypes.func.isRequired,
+    onEmailChange: PropTypes.func.isRequired,
+    onUsernameChange: PropTypes.func.isRequired,
 };
 
 export default IdentificationStep;

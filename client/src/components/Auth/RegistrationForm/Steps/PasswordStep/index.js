@@ -5,7 +5,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import useStyle from './styles'
 
-const PasswordStep = (props) => {
+const PasswordStep = ({nextStep, prevStep, onPasswordChange}) => {
     const classes = useStyle();
 
     return (
@@ -14,6 +14,7 @@ const PasswordStep = (props) => {
                 <TextField fullWidth variant={"outlined"} label={"Password"}
                            placeholder={"Write your password here."}
                            className={classes.input}
+                           onChange={onPasswordChange}
                 />
                 <TextField fullWidth variant={"outlined"} label={"Confirm password"}
                            placeholder={"Password confirmation."}
@@ -23,14 +24,14 @@ const PasswordStep = (props) => {
             <div className={classes.buttons}>
                 <Button
                     startIcon={<ArrowBackIcon/>}
-                    onClick={() => props.prevStep()}
+                    onClick={() => prevStep()}
                     variant={"outlined"}
                 >
                     Previous
                 </Button>
                 <Button
                     endIcon={<ArrowForwardIcon/>}
-                    onClick={() => props.nextStep()}
+                    onClick={() => nextStep()}
                     variant={"contained"}
                 >
                     Next
@@ -43,6 +44,7 @@ const PasswordStep = (props) => {
 PasswordStep.propTypes = {
     nextStep: PropTypes.func.isRequired,
     prevStep: PropTypes.func.isRequired,
+    onPasswordChange: PropTypes.func.isRequired
 };
 
 export default PasswordStep;
