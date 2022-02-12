@@ -7,6 +7,8 @@ import AuthPage from "../pages/AuthPage";
 import routes from "./routes";
 import WithAppBar from "../layout/WithAppBar";
 import WithoutAppBar from "../layout/WithoutAppBar";
+import RegistrationForm from "../components/Auth/RegistrationForm";
+import LoginForm from "../components/Auth/LoginForm";
 
 const AppRouter = () => {
     return (
@@ -19,8 +21,8 @@ const AppRouter = () => {
                 <Route path={routes.favorites} element={<FavoritesPageContainer/>}/>
             </Route>
             <Route element={<WithoutAppBar/>}>
-                <Route path={routes.login} element={<AuthPage><div>Login page</div></AuthPage>}/>
-                <Route path={routes.register} element={<AuthPage><div>Register page</div></AuthPage>}/>
+                <Route path={routes.register} element={<AuthPage><RegistrationForm/></AuthPage>}/>
+                <Route path={routes.login} element={<AuthPage><LoginForm/></AuthPage>}/>
             </Route>
         </Routes>
     );
