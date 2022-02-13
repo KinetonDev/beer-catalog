@@ -2,16 +2,16 @@ import React, {useCallback, useRef} from 'react';
 import PropTypes from 'prop-types';
 import EmailConfirmationStep from "../../components/Auth/RegistrationForm/Steps/EmailConfirmationStep";
 
-const EmailConfirmationStepContainer = ({handleChange, handleBlur, isSubmitting, values, touched, errors, formRef}) => {
+const EmailConfirmationStepContainer = ({handleChange, handleBlur, isSubmitting, values, touched, errors, handleSubmit}) => {
     const handleCodeCompletion = useCallback((e) => {
         handleChange(e);
 
         console.log(e.target.value.length)
 
         if(e.target.value.length === 6) {
-            formRef.current.submit();
+            handleSubmit(values, {setSubmitting: () => console.log("Form is submitted")});
         }
-    }, [handleChange]);
+    }, [handleChange, handleSubmit]);
 
     return (
         <EmailConfirmationStep
@@ -32,7 +32,7 @@ EmailConfirmationStepContainer.propTypes = {
     values: PropTypes.object.isRequired,
     errors: PropTypes.object.isRequired,
     touched: PropTypes.object.isRequired,
-    formRef: PropTypes.object.isRequired
+    handleSubmit: PropTypes.func.isRequired
 };
 
 export default EmailConfirmationStepContainer;

@@ -36,8 +36,6 @@ const RegistrationForm = () => {
 
     const navigate = useNavigate();
 
-    const formRef = useRef(null);
-
     const handleSubmit = useCallback((values, {setSubmitting}) => {
         console.log("Very complicated api call" , values);
         setSubmitting(false);
@@ -68,9 +66,8 @@ const RegistrationForm = () => {
                     code: ''
                 }}
                 validationSchema={validationSchema}
-                onSubmit={handleSubmit}
             >
-                {({handleSubmit,
+                {({
                   values,
                   errors,
                   touched,
@@ -78,7 +75,7 @@ const RegistrationForm = () => {
                   isSubmitting,
                   handleBlur,
                   setSubmitting}) => (
-                    <form onSubmit={handleSubmit} ref={formRef}>
+                    <form onSubmit={handleSubmit}>
                         {selectStepByValue(step, {
                             values,
                             errors,
@@ -88,7 +85,6 @@ const RegistrationForm = () => {
                             handleBlur,
                             setSubmitting,
                             isSubmitting,
-                            formRef,
                             nextStep: () => setStep(step => step + 1),
                             prevStep: () => setStep(step => step - 1),
                         })}
