@@ -1,6 +1,6 @@
-import React, {useCallback, useRef} from 'react';
+import React, {useCallback} from 'react';
 import PropTypes from 'prop-types';
-import EmailConfirmationStep from "../../components/Auth/RegistrationForm/Steps/EmailConfirmationStep";
+import EmailConfirmationStep from "../../../components/Auth/RegistrationForm/Steps/EmailConfirmationStep";
 
 const EmailConfirmationStepContainer = ({handleChange, handleBlur, isSubmitting, values, touched, errors, handleSubmit}) => {
     const handleCodeCompletion = useCallback((e) => {

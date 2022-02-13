@@ -1,30 +1,13 @@
-import React, {useCallback, useState} from 'react';
+import React from 'react';
 import useStyle from './styles'
 import {Formik} from 'formik'
-import {useNavigate} from "react-router-dom";
 import {Button, IconButton, InputAdornment, TextField, Typography} from "@mui/material";
 import {Visibility, VisibilityOff} from "@mui/icons-material";
 import {POST} from "../../../helpers/HTTPMethods";
-import routes from "../../../router/routes";
+import PropTypes from 'prop-types'
 
-const LoginForm = (props) => {
+const LoginForm = ({handleSubmit, isPasswordVisible, handleVisibilityChange, handleNavigationToRegisterPage}) => {
     const classes = useStyle();
-
-    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-    const navigate = useNavigate();
-
-    const handleVisibilityChange = useCallback(() => {
-        setIsPasswordVisible(prev => !prev);
-    }, [setIsPasswordVisible]);
-
-    const handleSubmit = useCallback((values, {setSubmitting}) => {
-        console.log("COMPLEX API CALL");
-        navigate(routes.landing);
-    }, [navigate]);
-
-    const handleNavigationToRegisterPage = useCallback(() => {
-        navigate(routes.register);
-    }, [navigate]);
 
     return (
         <div className={classes.loginSection}>
@@ -92,13 +75,10 @@ const LoginForm = (props) => {
 };
 
 LoginForm.propTypes = {
-
+    handleSubmit: PropTypes.func.isRequired,
+    isPasswordVisible: PropTypes.bool.isRequired,
+    handleVisibilityChange: PropTypes.func.isRequired,
+    handleNavigationToRegisterPage: PropTypes.func.isRequired
 };
-
-//isPasswordVisible: PropTypes.bool.isRequired,
-//     handleVisibilityChange: PropTypes.func.isRequired
-//isPasswordVisible={isPasswordVisible}
-//     handleVisibilityChange={handleVisibilityChange}
-
 
 export default LoginForm;

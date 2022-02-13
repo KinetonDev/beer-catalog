@@ -1,6 +1,6 @@
-import React, {useCallback} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import IdentificationStep from "../../components/Auth/RegistrationForm/Steps/IdentificationStep";
+import IdentificationStep from "../../../components/Auth/RegistrationForm/Steps/IdentificationStep";
 
 const IdentificationStepContainer = ({handleChange, handleBlur, nextStep, values, touched, errors}) => {
 

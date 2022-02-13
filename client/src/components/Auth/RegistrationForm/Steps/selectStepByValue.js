@@ -1,6 +1,6 @@
-import IdentificationStepContainer from "../../../../containers/Steps/IdentificationStepContainer";
-import EmailConfirmationStepContainer from "../../../../containers/Steps/EmailConfirmationStepContainer";
-import PasswordStepContainer from "../../../../containers/Steps/PasswordStepContainer";
+import IdentificationStepContainer from "../../../../containers/Auth/Steps/IdentificationStepContainer";
+import EmailConfirmationStepContainer from "../../../../containers/Auth/Steps/EmailConfirmationStepContainer";
+import PasswordStepContainer from "../../../../containers/Auth/Steps/PasswordStepContainer";
 
 function selectStepByValue(step, props) {
     switch(step) {

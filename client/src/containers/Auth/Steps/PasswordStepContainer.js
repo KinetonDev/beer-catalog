@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import PasswordStep from "../../components/Auth/RegistrationForm/Steps/PasswordStep";
+import PasswordStep from "../../../components/Auth/RegistrationForm/Steps/PasswordStep";
 
 const PasswordStepContainer = ({nextStep, prevStep, handleChange, handleBlur, values, touched, errors}) => {
     return (
@@ -12,7 +12,7 @@ const PasswordStepContainer = ({nextStep, prevStep, handleChange, handleBlur, va
             values={values}
             touched={touched}
             errors={errors}
-            areInputsInvalid={errors.password !== undefined}
+            areInputsInvalid={errors.password !== undefined || errors.confirmationPassword !== undefined}
         />
     );
 };
