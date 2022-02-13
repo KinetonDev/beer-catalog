@@ -20,11 +20,11 @@ const LoginForm = (props) => {
     const handleSubmit = useCallback((values, {setSubmitting}) => {
         console.log("COMPLEX API CALL");
         navigate(routes.landing);
-    }, []);
+    }, [navigate]);
 
     const handleNavigationToRegisterPage = useCallback(() => {
         navigate(routes.register);
-    }, []);
+    }, [navigate]);
 
     return (
         <div className={classes.loginSection}>
