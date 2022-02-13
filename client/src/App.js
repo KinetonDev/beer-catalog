@@ -11,7 +11,6 @@ function App() {
       <Provider store={store}>
           <StyledEngineProvider injectFirst>
               <BrowserRouter>
-                  <ApplicationBarContainer/>
                   <AppRouter/>
               </BrowserRouter>
           </StyledEngineProvider>
