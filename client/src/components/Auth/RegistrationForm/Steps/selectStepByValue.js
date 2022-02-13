@@ -8,7 +8,11 @@ function selectStepByValue(step, props) {
             return (
                 <IdentificationStepContainer
                     nextStep={props.nextStep}
-                    setUser={props.setUser}
+                    handleChange={props.handleChange}
+                    handleBlur={props.handleBlur}
+                    values={props.values}
+                    errors={props.errors}
+                    touched={props.touched}
                 />
             );
         case 2:
@@ -16,13 +20,23 @@ function selectStepByValue(step, props) {
                 <PasswordStepContainer
                     nextStep={props.nextStep}
                     prevStep={props.prevStep}
-                    setUser={props.setUser}
+                    handleChange={props.handleChange}
+                    handleBlur={props.handleBlur}
+                    values={props.values}
+                    errors={props.errors}
+                    touched={props.touched}
                 />
             );
         case 3:
             return (
                 <EmailConfirmationStepContainer
-                    
+                    isSubmitting={props.isSubmitting}
+                    handleChange={props.handleChange}
+                    handleBlur={props.handleBlur}
+                    values={props.values}
+                    errors={props.errors}
+                    touched={props.touched}
+                    formRef={props.formRef}
                 />
             );
         default:
