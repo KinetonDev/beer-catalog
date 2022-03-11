@@ -69,4 +69,11 @@ public class EmailDispatcher : BackgroundService
 
         return mailMessage;
     }
+
+    public override void Dispose()
+    {
+        _smtpClient.Dispose();
+        
+        base.Dispose();
+    }
 }
