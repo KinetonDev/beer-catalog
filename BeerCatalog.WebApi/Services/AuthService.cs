@@ -50,11 +50,13 @@ public class AuthService : Service<JwtTokens>, IAuthService
         if (!creatingResult.Succeeded)
             return Error(ErrorCode.UserNotCreated);
 
+        var emailConfirmationCode = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
         await _emailChannel.PushEmailMessageAsync(new EmailMessage
         {
             Subject = "Email confirmation",
             To = registerDto.Email,
-            Body = "Hello world"
+            Body = $"Please confirm your email. Your code: {emailConfirmationCode}"
         });
 
         return Success();
@@ -72,6 +74,13 @@ public class AuthService : Service<JwtTokens>, IAuthService
         if (!isPasswordValid)
         {
             return Error(ErrorCode.PasswordIsNotCorrect);
+        }
+
+        var isEmailConfirmed = await _userManager.IsEmailConfirmedAsync(existingUser);
+
+        if (!isEmailConfirmed)
+        {
+            return Error(ErrorCode.EmailIsNotConfirmed);
         }
 
         var claims = new List<Claim>
@@ -95,12 +104,26 @@ public class AuthService : Service<JwtTokens>, IAuthService
         });
     }
 
-    public Task<ServiceResult> ConfirmEmailAsync(ConfirmEmailDto confirmEmailDto)
+    public async Task<ServiceResult> ConfirmEmailAsync(ConfirmEmailDto confirmEmailDto)
     {
-        throw new NotImplementedException();
+        var user = await _userManager.FindByIdAsync(confirmEmailDto.UserId.ToString());
+
+        if (user == null)
+        {
+            return Error(ErrorCode.UserNotFound);
+        }
+
+        var confirmationResult = await _userManager.ConfirmEmailAsync(user, confirmEmailDto.Code);
+
+        if (!confirmationResult.Succeeded)
+        {
+            return Error(ErrorCode.EmailConfirmationFailed);
+        }
+
+        return Success();
     }
 
-    public async Task<ServiceResult<JwtTokens>> RefreshUserTokens(RefreshTokensDto refreshTokensDto)
+    public async Task<ServiceResult<JwtTokens>> RefreshUserTokensAsync(RefreshTokensDto refreshTokensDto)
     {
         var userId = _jwtTokenResolver.GetUserIdFromToken(refreshTokensDto.RefreshToken);
         var existingUser = await _userManager.FindByIdAsync(userId.ToString());

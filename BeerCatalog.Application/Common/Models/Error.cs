@@ -22,6 +22,7 @@ public class Error
         ErrorCode.PasswordIsNotCorrect => "Specified password is not correct",
         ErrorCode.RefreshTokenIsNotValid => "Refresh token isn't valid",
         ErrorCode.EmailIsNotConfirmed => "User didn't confirm email address",
+        ErrorCode.EmailConfirmationFailed => "Email confirmation failed",
         _ => throw new Exception("Unknown error code")
     };
 }

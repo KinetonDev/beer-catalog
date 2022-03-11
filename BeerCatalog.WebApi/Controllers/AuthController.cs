@@ -17,7 +17,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("register")]
-    public async Task<IActionResult> Register(RegisterDto registerDto)
+    public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)
     {
         var registrationResult = await _authService.RegisterAsync(registerDto);
 
@@ -30,7 +30,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> Login(LoginDto loginDto)
+    public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
     {
         var loginResult = await _authService.LoginAsync(loginDto);
 
@@ -43,9 +43,9 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("refresh")]
-    public async Task<IActionResult> Refresh(RefreshTokensDto refreshTokensDto)
+    public async Task<IActionResult> Refresh([FromBody] RefreshTokensDto refreshTokensDto)
     {
-        var refreshResult = await _authService.RefreshUserTokens(refreshTokensDto);
+        var refreshResult = await _authService.RefreshUserTokensAsync(refreshTokensDto);
 
         if (refreshResult.Succeeded)
         {
@@ -55,8 +55,8 @@ public class AuthController : ControllerBase
         return BadRequest(refreshResult.Error);
     }
 
-    [HttpPost("confirmEmail")]
-    public async Task<IActionResult> ConfirmEmail(ConfirmEmailDto confirmEmailDto)
+    [HttpPost("confirm-email")]
+    public async Task<IActionResult> ConfirmEmail([FromBody] ConfirmEmailDto confirmEmailDto)
     {
         var confirmEmailResult = await _authService.ConfirmEmailAsync(confirmEmailDto);
 

@@ -8,5 +8,6 @@ public enum ErrorCode
     UserAlreadyExists,
     PasswordIsNotCorrect,
     RefreshTokenIsNotValid,
-    EmailIsNotConfirmed
+    EmailIsNotConfirmed,
+    EmailConfirmationFailed
 }
