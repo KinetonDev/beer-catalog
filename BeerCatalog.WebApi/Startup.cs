@@ -58,7 +58,7 @@ public class Startup
             .AddDefaultTokenProviders();
 
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-        services.AddHostedService<EmailHandler>();
+        services.AddHostedService<EmailDispatcher>();
 
         services.Configure<JwtSettings>(_configuration.GetSection(JwtSettings.JwtSettingsSectionName));
 
