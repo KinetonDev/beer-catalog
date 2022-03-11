@@ -59,8 +59,10 @@ public class Startup
 
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         services.AddHostedService<EmailDispatcher>();
+        services.AddSingleton<IEmailChannel, EmailChannel>();
 
         services.Configure<JwtSettings>(_configuration.GetSection(JwtSettings.JwtSettingsSectionName));
+        services.Configure<SmtpClientSettings>(_configuration.GetSection(SmtpClientSettings.SmtpSettingsSectionName));
 
         services.AddTransient<IAuthService, AuthService>();
         services.AddTransient<IJwtTokenGenerator, JwtTokenGenerator>();

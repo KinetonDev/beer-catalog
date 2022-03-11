@@ -13,7 +13,7 @@ public class Error
         Message = GetMessageFromErrorCode(code);
     }
 
-    private string GetMessageFromErrorCode(ErrorCode code) => code switch
+    private static string GetMessageFromErrorCode(ErrorCode code) => code switch
     {
         ErrorCode.UserAlreadyExists => "User already exists",
         ErrorCode.UserNotCreated => "User wasn't created",
@@ -21,6 +21,7 @@ public class Error
         ErrorCode.UserNotUpdated => "User wasn't updated",
         ErrorCode.PasswordIsNotCorrect => "Specified password is not correct",
         ErrorCode.RefreshTokenIsNotValid => "Refresh token isn't valid",
+        ErrorCode.EmailIsNotConfirmed => "User didn't confirm email address",
         _ => throw new Exception("Unknown error code")
     };
 }

@@ -19,17 +19,20 @@ public class AuthService : Service<JwtTokens>, IAuthService
     private readonly IMapper _mapper;
     private readonly IJwtTokenGenerator _jwtTokenGenerator;
     private readonly IJwtTokenResolver _jwtTokenResolver;
+    private readonly IEmailChannel _emailChannel;
 
     public AuthService(
         UserManager<User> userManager,
         IMapper mapper,
         IJwtTokenGenerator jwtTokenGenerator,
-        IJwtTokenResolver jwtTokenResolver)
+        IJwtTokenResolver jwtTokenResolver,
+        IEmailChannel emailChannel)
     {
         _userManager = userManager;
         _mapper = mapper;
         _jwtTokenGenerator = jwtTokenGenerator;
         _jwtTokenResolver = jwtTokenResolver;
+        _emailChannel = emailChannel;
     }
     
     public async Task<ServiceResult> RegisterAsync(RegisterDto registerDto)
@@ -46,6 +49,13 @@ public class AuthService : Service<JwtTokens>, IAuthService
 
         if (!creatingResult.Succeeded)
             return Error(ErrorCode.UserNotCreated);
+
+        await _emailChannel.PushEmailMessageAsync(new EmailMessage
+        {
+            Subject = "Email confirmation",
+            To = registerDto.Email,
+            Body = "Hello world"
+        });
 
         return Success();
     }

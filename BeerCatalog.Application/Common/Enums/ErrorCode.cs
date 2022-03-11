@@ -3,10 +3,10 @@
 public enum ErrorCode
 {
     UserNotFound = 1000,
-    UserNotDeleted,
     UserNotCreated,
     UserNotUpdated,
     UserAlreadyExists,
     PasswordIsNotCorrect,
-    RefreshTokenIsNotValid
+    RefreshTokenIsNotValid,
+    EmailIsNotConfirmed
 }

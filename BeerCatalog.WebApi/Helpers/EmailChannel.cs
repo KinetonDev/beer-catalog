@@ -14,12 +14,12 @@ public class EmailChannel : IEmailChannel
 
     public bool IsCompleted() => _channel.Reader.Completion.IsCompleted;
 
-    public async Task<EmailMessage> GetEmailMessage()
+    public async Task<EmailMessage> GetEmailMessageAsync()
     {
         return await _channel.Reader.ReadAsync();
     }
 
-    public async Task PushEmailMessage(EmailMessage message)
+    public async Task PushEmailMessageAsync(EmailMessage message)
     {
         await _channel.Writer.WriteAsync(message);
     }
