@@ -5,6 +5,7 @@ public enum ErrorCode
     UserNotFound = 1000,
     UserNotCreated,
     UserNotUpdated,
+    UserNotDeleted,
     UserAlreadyExists,
     PasswordIsNotCorrect,
     RefreshTokenIsNotValid,

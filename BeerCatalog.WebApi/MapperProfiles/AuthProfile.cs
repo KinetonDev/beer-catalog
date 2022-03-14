@@ -4,9 +4,9 @@ using BeerCatalog.WebApi.DTO;
 
 namespace BeerCatalog.WebApi.MapperProfiles;
 
-public class UserProfile : Profile
+public class AuthProfile : Profile
 {
-    public UserProfile()
+    public AuthProfile()
     {
         CreateMap<RegisterDto, User>();
         CreateMap<LoginDto, User>();

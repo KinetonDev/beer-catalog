@@ -23,6 +23,7 @@ public class Error
         ErrorCode.RefreshTokenIsNotValid => "Refresh token isn't valid",
         ErrorCode.EmailIsNotConfirmed => "User didn't confirm email address",
         ErrorCode.EmailConfirmationFailed => "Email confirmation failed",
+        ErrorCode.UserNotDeleted => "User wasn't deleted",
         _ => throw new Exception("Unknown error code")
     };
 }

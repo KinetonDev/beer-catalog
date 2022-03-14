@@ -14,5 +14,5 @@ public class User : IdentityUser<Guid>
     public override string Email { get; set; }
     public string? RefreshToken { get; set; }
     public string? EmailConfirmationCode { get; set; }
-    //public List<Beer> Favorites { get; set; } = new();
+    //public List<Beer.Beer> Favorites { get; set; } = new();
 }

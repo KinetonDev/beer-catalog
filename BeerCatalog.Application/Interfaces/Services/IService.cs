@@ -8,6 +8,6 @@ public interface IService<T>
 {
     ServiceResult<T> Error(ErrorCode errorCode);
     ServiceResult<T> Result(T result);
-
+    ServiceResult<IEnumerable<T>> Result(IEnumerable<T> result);
     ServiceResult Success();
 }

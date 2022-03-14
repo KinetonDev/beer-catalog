@@ -1,4 +1,5 @@
-﻿using System.Threading.Channels;
+﻿using BeerCatalog.Application.Interfaces.Services;
+using BeerCatalog.Application.Services;
 using BeerCatalog.Domain.Models;
 using BeerCatalog.Infrastructure.Data;
 using BeerCatalog.WebApi.BackgroundServices;
@@ -32,7 +33,8 @@ public class Startup
             {
                 var jwtSettings = new JwtSettings();
                 _configuration.GetSection(JwtSettings.JwtSettingsSectionName).Bind(jwtSettings);
-                
+
+                config.SaveToken = true;
                 config.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
@@ -65,6 +67,7 @@ public class Startup
         services.Configure<SmtpClientSettings>(_configuration.GetSection(SmtpClientSettings.SmtpSettingsSectionName));
 
         services.AddTransient<IAuthService, AuthService>();
+        services.AddTransient<IUserService, UserService>();
         services.AddTransient<IJwtTokenGenerator, JwtTokenGenerator>();
         services.AddTransient<IJwtTokenResolver, JwtTokenResolver>();
 
