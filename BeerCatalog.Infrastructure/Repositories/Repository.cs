@@ -17,39 +17,48 @@ public class Repository<T, TKey> : IRepository<T, TKey> where T: class
         _entities = _appDbContext.Set<T>(); 
     }
     
-    public Task<ICollection<T>> AllAsync()
+    public async Task<IEnumerable<T>> AllAsync()
     {
-        return null;
+        return await _entities.AsNoTracking().ToListAsync();
     }
 
-    public Task<T> FindByIdAsync(TKey id)
+    public async Task<T?> FindByIdAsync(TKey id)
     {
-        throw new NotImplementedException();
+        return await _entities.FindAsync(id);
     }
 
-    public Task<T> CreateAsync(T entity)
+    public async Task<T> CreateAsync(T entity)
     {
-        throw new NotImplementedException();
+        return (await _entities.AddAsync(entity)).Entity;
     }
 
-    public Task<ICollection<T>> CreateManyAsync(ICollection<T> entities)
+    public async Task<IEnumerable<T>> CreateManyAsync(IEnumerable<T> entities)
     {
-        throw new NotImplementedException();
+        var entitiesList = entities.ToList();
+        await _entities.AddRangeAsync(entitiesList);
+
+        return entitiesList;
     }
 
     public Task UpdateAsync(T entity)
     {
-        throw new NotImplementedException();
+        return Task.Run(() =>
+        {
+            _entities.Update(entity);
+        });
     }
 
     public Task DeleteAsync(T entity)
     {
-        throw new NotImplementedException();
+        return Task.Run(() =>
+        {
+            _entities.Remove(entity);
+        });
     }
     
-    public Task SaveChangesAsync()
+    public async Task SaveChangesAsync()
     {
-        throw new NotImplementedException();
+        await _appDbContext.SaveChangesAsync();
     }
 }
 

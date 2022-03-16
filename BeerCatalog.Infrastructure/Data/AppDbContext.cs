@@ -1,4 +1,7 @@
 ﻿using BeerCatalog.Domain.Models;
+using BeerCatalog.Domain.Models.Beer;
+using BeerCatalog.Domain.Models.Ingredients;
+using BeerCatalog.Domain.Models.Method;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -7,9 +10,14 @@ namespace BeerCatalog.Infrastructure.Data;
 
 public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
 {
+    public AppDbContext()
+    {
+        
+    }
+    
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
-        Database.EnsureCreated();
+        
     }
 
     public override DbSet<User> Users { get; set; } = null!;
@@ -26,33 +34,43 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     public virtual DbSet<WhenToAdd> WhenToAdds { get; set; } = null!;
     public virtual DbSet<Yeast> Yeasts { get; set; } = null!;
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        if (!optionsBuilder.IsConfigured)
+        {
+            optionsBuilder.UseSqlServer("Server=localhost; Database=BeerCatalog; User Id = sa; Password = Heccrbqabpbr1; TrustServerCertificate = True;");
+        }
+        
+        base.OnConfiguring(optionsBuilder);
+    }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Beer>(entity =>
         {
             entity.ToTable("Beers", "Beer");
-
+    
             entity.HasIndex(e => e.Name, "UQ__Beers__737584F60E343CBB")
                 .IsUnique();
-
+    
             entity.Property(e => e.Id).ValueGeneratedNever();
-
+    
             entity.Property(e => e.BrewersTips).HasMaxLength(200);
-
+    
             entity.Property(e => e.Description).HasMaxLength(500);
-
+    
             entity.Property(e => e.ImageUrl).HasMaxLength(500);
-
+    
             entity.Property(e => e.Name).HasMaxLength(30);
-
+    
             entity.Property(e => e.Tagline).HasMaxLength(30);
-
+    
             entity.HasOne(d => d.Yeast)
                 .WithMany(p => p.Beers)
                 .HasForeignKey(d => d.YeastId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__Beers__YeastId__31EC6D26");
-
+    
             entity.HasMany(d => d.Foods)
                 .WithMany(p => p.Beers)
                 .UsingEntity<Dictionary<string, object>>(
@@ -62,161 +80,155 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
                     j =>
                     {
                         j.HasKey("BeerId", "FoodId").HasName("PK__FoodPair__816A4F81415D6025");
-
+    
                         j.ToTable("FoodPairing", "Beer");
                     });
         });
-
+    
         modelBuilder.Entity<Fermentation>(entity =>
         {
             entity.ToTable("Fermentation", "Method");
-
+    
             entity.Property(e => e.Id).ValueGeneratedNever();
-
+    
             entity.Property(e => e.Value).HasColumnName("VALUE");
-
+    
             entity.HasOne(d => d.Beer)
                 .WithMany(p => p.Fermentations)
                 .HasForeignKey(d => d.BeerId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__Fermentat__BeerI__45F365D3");
         });
-
+    
         modelBuilder.Entity<Food>(entity =>
         {
             entity.ToTable("Food", "Beer");
-
+    
             entity.Property(e => e.Id).ValueGeneratedNever();
-
+    
             entity.Property(e => e.Name).HasMaxLength(100);
         });
-
+    
         modelBuilder.Entity<Hop>(entity =>
         {
             entity.ToTable("Hops", "Ingredients");
-
+    
             entity.Property(e => e.Id).ValueGeneratedNever();
-
+    
             entity.Property(e => e.Name)
                 .HasMaxLength(20)
                 .HasColumnName("NAME");
         });
-
+    
         modelBuilder.Entity<HopAttribute>(entity =>
         {
             entity.ToTable("HopAttribute", "Ingredients");
-
+    
             entity.Property(e => e.Value)
                 .HasMaxLength(30)
                 .HasColumnName("HopAttribute");
         });
-
+    
         modelBuilder.Entity<HopIngredient>(entity =>
         {
-            entity.HasKey(e => new { e.BeerId, e.HopId })
-                .HasName("PK__HopIngre__3D3C9CEB76A14D7B");
-
             entity.ToTable("HopIngredients", "Beer");
-
+    
             entity.HasOne(d => d.Attribute)
                 .WithMany(p => p.HopIngredients)
                 .HasForeignKey(d => d.AttributeId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__HopIngred__Attri__38996AB5");
-
+    
             entity.HasOne(d => d.Beer)
                 .WithMany(p => p.HopIngredients)
                 .HasForeignKey(d => d.BeerId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__HopIngred__BeerI__35BCFE0A");
-
+    
             entity.HasOne(d => d.Hop)
                 .WithMany(p => p.HopIngredients)
                 .HasForeignKey(d => d.HopId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__HopIngred__HopId__36B12243");
-
+    
             entity.HasOne(d => d.WhenToAdd)
                 .WithMany(p => p.HopIngredients)
                 .HasForeignKey(d => d.WhenToAddId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__HopIngred__WhenT__37A5467C");
         });
-
+    
         modelBuilder.Entity<Malt>(entity =>
         {
             entity.ToTable("Malts", "Ingredients");
-
+    
             entity.Property(e => e.Id).ValueGeneratedNever();
-
+    
             entity.Property(e => e.Name)
                 .HasMaxLength(20)
                 .HasColumnName("NAME");
         });
-
+    
         modelBuilder.Entity<MaltIngredient>(entity =>
         {
-            entity.HasKey(e => new { e.BeerId, e.MaltId })
-                .HasName("PK__MaltIngr__3A2F3564D8C3B3B6");
-
             entity.ToTable("MaltIngredients", "Beer");
-
+    
             entity.HasOne(d => d.Beer)
                 .WithMany(p => p.MaltIngredients)
                 .HasForeignKey(d => d.BeerId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__MaltIngre__BeerI__3C69FB99");
-
+    
             entity.HasOne(d => d.Malt)
                 .WithMany(p => p.MaltIngredients)
                 .HasForeignKey(d => d.MaltId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__MaltIngre__MaltI__3D5E1FD2");
         });
-
+    
         modelBuilder.Entity<MashTemp>(entity =>
         {
             entity.ToTable("MashTemp", "Method");
-
+    
             entity.Property(e => e.Id).ValueGeneratedNever();
-
+    
             entity.HasOne(d => d.Beer)
                 .WithMany(p => p.MashTemps)
                 .HasForeignKey(d => d.BeerId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__MashTemp__BeerId__4222D4EF");
         });
-
+    
         modelBuilder.Entity<Twist>(entity =>
         {
             entity.ToTable("Twists", "Method");
-
+    
             entity.Property(e => e.Id).ValueGeneratedNever();
-
+    
             entity.Property(e => e.Name).HasMaxLength(200);
-
+    
             entity.HasOne(d => d.Beer)
                 .WithMany(p => p.Twists)
                 .HasForeignKey(d => d.BeerId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__Twists__BeerId__48CFD27E");
         });
-
+    
         modelBuilder.Entity<WhenToAdd>(entity =>
         {
             entity.ToTable("WhenToAdd", "Ingredients");
-
+    
             entity.Property(e => e.Value)
                 .HasMaxLength(30)
                 .HasColumnName("WhenToAdd");
         });
-
+    
         modelBuilder.Entity<Yeast>(entity =>
         {
             entity.ToTable("Yeasts", "Ingredients");
-
+    
             entity.Property(e => e.Id).ValueGeneratedNever();
-
+    
             entity.Property(e => e.Name)
                 .HasMaxLength(50)
                 .HasColumnName("NAME");
