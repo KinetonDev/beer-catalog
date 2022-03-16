@@ -1,6 +1,7 @@
 ﻿using BeerCatalog.Application.Interfaces.Services;
 using BeerCatalog.Application.Services;
 using BeerCatalog.Domain.Models;
+using BeerCatalog.Infrastructure;
 using BeerCatalog.Infrastructure.Data;
 using BeerCatalog.WebApi.BackgroundServices;
 using BeerCatalog.WebApi.Common.Models;
@@ -54,6 +55,7 @@ public class Startup
             else
                 config.UseSqlServer(_configuration.GetConnectionString("BeerCatalog")!);
         });
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
         
         services.AddIdentity<User, IdentityRole<Guid>>()
             .AddEntityFrameworkStores<AppDbContext>()

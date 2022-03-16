@@ -6,10 +6,10 @@ namespace BeerCatalog.WebApi.Controllers;
 
 [ApiController]
 [Route("beers")]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class BeersController : ControllerBase
 {
     [HttpGet]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public IActionResult Secret()
     {
         return Ok("OkOkOk");
