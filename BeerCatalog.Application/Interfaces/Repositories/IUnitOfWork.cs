@@ -4,5 +4,6 @@ namespace BeerCatalog.Infrastructure;
 
 public interface IUnitOfWork
 {
-    public IRepository<Beer> BeersRepository { get; }
+    IRepository<Beer> BeersRepository { get; }
+    Task SaveChangesAsync();
 }

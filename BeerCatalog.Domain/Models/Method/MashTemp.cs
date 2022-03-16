@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace BeerCatalog.Infrastructure
+﻿namespace BeerCatalog.Domain.Models.Method
 {
     public class MashTemp
     {
@@ -10,6 +7,6 @@ namespace BeerCatalog.Infrastructure
         public int Duration { get; set; }
         public Guid BeerId { get; set; }
 
-        public virtual Beer Beer { get; set; } = null!;
+        public virtual Beer.Beer Beer { get; set; } = null!;
     }
 }

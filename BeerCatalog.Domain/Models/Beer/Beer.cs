@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using BeerCatalog.Domain.Models.Ingredients;
+using BeerCatalog.Domain.Models.Method;
 
-namespace BeerCatalog.Infrastructure
+namespace BeerCatalog.Domain.Models.Beer
 {
     public class Beer
     {

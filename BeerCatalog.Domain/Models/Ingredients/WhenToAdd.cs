@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using BeerCatalog.Domain.Models.Beer;
 
-namespace BeerCatalog.Infrastructure
+namespace BeerCatalog.Domain.Models.Ingredients
 {
     public class WhenToAdd
     {

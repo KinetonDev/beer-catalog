@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace BeerCatalog.Infrastructure
+﻿namespace BeerCatalog.Domain.Models.Beer
 {
     public class Food
     {

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace BeerCatalog.Infrastructure
+﻿namespace BeerCatalog.Domain.Models.Method
 {
     public class Twist
     {
@@ -9,6 +6,6 @@ namespace BeerCatalog.Infrastructure
         public string Name { get; set; } = null!;
         public Guid BeerId { get; set; }
 
-        public virtual Beer Beer { get; set; } = null!;
+        public virtual Beer.Beer Beer { get; set; } = null!;
     }
 }
