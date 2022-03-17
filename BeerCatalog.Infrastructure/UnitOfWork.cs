@@ -9,14 +9,14 @@ public class UnitOfWork : IUnitOfWork, IDisposable
 {
     private readonly DbContext _dbContext;
 
-    private IRepository<Beer>? _beerRepository;
+    private IBeerRepository? _beerRepository;
 
     public UnitOfWork(DbContext dbContext)
     {
         _dbContext = dbContext;
     }
     
-    public IRepository<Beer> BeersRepository => _beerRepository ??= new Repository<Beer>(_dbContext);
+    public IBeerRepository BeersRepository => _beerRepository ??= new BeerRepository(_dbContext);
     public async Task SaveChangesAsync()
     {
         await _dbContext.SaveChangesAsync();

@@ -7,7 +7,7 @@ public class User : IdentityUser<Guid>
 {
     [MaxLength(20)]
     [Required(ErrorMessage = "Username must be set")]
-    public string Username { get; set; }
+    public override string UserName { get; set; }
     public DateTime? BirthDay { get; set; }
     [MaxLength(20)]
     [Required(ErrorMessage = "Email address must be set")]

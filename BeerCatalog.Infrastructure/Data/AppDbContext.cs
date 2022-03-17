@@ -92,12 +92,6 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
             entity.Property(e => e.Id).ValueGeneratedNever();
     
             entity.Property(e => e.Value).HasColumnName("VALUE");
-    
-            entity.HasOne(d => d.Beer)
-                .WithMany(p => p.Fermentations)
-                .HasForeignKey(d => d.BeerId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Fermentat__BeerI__45F365D3");
         });
     
         modelBuilder.Entity<Food>(entity =>
@@ -135,7 +129,7 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     
             entity.HasOne(d => d.Attribute)
                 .WithMany(p => p.HopIngredients)
-                .HasForeignKey(d => d.AttributeId)
+                .HasForeignKey(d => d.HopAttributeId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__HopIngred__Attri__38996AB5");
     
@@ -206,12 +200,6 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
             entity.Property(e => e.Id).ValueGeneratedNever();
     
             entity.Property(e => e.Name).HasMaxLength(200);
-    
-            entity.HasOne(d => d.Beer)
-                .WithMany(p => p.Twists)
-                .HasForeignKey(d => d.BeerId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Twists__BeerId__48CFD27E");
         });
     
         modelBuilder.Entity<WhenToAdd>(entity =>

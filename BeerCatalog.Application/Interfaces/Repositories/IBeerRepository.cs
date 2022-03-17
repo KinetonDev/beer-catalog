@@ -2,8 +2,7 @@
 
 namespace BeerCatalog.Application.Interfaces.Repositories;
 
-public interface IUnitOfWork
+public interface IBeerRepository : IRepository<Beer>
 {
-    IBeerRepository BeersRepository { get; }
-    Task SaveChangesAsync();
+    
 }

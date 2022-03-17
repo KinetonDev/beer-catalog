@@ -10,5 +10,7 @@ public enum ErrorCode
     PasswordIsNotCorrect,
     RefreshTokenIsNotValid,
     EmailIsNotConfirmed,
-    EmailConfirmationFailed
+    EmailConfirmationFailed,
+    
+    BeerNotFound = 2000,
 }

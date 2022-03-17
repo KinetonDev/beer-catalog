@@ -1,4 +1,5 @@
-﻿using BeerCatalog.Application.Interfaces.Services;
+﻿using BeerCatalog.Application.Interfaces.Repositories;
+using BeerCatalog.Application.Interfaces.Services;
 using BeerCatalog.Application.Services;
 using BeerCatalog.Domain.Models;
 using BeerCatalog.Infrastructure;
@@ -13,6 +14,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace BeerCatalog.WebApi;
 
@@ -50,11 +53,10 @@ public class Startup
         
         services.AddDbContext<AppDbContext>(config =>
         {
-            if (_environment.IsDevelopment())
-                config.UseInMemoryDatabase("BeerCatalog");
-            else
-                config.UseSqlServer(_configuration.GetConnectionString("BeerCatalog")!);
+            config.UseSqlServer(_configuration.GetConnectionString("BeerCatalog")!);
         });
+
+        services.AddScoped<DbContext>(_ => _.GetRequiredService<AppDbContext>());
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         
         services.AddIdentity<User, IdentityRole<Guid>>()
@@ -69,11 +71,30 @@ public class Startup
         services.Configure<SmtpClientSettings>(_configuration.GetSection(SmtpClientSettings.SmtpSettingsSectionName));
 
         services.AddTransient<IAuthService, AuthService>();
-        services.AddTransient<IUserService, UserService>();
+        services.AddTransient<IUserService, UserService>(); 
+        services.AddTransient<IBeerService, BeerService>();
         services.AddTransient<IJwtTokenGenerator, JwtTokenGenerator>();
         services.AddTransient<IJwtTokenResolver, JwtTokenResolver>();
+        services.AddHttpClient();
 
-        services.AddControllers();
+        services.AddControllers().AddNewtonsoftJson(options =>
+        {
+            options.SerializerSettings.ContractResolver = new DefaultContractResolver
+            {
+                NamingStrategy = new SnakeCaseNamingStrategy()
+            }; 
+            options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+        });
+
+        services.AddCors(options =>
+        {
+            options.AddDefaultPolicy(policy =>
+            {
+                policy.AllowAnyHeader();
+                policy.AllowAnyOrigin();
+                policy.AllowAnyMethod();
+            });
+        });
     }
 
     public void Configure(IApplicationBuilder app)
@@ -84,6 +105,8 @@ public class Startup
         app.UseHttpsRedirection();
 
         app.UseRouting();
+        
+        app.UseCors();
 
         app.UseAuthentication();
 

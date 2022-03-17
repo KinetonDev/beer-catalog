@@ -17,11 +17,11 @@ namespace BeerCatalog.Domain.Models.Beer
         public Guid YeastId { get; set; }
 
         public virtual Yeast Yeast { get; set; } = null!;
-        public virtual ICollection<Fermentation> Fermentations { get; set; } = new HashSet<Fermentation>();
+        public virtual Fermentation Fermentation { get; set; }
         public virtual ICollection<HopIngredient> HopIngredients { get; set; }  = new HashSet<HopIngredient>();
         public virtual ICollection<MaltIngredient> MaltIngredients { get; set; }  = new HashSet<MaltIngredient>();
         public virtual ICollection<MashTemp> MashTemps { get; set; } = new HashSet<MashTemp>();
-        public virtual ICollection<Twist> Twists { get; set; }  = new HashSet<Twist>();
+        public virtual Twist? Twist { get; set; }
         public virtual ICollection<Food> Foods { get; set; } = new HashSet<Food>();
     }
 }

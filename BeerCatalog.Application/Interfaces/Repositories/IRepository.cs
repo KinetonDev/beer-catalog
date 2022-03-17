@@ -1,4 +1,6 @@
-﻿namespace BeerCatalog.Application.Interfaces.Repositories;
+﻿using System.Linq.Expressions;
+
+namespace BeerCatalog.Application.Interfaces.Repositories;
 
 public interface IRepository
 {
@@ -7,10 +9,10 @@ public interface IRepository
 
 public interface IRepository<T, in TKey> : IRepository where T : class
 {
-    Task<ICollection<T>> AllAsync();
-    Task<T> FindByIdAsync(TKey id);
+    Task<IEnumerable<T>> AllAsync();
+    Task<T?> FindByIdAsync(TKey id);
     Task<T> CreateAsync(T entity);
-    Task<ICollection<T>> CreateManyAsync(ICollection<T> entities);
+    Task<IEnumerable<T>> CreateManyAsync(IEnumerable<T> entities);
     Task UpdateAsync(T entity);
     Task DeleteAsync(T entity);
 }
