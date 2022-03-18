@@ -23,7 +23,7 @@ public class AuthController : ControllerBase
 
         if (registrationResult.Succeeded)
         {
-            return Ok();
+            return Ok(registrationResult.Result);
         }
 
         return BadRequest(registrationResult.Error);

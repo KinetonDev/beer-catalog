@@ -5,7 +5,7 @@ namespace BeerCatalog.Application.Common.Models;
 public class Error
 {
     public ErrorCode ErrorCode { get; }
-    public string Message { get; set; }
+    public string Message { get; }
 
     public Error(ErrorCode code)
     {

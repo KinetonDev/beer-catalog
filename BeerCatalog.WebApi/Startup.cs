@@ -8,6 +8,7 @@ using BeerCatalog.WebApi.BackgroundServices;
 using BeerCatalog.WebApi.Common.Models;
 using BeerCatalog.WebApi.Helpers;
 using BeerCatalog.WebApi.Helpers.Interfaces;
+using BeerCatalog.WebApi.IdentityTokenProviders;
 using BeerCatalog.WebApi.Interfaces;
 using BeerCatalog.WebApi.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -59,9 +60,15 @@ public class Startup
         services.AddScoped<DbContext>(_ => _.GetRequiredService<AppDbContext>());
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         
-        services.AddIdentity<User, IdentityRole<Guid>>()
+        services.AddIdentity<User, IdentityRole<Guid>>(options =>
+            {
+                options.Password.RequiredLength = 8;
+
+                options.Tokens.EmailConfirmationTokenProvider = nameof(EmailSixDigitConfirmationTokenProvider);
+            })
             .AddEntityFrameworkStores<AppDbContext>()
-            .AddDefaultTokenProviders();
+            .AddDefaultTokenProviders()
+            .AddTokenProvider<EmailSixDigitConfirmationTokenProvider>(nameof(EmailSixDigitConfirmationTokenProvider));
 
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         services.AddHostedService<EmailDispatcher>();

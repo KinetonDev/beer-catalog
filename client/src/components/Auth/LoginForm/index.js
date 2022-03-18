@@ -5,6 +5,7 @@ import {Button, IconButton, InputAdornment, TextField, Typography} from "@mui/ma
 import {Visibility, VisibilityOff} from "@mui/icons-material";
 import {POST} from "../../../helpers/HTTPMethods";
 import PropTypes from 'prop-types'
+import validationSchema from "./validationSchema";
 
 const LoginForm = ({handleSubmit, isPasswordVisible, handleVisibilityChange, handleNavigationToRegisterPage}) => {
     const classes = useStyle();
@@ -18,6 +19,7 @@ const LoginForm = ({handleSubmit, isPasswordVisible, handleVisibilityChange, han
                     password: ''
                 }}
                 onSubmit={handleSubmit}
+                validationSchema={validationSchema}
             >
                 {({getFieldProps, handleSubmit}) => (
                     <>
@@ -45,7 +47,7 @@ const LoginForm = ({handleSubmit, isPasswordVisible, handleVisibilityChange, han
                                         <IconButton
                                             onClick={handleVisibilityChange}
                                         >
-                                            {isPasswordVisible ? <VisibilityOff/> : <Visibility/>}
+                                            {isPasswordVisible ? <Visibility/> : <VisibilityOff/>}
                                         </IconButton>
                                     </InputAdornment>
                                 }

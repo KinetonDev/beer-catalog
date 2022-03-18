@@ -7,7 +7,7 @@ import validationSchema from './validationSchema'
 import stepLabels from "./Steps/stepLabels";
 import PropTypes from 'prop-types'
 
-const RegistrationForm = ({step, handleSubmit, nextStep, prevStep}) => {
+const RegistrationForm = ({step, handleSubmit, nextStep, prevStep, confirmEmail, requestRegistration}) => {
     const classes = useStyle();
 
     return (
@@ -49,12 +49,13 @@ const RegistrationForm = ({step, handleSubmit, nextStep, prevStep}) => {
                             errors,
                             touched,
                             handleChange,
-                            handleSubmit,
                             handleBlur,
                             setSubmitting,
                             isSubmitting,
                             nextStep,
-                            prevStep
+                            prevStep,
+                            confirmEmail,
+                            requestRegistration
                         })}
                     </form>
                 )}

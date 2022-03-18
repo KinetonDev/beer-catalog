@@ -1,9 +1,23 @@
 import React from 'react';
 import {CircularProgress, TextField, Typography, InputAdornment} from "@mui/material";
+import CheckIcon from '@mui/icons-material/Check';
+import CloseIcon from '@mui/icons-material/Close';
 import useStyle from './styles'
 import PropTypes from 'prop-types'
 
-const EmailConfirmationStep = ({handleChange, handleBlur, isSubmitting, values, touched, errors}) => {
+function showIcon(isConfirmationProcessing, confirmationSucceeded, wasConfirmationRequested) {
+    if (isConfirmationProcessing) return (<CircularProgress/>);
+    if (wasConfirmationRequested && !isConfirmationProcessing) return confirmationSucceeded ? (<CheckIcon color={"success"} sx={{
+        width: "40px",
+        height: "40px",
+    }}/>) : (<CloseIcon color={"error"} sx={{
+        width: "40px",
+        height: "40px",
+    }}/>);
+    return null;
+}
+
+const EmailConfirmationStep = ({handleChange, handleBlur, values, touched, errors, isConfirmationProcessing, confirmationSucceeded, wasConfirmationRequested}) => {
     const classes = useStyle();
 
     return (
@@ -23,14 +37,13 @@ const EmailConfirmationStep = ({handleChange, handleBlur, isSubmitting, values, 
                     helperText={(errors.code && touched.code) ? errors.code : ""}
                     name="code"
                 />
-                {isSubmitting && <CircularProgress/>}
+                {showIcon(isConfirmationProcessing, confirmationSucceeded, wasConfirmationRequested)}
             </div>
         </div>
     );
 };
 
 EmailConfirmationStep.propTypes = {
-    isSubmitting: PropTypes.bool.isRequired,
     handleChange: PropTypes.func.isRequired,
     handleBlur: PropTypes.func.isRequired,
     values: PropTypes.object.isRequired,

@@ -1,38 +1,62 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import EmailConfirmationStep from "../../../components/Auth/RegistrationForm/Steps/EmailConfirmationStep";
+import {useSelector} from "react-redux";
+import {
+    selectIsConfirmationProcessing,
+    selectConfirmationSucceeded,
+    selectUserId,
+    selectWasConfirmationRequested
+} from "../../../redux/selectors";
+import {useNavigate} from "react-router-dom";
+import routes from "../../../router/routes";
 
-const EmailConfirmationStepContainer = ({handleChange, handleBlur, isSubmitting, values, touched, errors, handleSubmit}) => {
-    const handleCodeCompletion = useCallback((e) => {
-        handleChange(e);
+const EmailConfirmationStepContainer = ({handleChange, handleBlur, values, touched, errors, confirmEmail}) => {
+    const id = useSelector(state => selectUserId(state));
+    const confirmationSucceeded = useSelector(state => selectConfirmationSucceeded(state));
+    const isConfirmationProcessing = useSelector(state => selectIsConfirmationProcessing(state));
+    const wasConfirmationRequested = useSelector(state => selectWasConfirmationRequested(state));
+    const navigate = useNavigate();
 
-        console.log(e.target.value.length)
+    useEffect(() => {
+        console.log(id)
 
-        if(e.target.value.length === 6) {
-            handleSubmit(values, {setSubmitting: () => console.log("Form is submitted")});
+        if(values.code.length === 6) {
+            confirmEmail({...values, id});
         }
-    }, [handleChange, handleSubmit]);
+    }, [values.code, id]);
+
+    useEffect(() => {
+        if (!isConfirmationProcessing && wasConfirmationRequested && confirmationSucceeded)
+        {
+            new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve();
+                }, 500);
+            }).then(() => navigate(routes.login));
+        }
+    }, [isConfirmationProcessing, wasConfirmationRequested, confirmationSucceeded]);
 
     return (
         <EmailConfirmationStep
-            isSubmitting={isSubmitting}
-            handleChange={handleCodeCompletion}
+            handleChange={handleChange}
             handleBlur={handleBlur}
             values={values}
             errors={errors}
             touched={touched}
+            isConfirmationProcessing={isConfirmationProcessing}
+            confirmationSucceeded={confirmationSucceeded}
+            wasConfirmationRequested={wasConfirmationRequested}
         />
     );
 };
 
 EmailConfirmationStepContainer.propTypes = {
-    isSubmitting: PropTypes.bool.isRequired,
     handleChange: PropTypes.func.isRequired,
     handleBlur: PropTypes.func.isRequired,
     values: PropTypes.object.isRequired,
     errors: PropTypes.object.isRequired,
     touched: PropTypes.object.isRequired,
-    handleSubmit: PropTypes.func.isRequired
 };
 
 export default EmailConfirmationStepContainer;

@@ -84,6 +84,18 @@ public class UsersController : ControllerBase
 
         return BadRequest(deletionResult.Error);
     }
+
+    [HttpGet]
+    public async Task<IActionResult> CheckIfUserExistsByEmail()
+    {
+        throw new NotImplementedException();
+    }
+    
+    [HttpGet]
+    public async Task<IActionResult> CheckIfUserExistsByUsername()
+    {
+        throw new NotImplementedException();
+    }
     
     private async Task<bool> IsAllowedToDeleteAccount(Guid id)
     {

@@ -1,10 +1,13 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {useNavigate} from "react-router-dom";
 import routes from "../../router/routes";
 import RegistrationForm from "../../components/Auth/RegistrationForm";
+import {clearFlags, confirmEmailRequest, registerRequest} from "../../redux/actions/actions";
+import {useDispatch} from "react-redux";
 
 const RegistrationFormContainer = () => {
     const [step, setStep] = useState(1);
+    const dispatch = useDispatch();
 
     const navigate = useNavigate();
 
@@ -14,6 +17,24 @@ const RegistrationFormContainer = () => {
         navigate(routes.landing);
     }, [navigate]);
 
+    const requestRegistration = useCallback((values) => {
+        dispatch(registerRequest({
+            email: values.email,
+            username: values.username,
+            password: values.password,
+            confirmationPassword: values.confirmationPassword
+        }));
+    }, [dispatch]);
+
+    const confirmEmail = useCallback((values) => {
+        console.log(values)
+
+        dispatch(confirmEmailRequest({
+            id: values.id,
+            code: values.code
+        }));
+    }, [dispatch]);
+
     const nextStep = useCallback(() => {
         setStep(step => step + 1);
     }, [setStep]);
@@ -22,9 +43,17 @@ const RegistrationFormContainer = () => {
         setStep(step => step - 1);
     }, [setStep]);
 
+    useEffect(() => {
+        return () => {
+          dispatch(clearFlags());
+        };
+    }, [dispatch]);
+
     return (
         <RegistrationForm
             handleSubmit={handleSubmit}
+            requestRegistration={requestRegistration}
+            confirmEmail={confirmEmail}
             step={step}
             setStep={setStep}
             nextStep={nextStep}

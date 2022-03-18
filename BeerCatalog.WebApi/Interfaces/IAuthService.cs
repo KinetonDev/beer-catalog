@@ -8,7 +8,7 @@ namespace BeerCatalog.WebApi.Interfaces;
 
 public interface IAuthService
 {
-    Task<ServiceResult> RegisterAsync(RegisterDto registerDto);
+    Task<ServiceResult<Guid>> RegisterAsync(RegisterDto registerDto);
     Task<ServiceResult<JwtTokens>> LoginAsync(LoginDto loginDto);
     Task<ServiceResult> ConfirmEmailAsync(ConfirmEmailDto confirmEmailDto);
     Task<ServiceResult<JwtTokens>> RefreshUserTokensAsync(RefreshTokensDto refreshTokensDto);

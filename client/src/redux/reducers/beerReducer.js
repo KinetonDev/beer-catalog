@@ -1,6 +1,9 @@
 import {
-    CHANGE_FILTER, GET_BEER_BY_ID_REQUEST, GET_BEER_BY_ID_SUCCESS, GET_BEERS_REQUEST,
-    GET_BEERS_SUCCESS, INCREMENT_PAGE,
+    CHANGE_FILTER,
+    GET_BEER_BY_ID_REQUEST,
+    GET_BEER_BY_ID_SUCCESS,
+    GET_BEERS_SUCCESS,
+    INCREMENT_PAGE,
     SET_WAS_SEARCH_PERFORMED
 } from "../types/types";
 
@@ -23,6 +26,7 @@ const initialState = {
 
 export const beerReducer = (state = initialState, action) => {
     console.log(action.type);
+    console.log(action.payload);
 
     switch (action.type) {
         case GET_BEERS_SUCCESS:
