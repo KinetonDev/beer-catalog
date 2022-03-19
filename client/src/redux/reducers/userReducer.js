@@ -1,5 +1,7 @@
 import
 {
+    CHECK_EMAIL_FAILED,
+    CHECK_EMAIL_REQUEST, CHECK_EMAIL_SUCCESS, CHECK_USERNAME_FAILED, CHECK_USERNAME_REQUEST, CHECK_USERNAME_SUCCESS,
     CLEAR_FLAGS,
     CONFIRM_EMAIL_FAILED,
     CONFIRM_EMAIL_REQUEST,
@@ -12,7 +14,9 @@ const defaultFlagsValues = {
         confirmationSucceeded: false,
         wasConfirmationRequested: false,
         loginSucceeded: false,
-        wasLoginRequested: false
+        wasLoginRequested: false,
+        userWithEmailExists: false,
+        userWithUsernameExists: false
     },
     loadingFlags: {
         isConfirmationProcessing: false
@@ -69,6 +73,18 @@ export const userReducer = (state = initialState, action) => {
         case LOGIN_FAILED:
             return {...state,
                 flags: {...state.flags, loginSucceeded: false, wasLoginRequested: true}};
+        case CHECK_EMAIL_REQUEST:
+            return state;
+        case CHECK_EMAIL_SUCCESS:
+            return {...state, flags: {...state.flags, userWithEmailExists: true}};
+        case CHECK_EMAIL_FAILED:
+            return state;
+        case CHECK_USERNAME_REQUEST:
+            return state;
+        case CHECK_USERNAME_SUCCESS:
+            return {...state, flags: {...state.flags, userWithUsernameExists: true}};
+        case CHECK_USERNAME_FAILED:
+            return state;
         default:
             return state;
     }

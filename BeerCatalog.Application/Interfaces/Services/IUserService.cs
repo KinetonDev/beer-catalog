@@ -12,4 +12,6 @@ public interface IUserService
     Task<ServiceResult> DeleteByIdAsync(Guid id);
     Task<ServiceResult> UpdateByIdAsync(Guid id);
     Task<bool> IsInRoleAsync(Guid id, string role);
+    Task<bool> CheckIfUserExistsByEmailAsync(string email);
+    Task<bool> CheckIfUserExistsByUsernameAsync(string username);
 }

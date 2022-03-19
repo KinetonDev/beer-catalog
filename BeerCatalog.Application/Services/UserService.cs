@@ -63,4 +63,18 @@ public class UserService : Service<UserReadDto>, IUserService
         
         return await _userManager.IsInRoleAsync(user, role);
     }
+
+    public async Task<bool> CheckIfUserExistsByEmailAsync(string email)
+    {
+        var user = await _userManager.FindByEmailAsync(email);
+
+        return user != null;
+    }
+
+    public async Task<bool> CheckIfUserExistsByUsernameAsync(string username)
+    {
+        var user = await _userManager.FindByEmailAsync(username);
+
+        return user != null;
+    }
 }

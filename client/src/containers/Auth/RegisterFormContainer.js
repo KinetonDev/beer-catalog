@@ -2,7 +2,13 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {useNavigate} from "react-router-dom";
 import routes from "../../router/routes";
 import RegistrationForm from "../../components/Auth/RegistrationForm";
-import {clearFlags, confirmEmailRequest, registerRequest} from "../../redux/actions/actions";
+import {
+    checkEmailRequest,
+    checkUsernameRequest,
+    clearFlags,
+    confirmEmailRequest,
+    registerRequest
+} from "../../redux/actions/actions";
 import {useDispatch} from "react-redux";
 
 const RegistrationFormContainer = () => {
@@ -35,6 +41,14 @@ const RegistrationFormContainer = () => {
         }));
     }, [dispatch]);
 
+    const checkIfEmailExists = useCallback((email) => {
+        dispatch(checkEmailRequest({email}));
+    }, [dispatch]);
+
+    const checkIfUsernameExists = useCallback((username) => {
+        dispatch(checkUsernameRequest({username}));
+    }, [dispatch]);
+
     const nextStep = useCallback(() => {
         setStep(step => step + 1);
     }, [setStep]);
@@ -55,9 +69,10 @@ const RegistrationFormContainer = () => {
             requestRegistration={requestRegistration}
             confirmEmail={confirmEmail}
             step={step}
-            setStep={setStep}
             nextStep={nextStep}
             prevStep={prevStep}
+            checkIfEmailExists={checkIfEmailExists}
+            checkIfUsernameExists={checkIfUsernameExists}
         />
     );
 };

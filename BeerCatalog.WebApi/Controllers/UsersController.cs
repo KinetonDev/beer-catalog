@@ -85,16 +85,22 @@ public class UsersController : ControllerBase
         return BadRequest(deletionResult.Error);
     }
 
-    [HttpGet]
-    public async Task<IActionResult> CheckIfUserExistsByEmail()
+    [AllowAnonymous]
+    [HttpGet("check-email/{email}")]
+    public async Task<IActionResult> CheckIfUserExistsByEmail(string email)
     {
-        throw new NotImplementedException();
+        var exists = await _userService.CheckIfUserExistsByEmailAsync(email);
+
+        return exists ? Ok() : NotFound();
     }
     
-    [HttpGet]
-    public async Task<IActionResult> CheckIfUserExistsByUsername()
+    [AllowAnonymous]
+    [HttpGet("check-username/{username}")]
+    public async Task<IActionResult> CheckIfUserExistsByUsername(string username)
     {
-        throw new NotImplementedException();
+        var exists = await _userService.CheckIfUserExistsByEmailAsync(username);
+
+        return exists ? Ok() : NotFound();
     }
     
     private async Task<bool> IsAllowedToDeleteAccount(Guid id)

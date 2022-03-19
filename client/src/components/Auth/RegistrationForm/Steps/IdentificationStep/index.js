@@ -5,7 +5,7 @@ import ArrowBackIcon from "@mui/icons-material/Close";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import useStyle from './styles'
 
-const IdentificationStep = ({nextStep, handleChange, handleBlur, values, touched, errors, areInputsInvalid}) => {
+const IdentificationStep = ({nextStep, handleChange, handleUsernameBlur, handleEmailBlur, values, touched, errors, areInputsInvalid}) => {
     const classes = useStyle();
 
     return (
@@ -15,7 +15,7 @@ const IdentificationStep = ({nextStep, handleChange, handleBlur, values, touched
                            placeholder={"Write your username here."}
                            className={classes.input}
                            onChange={handleChange}
-                           onBlur={handleBlur}
+                           onBlur={handleUsernameBlur}
                            value={values.username}
                            error={errors.username && touched.username}
                            helperText={(errors.username && touched.username) ?  errors.username : ""}
@@ -25,7 +25,7 @@ const IdentificationStep = ({nextStep, handleChange, handleBlur, values, touched
                            placeholder={"And email here."}
                            className={classes.input}
                            onChange={handleChange}
-                           onBlur={handleBlur}
+                           onBlur={handleEmailBlur}
                            value={values.email}
                            error={errors.email && touched.email}
                            helperText={(errors.email && touched.email) ?  errors.email : ""}
@@ -55,7 +55,6 @@ const IdentificationStep = ({nextStep, handleChange, handleBlur, values, touched
 IdentificationStep.propTypes = {
     nextStep: PropTypes.func.isRequired,
     handleChange: PropTypes.func.isRequired,
-    handleBlur: PropTypes.func.isRequired,
     values: PropTypes.object.isRequired,
     errors: PropTypes.object.isRequired,
     touched: PropTypes.object.isRequired,

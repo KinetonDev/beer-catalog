@@ -60,3 +60,25 @@ export function login(payload) {
         requestWithFetch
     );
 }
+
+export function checkEmail(payload) {
+    return call(
+        request,
+        {
+            url: createUrlFromFilter(`users/check-email/${payload.email}`),
+            method: GET
+        },
+        requestWithFetch
+    );
+}
+
+export function checkUsername(payload) {
+    return call(
+        request,
+        {
+            url: createUrlFromFilter(`users/check-username/${payload.username}`),
+            method: GET
+        },
+        requestWithFetch
+    );
+}

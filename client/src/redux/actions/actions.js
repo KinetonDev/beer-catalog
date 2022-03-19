@@ -1,7 +1,14 @@
 import {
-    CHANGE_FILTER, CLEAR_FLAGS, CONFIRM_EMAIL_REQUEST, GET_BEER_BY_ID_REQUEST,
+    CHANGE_FILTER,
+    CHECK_EMAIL_REQUEST,
+    CHECK_USERNAME_REQUEST,
+    CLEAR_FLAGS,
+    CONFIRM_EMAIL_REQUEST,
+    GET_BEER_BY_ID_REQUEST,
     GET_BEERS_REQUEST,
-    INCREMENT_PAGE, LOGIN_REQUEST, REGISTER_REQUEST,
+    INCREMENT_PAGE,
+    LOGIN_REQUEST,
+    REGISTER_REQUEST,
     SET_WAS_SEARCH_PERFORMED
 } from "../types/types";
 
@@ -63,5 +70,19 @@ export function confirmEmailRequest(payload) {
 export function clearFlags() {
     return {
         type: CLEAR_FLAGS
+    }
+}
+
+export function checkEmailRequest(payload) {
+    return {
+        type: CHECK_EMAIL_REQUEST,
+        payload: payload
+    }
+}
+
+export function checkUsernameRequest(payload) {
+    return {
+        type: CHECK_USERNAME_REQUEST,
+        payload: payload
     }
 }

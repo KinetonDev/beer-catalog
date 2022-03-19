@@ -20,9 +20,6 @@ export function requestWithXHR({url, method, body}) {
 }
 
 export function requestWithFetch({url, method, body}) {
-    console.log(body)
-    console.log(JSON.stringify(body))
-
     const options = {
         method: method,
         headers: {
@@ -38,7 +35,7 @@ export function requestWithFetch({url, method, body}) {
         if (!response.ok) {
             return response.json()
                 .catch(() => {
-                    throw new Error(response.status);
+                    throw new Error(response.status.toString());
                 })
                 .then(({message, title}) => {
                     throw new Error(message || title || response.status);

@@ -13,6 +13,8 @@ function selectStepByValue(step, props) {
                     values={props.values}
                     errors={props.errors}
                     touched={props.touched}
+                    checkIfUsernameExists={props.checkIfUsernameExists}
+                    checkIfEmailExists={props.checkIfEmailExists}
                 />
             );
         case 2:
