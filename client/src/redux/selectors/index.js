@@ -45,3 +45,7 @@ export function selectLoginSucceeded(state) {
 export function selectWasLoginRequested(state) {
     return state.user.flags.wasLoginRequested;
 }
+
+export function selectLoginError(state) {
+    return state.user.errors.login;
+}

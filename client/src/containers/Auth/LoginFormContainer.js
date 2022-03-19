@@ -4,12 +4,13 @@ import LoginForm from "../../components/Auth/LoginForm";
 import routes from "../../router/routes";
 import {clearFlags, loginRequest} from "../../redux/actions/actions";
 import {useDispatch, useSelector} from "react-redux";
-import {selectLoginSucceeded, selectWasLoginRequested} from "../../redux/selectors";
+import {selectLoginError, selectLoginSucceeded, selectWasLoginRequested} from "../../redux/selectors";
 
 const LoginFormContainer = () => {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     const loginSucceeded = useSelector(state => selectLoginSucceeded(state));
     const wasLoginRequested = useSelector(state => selectWasLoginRequested(state));
+    const loginError = useSelector(state => selectLoginError(state));
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -43,6 +44,9 @@ const LoginFormContainer = () => {
             handleVisibilityChange={handleVisibilityChange}
             handleSubmit={handleSubmit}
             handleNavigationToRegisterPage={handleNavigationToRegisterPage}
+            loginError={loginError}
+            wasLoginRequested={wasLoginRequested}
+            loginSucceeded={loginSucceeded}
         />
     );
 };

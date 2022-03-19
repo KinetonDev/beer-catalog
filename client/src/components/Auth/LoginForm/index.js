@@ -7,7 +7,7 @@ import {POST} from "../../../helpers/HTTPMethods";
 import PropTypes from 'prop-types'
 import validationSchema from "./validationSchema";
 
-const LoginForm = ({handleSubmit, isPasswordVisible, handleVisibilityChange, handleNavigationToRegisterPage}) => {
+const LoginForm = ({handleSubmit, isPasswordVisible, handleVisibilityChange, handleNavigationToRegisterPage, loginError, loginSucceeded, wasLoginRequested}) => {
     const classes = useStyle();
 
     return (
@@ -53,6 +53,15 @@ const LoginForm = ({handleSubmit, isPasswordVisible, handleVisibilityChange, han
                                 }
                                 }
                             />
+                            {(wasLoginRequested && !loginSucceeded) && (
+                                <Typography
+                                    variant={"subtitle1"}
+                                    align={"center"}
+                                    color={"red"}
+                                >
+                                    {loginError.message}
+                                </Typography>
+                            )}
                             <Button
                                 variant={"contained"}
                                 size={"large"}

@@ -37,6 +37,11 @@ const initialState = {
     },
     loadingFlags: {
         ...defaultFlagsValues.loadingFlags
+    },
+    errors: {
+        login: {
+            message: ""
+        }
     }
 }
 
@@ -72,7 +77,8 @@ export const userReducer = (state = initialState, action) => {
                 flags: {...state.flags, loginSucceeded: true, wasLoginRequested: true}};
         case LOGIN_FAILED:
             return {...state,
-                flags: {...state.flags, loginSucceeded: false, wasLoginRequested: true}};
+                flags: {...state.flags, loginSucceeded: false, wasLoginRequested: true},
+                errors: {...state.errors, login: action.payload.error}};
         case CHECK_EMAIL_REQUEST:
             return state;
         case CHECK_EMAIL_SUCCESS:
