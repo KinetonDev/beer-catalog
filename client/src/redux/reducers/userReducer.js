@@ -84,13 +84,13 @@ export const userReducer = (state = initialState, action) => {
         case CHECK_EMAIL_SUCCESS:
             return {...state, flags: {...state.flags, userWithEmailExists: true}};
         case CHECK_EMAIL_FAILED:
-            return state;
+            return {...state, flags: {...state.flags, userWithEmailExists: false}};
         case CHECK_USERNAME_REQUEST:
             return state;
         case CHECK_USERNAME_SUCCESS:
             return {...state, flags: {...state.flags, userWithUsernameExists: true}};
         case CHECK_USERNAME_FAILED:
-            return state;
+            return {...state, flags: {...state.flags, userWithUsernameExists: false}};
         default:
             return state;
     }

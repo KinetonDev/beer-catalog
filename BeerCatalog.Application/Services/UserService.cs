@@ -73,7 +73,7 @@ public class UserService : Service<UserReadDto>, IUserService
 
     public async Task<bool> CheckIfUserExistsByUsernameAsync(string username)
     {
-        var user = await _userManager.FindByEmailAsync(username);
+        var user = await _userManager.FindByNameAsync(username);
 
         return user != null;
     }

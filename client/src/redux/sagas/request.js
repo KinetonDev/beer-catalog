@@ -1,4 +1,4 @@
-export function requestWithXHR({url, method, body}) {
+export function requestWithXHR({url, method, body}) { // need to work on it
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
         xhr.open(method, url);
@@ -19,10 +19,11 @@ export function requestWithXHR({url, method, body}) {
     });
 }
 
-export function requestWithFetch({url, method, body}) {
+export function requestWithFetch({url, method, body, headers}) {
     const options = {
         method: method,
         headers: {
+            ...headers,
             'Content-Type': 'application/json'
         }
     };
@@ -42,10 +43,17 @@ export function requestWithFetch({url, method, body}) {
                 });
         }
 
-        return response.json();
+        return response.text().then(data => data ? JSON.parse(data) : {});
     });
 }
 
 export function request(options, func) {
     return func(options);
+}
+
+export function authorizedRequest(options, func) {
+    return request({...options,
+        headers: {...options?.headers,
+            'Authorization' : 'token'}
+    }, func);
 }

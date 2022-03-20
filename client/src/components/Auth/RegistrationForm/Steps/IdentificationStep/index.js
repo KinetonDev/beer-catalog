@@ -5,7 +5,19 @@ import ArrowBackIcon from "@mui/icons-material/Close";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import useStyle from './styles'
 
-const IdentificationStep = ({nextStep, handleChange, handleUsernameBlur, handleEmailBlur, values, touched, errors, areInputsInvalid}) => {
+const IdentificationStep = (
+    {
+        nextStep,
+        handleChange,
+        handleUsernameBlur,
+        handleEmailBlur,
+        values,
+        touched,
+        errors,
+        areInputsInvalid,
+        userWithEmailExists,
+        userWithUsernameExists
+    }) => {
     const classes = useStyle();
 
     return (
@@ -17,8 +29,9 @@ const IdentificationStep = ({nextStep, handleChange, handleUsernameBlur, handleE
                            onChange={handleChange}
                            onBlur={handleUsernameBlur}
                            value={values.username}
-                           error={errors.username && touched.username}
-                           helperText={(errors.username && touched.username) ?  errors.username : ""}
+                           error={(errors.username && touched.username) || (userWithUsernameExists && touched.username)}
+                           helperText={((errors.username && touched.username) ?  errors.username : "") ?
+                               errors.username : (userWithUsernameExists ? "User with that username already exists" : "")}
                            name="username"
                 />
                 <TextField fullWidth variant={"outlined"} label={"Email"}
@@ -27,8 +40,9 @@ const IdentificationStep = ({nextStep, handleChange, handleUsernameBlur, handleE
                            onChange={handleChange}
                            onBlur={handleEmailBlur}
                            value={values.email}
-                           error={errors.email && touched.email}
-                           helperText={(errors.email && touched.email) ?  errors.email : ""}
+                           error={(errors.email && touched.email) || (userWithEmailExists && touched.email)}
+                           helperText={((errors.email && touched.email) ?  errors.email : "") ?
+                               errors.email : (userWithEmailExists ? "User with that email already exists" : "")}
                            name="email"
                 />
             </div>

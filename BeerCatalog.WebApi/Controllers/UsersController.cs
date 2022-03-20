@@ -98,7 +98,7 @@ public class UsersController : ControllerBase
     [HttpGet("check-username/{username}")]
     public async Task<IActionResult> CheckIfUserExistsByUsername(string username)
     {
-        var exists = await _userService.CheckIfUserExistsByEmailAsync(username);
+        var exists = await _userService.CheckIfUserExistsByUsernameAsync(username);
 
         return exists ? Ok() : NotFound();
     }

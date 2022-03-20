@@ -49,3 +49,11 @@ export function selectWasLoginRequested(state) {
 export function selectLoginError(state) {
     return state.user.errors.login;
 }
+
+export function selectUserWithEmailExists(state) {
+    return state.user.flags.userWithEmailExists;
+}
+
+export function selectUserWithUsernameExists(state) {
+    return state.user.flags.userWithUsernameExists;
+}

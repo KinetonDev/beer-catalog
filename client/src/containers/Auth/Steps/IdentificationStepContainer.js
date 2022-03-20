@@ -1,36 +1,49 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import IdentificationStep from "../../../components/Auth/RegistrationForm/Steps/IdentificationStep";
+import {selectUserWithEmailExists, selectUserWithUsernameExists} from "../../../redux/selectors";
+import {useSelector} from "react-redux";
 
 const IdentificationStepContainer = ({handleChange, handleBlur, nextStep, values, touched, errors, checkIfEmailExists, checkIfUsernameExists}) => {
-    const handleEmailBlur = useCallback((e) => {
-        handleBlur(e);
-        console.log(touched)
-        if (touched.email && !errors.email) {
-            console.log("email check")
-            checkIfEmailExists(values.email);
-        }
-    }, [handleBlur, touched, errors, checkIfEmailExists, values]);
+    const userWithEmailExists = useSelector(state => selectUserWithEmailExists(state));
+    const userWithUsernameExists = useSelector(state => selectUserWithUsernameExists(state));
 
-    const handleUsernameBlur = useCallback((e) => {
-        handleBlur(e);
-        console.log(touched)
-        if (touched.username && !errors.username) {
-            console.log("username check")
-            checkIfUsernameExists(values.username);
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            if (touched.email && !errors.email) {
+                checkIfEmailExists(values.email);
+            }
+        }, 500);
+
+        return () => {
+            clearTimeout(timer);
         }
-    }, [handleBlur, touched, errors, checkIfUsernameExists, values]);
+    }, [touched.email, errors.email, checkIfEmailExists, values.email]);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            if (touched.username && !errors.username) {
+                checkIfUsernameExists(values.username);
+            }
+        }, 500);
+
+        return () => {
+            clearTimeout(timer);
+        }
+    }, [touched.username, errors.username, checkIfUsernameExists, values.username]);
 
     return (
         <IdentificationStep
             nextStep={nextStep}
             handleChange={handleChange}
-            handleEmailBlur={handleEmailBlur}
-            handleUsernameBlur={handleUsernameBlur}
+            handleEmailBlur={handleBlur}
+            handleUsernameBlur={handleBlur}
             values={values}
             errors={errors}
             touched={touched}
-            areInputsInvalid={errors.username !== undefined || errors.email !== undefined}
+            areInputsInvalid={errors.username !== undefined || errors.email !== undefined || userWithUsernameExists || userWithEmailExists}
+            userWithEmailExists={userWithEmailExists}
+            userWithUsernameExists={userWithUsernameExists}
         />
     );
 };
