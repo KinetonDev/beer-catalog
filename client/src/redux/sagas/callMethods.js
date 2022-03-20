@@ -1,27 +1,29 @@
 import {call} from "redux-saga/effects";
-import {request, requestWithFetch, requestWithXHR} from "./request";
+import {authorizedRequest, request, requestWithFetch, requestWithXHR} from "./request";
 import {GET, POST} from "../../helpers/HTTPMethods";
 import createUrlFromFilter from "../../helpers/createUrlFromFilter";
 
-export function getBeers(payload) {
+export function getBeers(payload, accessToken) {
     return call(
-        request,
+        authorizedRequest,
         {
             url: createUrlFromFilter("beers", payload.filter, payload.page, payload.perPage),
             method: GET,
         },
-        requestWithFetch
+        requestWithFetch,
+        accessToken
     )
 };
 
-export function getBeerById(payload) {
+export function getBeerById(payload, accessToken) {
     return call(
-        request,
+        authorizedRequest,
         {
             url: createUrlFromFilter(`beers/${payload.id}`),
             method: GET,
         },
-        requestWithFetch
+        requestWithFetch,
+        accessToken
     )
 }
 

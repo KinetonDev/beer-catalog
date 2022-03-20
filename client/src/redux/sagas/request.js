@@ -51,9 +51,9 @@ export function request(options, func) {
     return func(options);
 }
 
-export function authorizedRequest(options, func) {
+export function authorizedRequest(options, func, accessToken) {
     return request({...options,
         headers: {...options?.headers,
-            'Authorization' : 'token'}
+            'Authorization' : `Bearer ${accessToken}`}
     }, func);
 }

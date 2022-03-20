@@ -3,10 +3,13 @@ import PropTypes from 'prop-types';
 import IdentificationStep from "../../../components/Auth/RegistrationForm/Steps/IdentificationStep";
 import {selectUserWithEmailExists, selectUserWithUsernameExists} from "../../../redux/selectors";
 import {useSelector} from "react-redux";
+import {useNavigate} from "react-router-dom";
+import routes from "../../../router/routes";
 
 const IdentificationStepContainer = ({handleChange, handleBlur, nextStep, values, touched, errors, checkIfEmailExists, checkIfUsernameExists}) => {
     const userWithEmailExists = useSelector(state => selectUserWithEmailExists(state));
     const userWithUsernameExists = useSelector(state => selectUserWithUsernameExists(state));
+    const navigate = useNavigate();
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -32,6 +35,10 @@ const IdentificationStepContainer = ({handleChange, handleBlur, nextStep, values
         }
     }, [touched.username, errors.username, checkIfUsernameExists, values.username]);
 
+    const navigateToLoginPage = useCallback(() => {
+        navigate(routes.login);
+    }, []);
+
     return (
         <IdentificationStep
             nextStep={nextStep}
@@ -44,6 +51,7 @@ const IdentificationStepContainer = ({handleChange, handleBlur, nextStep, values
             areInputsInvalid={errors.username !== undefined || errors.email !== undefined || userWithUsernameExists || userWithEmailExists}
             userWithEmailExists={userWithEmailExists}
             userWithUsernameExists={userWithUsernameExists}
+            navigateToLoginPage={navigateToLoginPage}
         />
     );
 };

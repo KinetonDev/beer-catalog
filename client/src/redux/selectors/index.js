@@ -57,3 +57,7 @@ export function selectUserWithEmailExists(state) {
 export function selectUserWithUsernameExists(state) {
     return state.user.flags.userWithUsernameExists;
 }
+
+export function selectAccessToken(state) {
+    return state.user.accessToken;
+}

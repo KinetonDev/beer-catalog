@@ -16,7 +16,8 @@ const IdentificationStep = (
         errors,
         areInputsInvalid,
         userWithEmailExists,
-        userWithUsernameExists
+        userWithUsernameExists,
+        navigateToLoginPage
     }) => {
     const classes = useStyle();
 
@@ -50,6 +51,7 @@ const IdentificationStep = (
                 <Button
                     startIcon={<ArrowBackIcon/>}
                     variant={"outlined"}
+                    onClick={navigateToLoginPage}
                 >
                     Cancel
                 </Button>
