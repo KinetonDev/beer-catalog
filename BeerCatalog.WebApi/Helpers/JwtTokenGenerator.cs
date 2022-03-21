@@ -40,7 +40,7 @@ public class JwtTokenGenerator : IJwtTokenGenerator
             _jwtSettings.Audience,
             claims,
             DateTime.Now,
-            DateTime.Now.AddMinutes(15),
+            DateTime.Now.AddDays(1),
             new SigningCredentials(_jwtSettings.SigningKey, SecurityAlgorithms.HmacSha256)
         );
 

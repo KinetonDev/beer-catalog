@@ -61,3 +61,11 @@ export function selectUserWithUsernameExists(state) {
 export function selectAccessToken(state) {
     return state.user.accessToken;
 }
+
+export function selectIsAuth(state) {
+    return state.user.isAuth;
+}
+
+export function selectIsCheckingProcessing(state) {
+    return state.user.loadingFlags.isCheckingProcessing;
+}

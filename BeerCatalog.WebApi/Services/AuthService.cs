@@ -144,7 +144,7 @@ public class AuthService : Service<JwtTokens>, IAuthService
         };
 
         var newAccessToken = _jwtTokenGenerator.GenerateAccessToken(claims);
-        var newRefreshToken = _jwtTokenGenerator.GenerateAccessToken(claims);
+        var newRefreshToken = _jwtTokenGenerator.GenerateRefreshToken(claims);
         existingUser.RefreshToken = newRefreshToken;
         var updatingResult = await _userManager.UpdateAsync(existingUser);
         

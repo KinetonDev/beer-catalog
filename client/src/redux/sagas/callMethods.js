@@ -84,3 +84,14 @@ export function checkUsername(payload) {
         requestWithFetch
     );
 }
+
+export function refreshToken() {
+    return call(
+        request,
+        {
+            url: createUrlFromFilter("auth/refresh"),
+            method: POST
+        },
+        requestWithFetch
+    )
+}

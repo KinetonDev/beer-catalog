@@ -24,8 +24,9 @@ export function requestWithFetch({url, method, body, headers}) {
         method: method,
         headers: {
             ...headers,
-            'Content-Type': 'application/json'
-        }
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include'
     };
 
     if (body) {
@@ -33,17 +34,22 @@ export function requestWithFetch({url, method, body, headers}) {
     }
 
     return fetch(url, options).then(response => {
+        const status = response.status;
         if (!response.ok) {
+            const error = new Error();
+            error.status = status;
             return response.json()
                 .catch(() => {
-                    throw new Error(response.status.toString());
+                    throw error;
                 })
                 .then(({message, title}) => {
-                    throw new Error(message || title || response.status);
+                    error.message = message;
+                    error.title = title;
+                    throw error;
                 });
         }
 
-        return response.text().then(data => data ? JSON.parse(data) : {});
+        return response.text().then(data => data ? {status, body: JSON.parse(data)} : {status});
     });
 }
 
@@ -52,8 +58,13 @@ export function request(options, func) {
 }
 
 export function authorizedRequest(options, func, accessToken) {
-    return request({...options,
-        headers: {...options?.headers,
-            'Authorization' : `Bearer ${accessToken}`}
-    }, func);
+    try {
+        return request({...options,
+            headers: {...options?.headers,
+                'Authorization' : `Bearer ${accessToken}`}
+        }, func);
+    }
+    catch (e) {
+        console.log(e)
+    }
 }

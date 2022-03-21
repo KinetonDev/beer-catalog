@@ -36,20 +36,41 @@ public class AuthController : ControllerBase
 
         if (loginResult.Succeeded)
         {
-            return Ok(loginResult.Result);
+            AddRefreshTokenToCookies(loginResult.Result!.RefreshToken);
+            return Ok(new
+            {
+                loginResult.Result.AccessToken
+            });
         }
 
         return BadRequest(loginResult.Error);
     }
 
     [HttpPost("refresh")]
-    public async Task<IActionResult> Refresh([FromBody] RefreshTokensDto refreshTokensDto)
+    public async Task<IActionResult> Refresh()
     {
-        var refreshResult = await _authService.RefreshUserTokensAsync(refreshTokensDto);
+        var refreshToken = Request.Cookies["refresh_token"];
 
-        if (refreshResult.Succeeded)
+        if (string.IsNullOrEmpty(refreshToken))
         {
-            return Ok(refreshResult.Result);
+            return BadRequest(new
+            {
+                Message = "No refresh token was provided"
+            });
+        }
+        
+        var refreshResult = await _authService.RefreshUserTokensAsync(new RefreshTokensDto
+        {
+            RefreshToken = refreshToken
+        });
+
+        if (refreshResult.Succeeded)    
+        {
+            AddRefreshTokenToCookies(refreshResult.Result!.RefreshToken);
+            return Ok(new
+            {
+                refreshResult.Result.AccessToken
+            });
         }
 
         return BadRequest(refreshResult.Error);
@@ -67,4 +88,18 @@ public class AuthController : ControllerBase
 
         return BadRequest(confirmEmailResult.Error);
     }
+
+    private void AddRefreshTokenToCookies(string refreshToken)
+    {
+        var cookieOptions = new CookieOptions
+        {
+            HttpOnly = true,
+            Expires = DateTimeOffset.Now.AddDays(14),
+            Path = "/auth", 
+            SameSite = SameSiteMode.None,
+            Secure = true
+        };
+        
+        Response.Cookies.Append("refresh_token", refreshToken, cookieOptions);
+    } 
 }

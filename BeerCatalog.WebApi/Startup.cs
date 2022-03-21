@@ -95,12 +95,15 @@ public class Startup
 
         services.AddCors(options =>
         {
-            options.AddDefaultPolicy(policy =>
+            options.AddPolicy("SPA", builder =>
             {
-                policy.AllowAnyHeader();
-                policy.AllowAnyOrigin();
-                policy.AllowAnyMethod();
+                builder.AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials()
+                    .WithOrigins("http://localhost:3000");
             });
+
+            options.DefaultPolicyName = "SPA";
         });
     }
 

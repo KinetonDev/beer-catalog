@@ -7,7 +7,16 @@ import {POST} from "../../../helpers/HTTPMethods";
 import PropTypes from 'prop-types'
 import validationSchema from "./validationSchema";
 
-const LoginForm = ({handleSubmit, isPasswordVisible, handleVisibilityChange, handleNavigationToRegisterPage, loginError, loginSucceeded, wasLoginRequested}) => {
+const LoginForm = (
+    {
+        handleSubmit,
+        isPasswordVisible,
+        handleVisibilityChange,
+        handleNavigationToRegisterPage,
+        loginError,
+        loginSucceeded,
+        wasLoginRequested
+    }) => {
     const classes = useStyle();
 
     return (
@@ -21,7 +30,7 @@ const LoginForm = ({handleSubmit, isPasswordVisible, handleVisibilityChange, han
                 onSubmit={handleSubmit}
                 validationSchema={validationSchema}
             >
-                {({getFieldProps, handleSubmit}) => (
+                {({getFieldProps, handleSubmit, errors, touched}) => (
                     <>
                         <form onSubmit={handleSubmit} method={POST} className={classes.loginForm}>
                             <TextField
@@ -32,6 +41,8 @@ const LoginForm = ({handleSubmit, isPasswordVisible, handleVisibilityChange, han
                                 placeholder={"Write your email here"}
                                 type={"email"}
                                 name={"email"}
+                                error={(errors.email && touched.email)}
+                                helperText={((errors.email && touched.email) ? errors.email : "")}
                                 {...getFieldProps('email')}
                             />
                             <TextField
@@ -41,6 +52,8 @@ const LoginForm = ({handleSubmit, isPasswordVisible, handleVisibilityChange, han
                                 label={"Password"}
                                 placeholder={"Write your password here"}
                                 type={isPasswordVisible ? "text" : "password"}
+                                error={(errors.password && touched.password)}
+                                helperText={((errors.password && touched.password) ? errors.password : "")}
                                 {...getFieldProps('password')}
                                 InputProps={{
                                     endAdornment: <InputAdornment position={"end"}>

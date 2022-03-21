@@ -7,9 +7,9 @@ import {
     GET_BEER_BY_ID_REQUEST,
     GET_BEERS_REQUEST,
     INCREMENT_PAGE,
-    LOGIN_REQUEST,
+    LOGIN_REQUEST, REFRESH_TOKEN_REQUEST,
     REGISTER_REQUEST,
-    SET_WAS_SEARCH_PERFORMED
+    SET_WAS_SEARCH_PERFORMED, START_VALIDATING
 } from "../types/types";
 
 export function getBeersRequest(payload) {
@@ -84,5 +84,17 @@ export function checkUsernameRequest(payload) {
     return {
         type: CHECK_USERNAME_REQUEST,
         payload: payload
+    }
+}
+
+export function startValidating() {
+    return {
+        type: START_VALIDATING
+    }
+}
+
+export function refreshTokenRequest() {
+    return {
+        type: REFRESH_TOKEN_REQUEST
     }
 }

@@ -1,6 +1,7 @@
 ﻿using BeerCatalog.Application.Interfaces.Services;
 using BeerCatalog.Domain.Models.Beer;
 using BeerCatalog.Infrastructure;
+using BeerCatalog.WebApi.DTO;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -23,7 +24,7 @@ public class BeersController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAll([FromQuery] PaginationAndFilterDto paginationDto)
     {
         var retrievingResult = await _beerService.GetAllAsync();
 
@@ -34,7 +35,7 @@ public class BeersController : ControllerBase
 
         return BadRequest(retrievingResult.Error);
     }
-    
+
     [HttpGet("{id}")]
     public async Task<IActionResult> GetAll([FromRoute] Guid id)
     {
