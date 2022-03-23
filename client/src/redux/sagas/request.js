@@ -1,8 +1,8 @@
-export function requestWithXHR(url, method) {
+export function requestWithXHR({url, method, body}) { // need to work on it
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
         xhr.open(method, url);
-
+        xhr.setRequestHeader('Content-Type', '\'application/json\'');
         xhr.onload = () => {
            if (xhr.status >= 200 && xhr.status < 300) {
                resolve(JSON.parse(xhr.response));
@@ -15,16 +15,56 @@ export function requestWithXHR(url, method) {
            reject(xhr.response);
         };
 
-        xhr.send();
+        xhr.send(JSON.stringify(body));
     });
 }
 
-export function requestWithFetch(url, method) {
-    return fetch(url, {
-        method: method
-    }).then(response => response.json());
+export function requestWithFetch({url, method, body, headers}) {
+    const options = {
+        method: method,
+        headers: {
+            ...headers,
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include'
+    };
+
+    if (body) {
+        options.body = JSON.stringify(body);
+    }
+
+    return fetch(url, options).then(response => {
+        const status = response.status;
+        if (!response.ok) {
+            const error = new Error();
+            error.status = status;
+            return response.json()
+                .catch(() => {
+                    throw error;
+                })
+                .then(({message, title}) => {
+                    error.message = message;
+                    error.title = title;
+                    throw error;
+                });
+        }
+
+        return response.text().then(data => data ? {status, body: JSON.parse(data)} : {status});
+    });
 }
 
-export function request(url, httpMethod, func) {
-    return func(url, httpMethod);
+export function request(options, func) {
+    return func(options);
+}
+
+export function authorizedRequest(options, func, accessToken) {
+    try {
+        return request({...options,
+            headers: {...options?.headers,
+                'Authorization' : `Bearer ${accessToken}`}
+        }, func);
+    }
+    catch (e) {
+        console.log(e)
+    }
 }

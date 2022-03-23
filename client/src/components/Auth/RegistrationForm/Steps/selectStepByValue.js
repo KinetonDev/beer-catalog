@@ -13,6 +13,8 @@ function selectStepByValue(step, props) {
                     values={props.values}
                     errors={props.errors}
                     touched={props.touched}
+                    checkIfUsernameExists={props.checkIfUsernameExists}
+                    checkIfEmailExists={props.checkIfEmailExists}
                 />
             );
         case 2:
@@ -25,6 +27,7 @@ function selectStepByValue(step, props) {
                     values={props.values}
                     errors={props.errors}
                     touched={props.touched}
+                    requestRegistration={props.requestRegistration}
                 />
             );
         case 3:
@@ -36,7 +39,7 @@ function selectStepByValue(step, props) {
                     values={props.values}
                     errors={props.errors}
                     touched={props.touched}
-                    handleSubmit={props.handleSubmit}
+                    confirmEmail={props.confirmEmail}
                 />
             );
         default:

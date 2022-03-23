@@ -1,16 +1,22 @@
-﻿using System.Threading.Channels;
+﻿using BeerCatalog.Application.Interfaces.Repositories;
+using BeerCatalog.Application.Interfaces.Services;
+using BeerCatalog.Application.Services;
 using BeerCatalog.Domain.Models;
+using BeerCatalog.Infrastructure;
 using BeerCatalog.Infrastructure.Data;
 using BeerCatalog.WebApi.BackgroundServices;
 using BeerCatalog.WebApi.Common.Models;
 using BeerCatalog.WebApi.Helpers;
 using BeerCatalog.WebApi.Helpers.Interfaces;
+using BeerCatalog.WebApi.IdentityTokenProviders;
 using BeerCatalog.WebApi.Interfaces;
 using BeerCatalog.WebApi.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace BeerCatalog.WebApi;
 
@@ -32,7 +38,8 @@ public class Startup
             {
                 var jwtSettings = new JwtSettings();
                 _configuration.GetSection(JwtSettings.JwtSettingsSectionName).Bind(jwtSettings);
-                
+
+                config.SaveToken = true;
                 config.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
@@ -47,15 +54,21 @@ public class Startup
         
         services.AddDbContext<AppDbContext>(config =>
         {
-            if (_environment.IsDevelopment())
-                config.UseInMemoryDatabase("BeerCatalog");
-            else
-                config.UseSqlServer(_configuration.GetConnectionString("BeerCatalog")!);
+            config.UseSqlServer(_configuration.GetConnectionString("BeerCatalog")!);
         });
+
+        services.AddScoped<DbContext>(_ => _.GetRequiredService<AppDbContext>());
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
         
-        services.AddIdentity<User, IdentityRole<Guid>>()
+        services.AddIdentity<User, IdentityRole<Guid>>(options =>
+            {
+                options.Password.RequiredLength = 8;
+
+                options.Tokens.EmailConfirmationTokenProvider = nameof(EmailSixDigitConfirmationTokenProvider);
+            })
             .AddEntityFrameworkStores<AppDbContext>()
-            .AddDefaultTokenProviders();
+            .AddDefaultTokenProviders()
+            .AddTokenProvider<EmailSixDigitConfirmationTokenProvider>(nameof(EmailSixDigitConfirmationTokenProvider));
 
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         services.AddHostedService<EmailDispatcher>();
@@ -65,10 +78,33 @@ public class Startup
         services.Configure<SmtpClientSettings>(_configuration.GetSection(SmtpClientSettings.SmtpSettingsSectionName));
 
         services.AddTransient<IAuthService, AuthService>();
+        services.AddTransient<IUserService, UserService>(); 
+        services.AddTransient<IBeerService, BeerService>();
         services.AddTransient<IJwtTokenGenerator, JwtTokenGenerator>();
         services.AddTransient<IJwtTokenResolver, JwtTokenResolver>();
+        services.AddHttpClient();
 
-        services.AddControllers();
+        services.AddControllers().AddNewtonsoftJson(options =>
+        {
+            options.SerializerSettings.ContractResolver = new DefaultContractResolver
+            {
+                NamingStrategy = new SnakeCaseNamingStrategy()
+            }; 
+            options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+        });
+
+        services.AddCors(options =>
+        {
+            options.AddPolicy("SPA", builder =>
+            {
+                builder.AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials()
+                    .WithOrigins("http://localhost:3000");
+            });
+
+            options.DefaultPolicyName = "SPA";
+        });
     }
 
     public void Configure(IApplicationBuilder app)
@@ -79,6 +115,8 @@ public class Startup
         app.UseHttpsRedirection();
 
         app.UseRouting();
+        
+        app.UseCors();
 
         app.UseAuthentication();
 

@@ -15,6 +15,11 @@ public abstract class Service<T> : IService<T>
         return new ServiceResult<T>(result);
     }
 
+    public ServiceResult<IEnumerable<T>> Result(IEnumerable<T> result)
+    {
+        return new ServiceResult<IEnumerable<T>>(result);
+    }
+
     public ServiceResult Success()
     {
         return new ServiceResult();

@@ -35,20 +35,20 @@ public class AuthService : Service<JwtTokens>, IAuthService
         _emailChannel = emailChannel;
     }
     
-    public async Task<ServiceResult> RegisterAsync(RegisterDto registerDto)
+    public async Task<ServiceResult<Guid>> RegisterAsync(RegisterDto registerDto)
     {
         var existingUser = await _userManager.FindByEmailAsync(registerDto.Email)
                            ?? await _userManager.FindByNameAsync(registerDto.Username);
 
         if (existingUser != null)
-            return Error(ErrorCode.UserAlreadyExists);
+            return new ServiceResult<Guid>(ErrorCode.UserAlreadyExists);
 
         var user = _mapper.Map<User>(registerDto);
 
         var creatingResult = await _userManager.CreateAsync(user, registerDto.Password);
 
         if (!creatingResult.Succeeded)
-            return Error(ErrorCode.UserNotCreated);
+            return new ServiceResult<Guid>(ErrorCode.UserNotCreated);
 
         var emailConfirmationCode = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
@@ -59,7 +59,7 @@ public class AuthService : Service<JwtTokens>, IAuthService
             Body = $"Please confirm your email. Your code: {emailConfirmationCode}"
         });
 
-        return Success();
+        return new ServiceResult<Guid>(user.Id);
     }
 
     public async Task<ServiceResult<JwtTokens>> LoginAsync(LoginDto loginDto)
@@ -106,7 +106,7 @@ public class AuthService : Service<JwtTokens>, IAuthService
 
     public async Task<ServiceResult> ConfirmEmailAsync(ConfirmEmailDto confirmEmailDto)
     {
-        var user = await _userManager.FindByIdAsync(confirmEmailDto.UserId.ToString());
+        var user = await _userManager.FindByIdAsync(confirmEmailDto.Id.ToString());
 
         if (user == null)
         {
@@ -144,7 +144,7 @@ public class AuthService : Service<JwtTokens>, IAuthService
         };
 
         var newAccessToken = _jwtTokenGenerator.GenerateAccessToken(claims);
-        var newRefreshToken = _jwtTokenGenerator.GenerateAccessToken(claims);
+        var newRefreshToken = _jwtTokenGenerator.GenerateRefreshToken(claims);
         existingUser.RefreshToken = newRefreshToken;
         var updatingResult = await _userManager.UpdateAsync(existingUser);
         

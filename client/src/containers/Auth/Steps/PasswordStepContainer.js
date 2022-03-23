@@ -1,11 +1,16 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import PropTypes from 'prop-types';
 import PasswordStep from "../../../components/Auth/RegistrationForm/Steps/PasswordStep";
 
-const PasswordStepContainer = ({nextStep, prevStep, handleChange, handleBlur, values, touched, errors}) => {
+const PasswordStepContainer = ({nextStep, prevStep, handleChange, handleBlur, values, touched, errors, requestRegistration}) => {
+    const handleNextStep = useCallback(() => {
+        requestRegistration(values);
+        nextStep();
+    }, [values, nextStep, requestRegistration]);
+
     return (
         <PasswordStep
-            nextStep={nextStep}
+            nextStep={handleNextStep}
             prevStep={prevStep}
             handleChange={handleChange}
             handleBlur={handleBlur}

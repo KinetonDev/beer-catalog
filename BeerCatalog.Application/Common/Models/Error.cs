@@ -5,7 +5,7 @@ namespace BeerCatalog.Application.Common.Models;
 public class Error
 {
     public ErrorCode ErrorCode { get; }
-    public string Message { get; set; }
+    public string Message { get; }
 
     public Error(ErrorCode code)
     {
@@ -15,6 +15,7 @@ public class Error
 
     private static string GetMessageFromErrorCode(ErrorCode code) => code switch
     {
+        //users
         ErrorCode.UserAlreadyExists => "User already exists",
         ErrorCode.UserNotCreated => "User wasn't created",
         ErrorCode.UserNotFound => "User wasn't found",
@@ -23,6 +24,9 @@ public class Error
         ErrorCode.RefreshTokenIsNotValid => "Refresh token isn't valid",
         ErrorCode.EmailIsNotConfirmed => "User didn't confirm email address",
         ErrorCode.EmailConfirmationFailed => "Email confirmation failed",
+        ErrorCode.UserNotDeleted => "User wasn't deleted",
+        //beers
+        ErrorCode.BeerNotFound => "Beer wasn't found",
         _ => throw new Exception("Unknown error code")
     };
 }

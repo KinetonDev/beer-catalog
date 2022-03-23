@@ -1,1 +1,1 @@
-export const apiUrl = "https://api.punkapi.com/v2";
+export const apiUrl = "https://localhost:7257";
