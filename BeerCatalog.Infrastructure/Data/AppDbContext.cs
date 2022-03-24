@@ -75,16 +75,31 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
                 .WithMany(p => p.Beers)
                 .UsingEntity<Dictionary<string, object>>(
                     "FoodPairing",
-                    l => l.HasOne<Food>().WithMany().HasForeignKey("FoodId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK__FoodPairi__FoodI__4E88ABD4"),
-                    r => r.HasOne<Beer>().WithMany().HasForeignKey("BeerId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK__FoodPairi__BeerI__4D94879B"),
+                    l => l.HasOne<Food>().WithMany().HasForeignKey("FoodId")
+                        .OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK__FoodPairi__FoodI__4E88ABD4"),
+                    r => r.HasOne<Beer>().WithMany().HasForeignKey("BeerId")
+                        .OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK__FoodPairi__BeerI__4D94879B"),
                     j =>
                     {
                         j.HasKey("BeerId", "FoodId").HasName("PK__FoodPair__816A4F81415D6025");
     
                         j.ToTable("FoodPairing", "Beer");
                     });
+            
+            entity.HasMany(d => d.Fans)
+                .WithMany(p => p.Favorites)
+                .UsingEntity<Dictionary<string, object>>(
+                    "FavoriteBeer",
+                    r => r.HasOne<User>().WithMany().HasForeignKey("UserId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK__FavoriteB__UserI__625A9A57"),
+                    l => l.HasOne<Beer>().WithMany().HasForeignKey("BeerId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK__FavoriteB__BeerI__634EBE90"),
+                    j =>
+                    {
+                        j.HasKey("UserId", "BeerId").HasName("PK__Favorite__F51B050768A08B47");
+
+                        j.ToTable("FavoriteBeers");
+                    });
         });
-    
+
         modelBuilder.Entity<Fermentation>(entity =>
         {
             entity.ToTable("Fermentation", "Method");

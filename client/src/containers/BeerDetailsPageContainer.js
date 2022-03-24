@@ -4,7 +4,7 @@ import {useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {selectCurrentBeer} from "../redux/selectors";
 import {getBeerByIdRequest} from "../redux/actions/actions";
-import Loader from "../components/BeerDetailsPageLoader";
+import Loader from "../components/PageLoader";
 
 const BeerDetailsPageContainer = () => {
     const { beerId } = useParams();

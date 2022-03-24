@@ -34,7 +34,7 @@ export const beerReducer = (state = initialState, action) => {
         case GET_BEER_BY_ID_REQUEST:
             return {...state, currentBeer: {...state.currentBeer, isLoading: true} }
         case GET_BEER_BY_ID_SUCCESS:
-            return {...state, currentBeer: {...state.currentBeer, value: action.payload.response[0], isLoading: false}};
+            return {...state, currentBeer: {...state.currentBeer, value: action.payload.response, isLoading: false}};
         case SET_WAS_SEARCH_PERFORMED:
             return {...state, wasSearchPerformed: action.payload};
         case CHANGE_FILTER:

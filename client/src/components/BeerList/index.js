@@ -14,7 +14,7 @@ const BeerList = (props) => {
                     name={favorite.name}
                     tagline={favorite.tagline}
                     description={favorite.description}
-                    alt={favorite.alt}
+                    alt={"Favorite beer"}
                     image={favorite.image_url}
                     onNavigate={() => {
                         props.handleNavigation(favorite.id);

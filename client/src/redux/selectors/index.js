@@ -69,3 +69,11 @@ export function selectIsAuth(state) {
 export function selectIsCheckingProcessing(state) {
     return state.user.loadingFlags.isCheckingProcessing;
 }
+
+export function selectFavoriteBeer(state) {
+    return state.user.favoriteBeer;
+}
+
+export function selectIsFavoritesLoading(state) {
+    return state.user.loadingFlags.isFavoritesLoading;
+}

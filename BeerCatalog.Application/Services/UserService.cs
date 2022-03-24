@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using BeerCatalog.Application.Common.Enums;
 using BeerCatalog.Application.Common.Service;
+using BeerCatalog.Application.Interfaces.Repositories;
 using BeerCatalog.Application.Interfaces.Services;
 using BeerCatalog.Application.Models;
+using BeerCatalog.Application.Models.Beer;
 using BeerCatalog.Domain.Models;
 using Microsoft.AspNetCore.Identity;
 
@@ -11,13 +13,16 @@ namespace BeerCatalog.Application.Services;
 public class UserService : Service<UserReadDto>, IUserService
 {
     private readonly UserManager<User> _userManager;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
 
     public UserService(
         UserManager<User> userManager,
+        IUnitOfWork unitOfWork,
         IMapper mapper)
     {
         _userManager = userManager;
+        _unitOfWork = unitOfWork;
         _mapper = mapper;
     }
 
@@ -50,6 +55,20 @@ public class UserService : Service<UserReadDto>, IUserService
     public Task<ServiceResult> UpdateByIdAsync(Guid id)
     {
         throw new NotImplementedException();
+    }
+
+    public async Task<ServiceResult<IEnumerable<FavoriteBeerDto>>> GetFavoriteBeersAsync(Guid id)
+    {
+        var user = await _unitOfWork.UsersRepository.GetWithFavoritesByIdAsync(id);
+
+        if (user == null)
+        {
+            return new (ErrorCode.UserNotFound);
+        }
+        
+        var favorites = user.Favorites;
+
+        return new ServiceResult<IEnumerable<FavoriteBeerDto>>(_mapper.Map<IEnumerable<FavoriteBeerDto>>(favorites));
     }
 
     public async Task<bool> IsInRoleAsync(Guid id, string role)

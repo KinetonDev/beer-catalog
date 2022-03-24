@@ -10,6 +10,11 @@ import
     CONFIRM_EMAIL_FAILED,
     CONFIRM_EMAIL_REQUEST,
     CONFIRM_EMAIL_SUCCESS,
+    GET_FAVORITES_FAILED,
+    GET_FAVORITES_REQUEST,
+    GET_FAVORITES_SUCCESS,
+    GET_ME_REQUEST,
+    GET_ME_SUCCESS,
     LOGIN_FAILED,
     LOGIN_REQUEST,
     LOGIN_SUCCESS,
@@ -31,7 +36,8 @@ const defaultFlagsValues = {
     },
     loadingFlags: {
         isConfirmationProcessing: false,
-        isCheckingProcessing: false
+        isCheckingProcessing: false,
+        isFavoritesLoading: true
     }
 }
 
@@ -109,6 +115,15 @@ export const userReducer = (state = initialState, action) => {
             return {...state, accessToken: action.payload.response.access_token, isAuth: true};
         case REFRESH_TOKEN_FAILED:
             return {...state, isAuth: false};
+        case GET_FAVORITES_REQUEST:
+            return {...state, loadingFlags: {...state.loadingFlags, isFavoritesLoading: true}};
+        case GET_FAVORITES_SUCCESS:
+            return {...state, favoriteBeer: action.payload.response, loadingFlags: {...state.loadingFlags, isFavoritesLoading: false}}
+        case GET_ME_SUCCESS:
+            return {...state, id: action.payload.response.id, username: action.payload.response.username, email: action.payload.response.email};
+        case GET_FAVORITES_FAILED:
+            return {...state, loadingFlags: {...state.loadingFlags, isFavoritesLoading: false}};
+        case GET_ME_REQUEST:
         default:
             return state;
     }

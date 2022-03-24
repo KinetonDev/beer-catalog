@@ -1,7 +1,6 @@
 ﻿using BeerCatalog.Application.Common.Enums;
 using BeerCatalog.Application.Interfaces.Services;
 using BeerCatalog.WebApi.Helpers.Interfaces;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -38,16 +37,29 @@ public class UsersController : ControllerBase
     }
     
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetById(string id)
+    public async Task<IActionResult> GetById(Guid id)
     {
-        var isIdValidGuid = Guid.TryParse(id, out var guid);
+        var retrievingResult = await _userService.GetByIdAsync(id);
 
-        if (!isIdValidGuid)
+        if (retrievingResult.Succeeded)
         {
-            return BadRequest("Invalid guid");
+            return Ok(retrievingResult.Result);
         }
         
-        var retrievingResult = await _userService.GetByIdAsync(guid);
+        if (retrievingResult.Error.ErrorCode == ErrorCode.UserNotFound)
+        {
+            return NotFound(retrievingResult.Error);
+        }
+
+        return BadRequest(retrievingResult.Error);
+    }
+    
+    [HttpGet("me")]
+    public async Task<IActionResult> GetMe()
+    {
+        var userId = GetUserIdFromAccessToken();
+        
+        var retrievingResult = await _userService.GetByIdAsync(userId);
 
         if (retrievingResult.Succeeded)
         {
@@ -62,20 +74,13 @@ public class UsersController : ControllerBase
         return BadRequest(retrievingResult.Error);
     }
 
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteById(string id)
+    [HttpDelete("{userId}")]
+    public async Task<IActionResult> DeleteById(Guid userId)
     {
-        var isIdValidGuid = Guid.TryParse(id, out var guid);
-
-        if (!isIdValidGuid)
-        {
-            return BadRequest("Invalid guid");
-        }
-
-        if (!(await IsAllowedToDeleteAccount(guid)))
+        if (!(await IsAllowedToDeleteAccount(userId)))
             return BadRequest("Not allowed to delete this user");
 
-        var deletionResult = await _userService.DeleteByIdAsync(guid);
+        var deletionResult = await _userService.DeleteByIdAsync(userId);
 
         if (deletionResult.Succeeded)
         {
@@ -83,6 +88,19 @@ public class UsersController : ControllerBase
         }
 
         return BadRequest(deletionResult.Error);
+    }
+
+    [HttpGet("{userId}/favorite-beers")]
+    public async Task<IActionResult> GetFavoriteBeers(Guid userId)
+    {
+        var favoritesResult = await _userService.GetFavoriteBeersAsync(userId);
+        
+        if (favoritesResult.Succeeded)
+        {
+            return Ok(favoritesResult.Result);
+        }
+        
+        return BadRequest(favoritesResult.Error);
     }
 
     [AllowAnonymous]
@@ -102,14 +120,19 @@ public class UsersController : ControllerBase
 
         return exists ? Ok() : NotFound();
     }
-    
-    private async Task<bool> IsAllowedToDeleteAccount(Guid id)
+
+    private Guid GetUserIdFromAccessToken()
     {
         var token = HttpContext.Request.Headers["Authorization"]
             .FirstOrDefault(token => token!.StartsWith("Bearer"))!
             .Split(" ")[1];
 
-        var userId = _jwtTokenResolver.GetUserIdFromToken(token!);
+        return _jwtTokenResolver.GetUserIdFromToken(token!);
+    }
+    
+    private async Task<bool> IsAllowedToDeleteAccount(Guid id)
+    {
+        var userId = GetUserIdFromAccessToken();
 
         if (userId == id)
         {

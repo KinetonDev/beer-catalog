@@ -10,6 +10,7 @@ public class BeerProfile : Profile
 {
     public BeerProfile()
     {
+        CreateMap<Beer, FavoriteBeerDto>();
         CreateMap<Beer, BeerReadDto>()
             .ForMember(b => b.FoodPairing, opt =>
                 opt.MapFrom(c => c.Foods.Select(f => f.Name)))
