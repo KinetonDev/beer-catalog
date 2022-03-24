@@ -1,8 +1,12 @@
 ﻿using System.Text;
+using BeerCatalog.Application.Common.Enums;
+using BeerCatalog.Application.Common.Models;
 using BeerCatalog.Application.Interfaces.Services;
 using BeerCatalog.Domain.Models.Beer;
 using BeerCatalog.Infrastructure;
+using BeerCatalog.WebApi.Controllers.Common;
 using BeerCatalog.WebApi.DTO;
+using BeerCatalog.WebApi.Helpers.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,44 +19,42 @@ namespace BeerCatalog.WebApi.Controllers;
 [ApiController]
 [Route("beers")]
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-public class BeersController : ControllerBase
+public class BeersController : ControllerBaseClass
 {
     private readonly IBeerService _beerService;
+    private readonly IJwtTokenResolver _jwtTokenResolver;
     private readonly DbContext _context;
 
-    public BeersController(IBeerService beerService, DbContext context)
+    public BeersController(
+        IBeerService beerService,
+        IJwtTokenResolver jwtTokenResolver,
+        DbContext context)
     {
         _beerService = beerService;
+        _jwtTokenResolver = jwtTokenResolver;
         _context = context;
     }
 
     [HttpGet]
     public async Task<IActionResult> GetAll([FromQuery] PaginationAndFilterDto paginationDto)
     {
-        var retrievingResult = await _beerService.GetAllAsync();
+        var userId = GetUserIdFromAccessToken();
+        
+        var retrievingResult = await _beerService.GetAllWithFavoriteMarkAsync(userId);
 
-        if (retrievingResult.Succeeded)
-        {
-            return Ok(retrievingResult.Result);
-        }
-
-        return BadRequest(retrievingResult.Error);
+        return HandleServiceResult(retrievingResult);
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById([FromRoute] Guid id)
     {
-        var retrievingResult = await _beerService.GetByIdAsync(id);
+        var userId = GetUserIdFromAccessToken();
+        
+        var retrievingResult = await _beerService.GetByIdWithFavoriteMarkAsync(id, userId);
 
-        if (retrievingResult.Succeeded)
-        {
-            return Ok(retrievingResult.Result);
-        }
-
-        return BadRequest(retrievingResult.Error);
+        return HandleServiceResult(retrievingResult);
     }
 
-    
     [HttpPost("parse")]
     [AllowAnonymous]
     public async Task<IActionResult> AddBeersFromPunkApi([FromServices]IHttpClientFactory factory)
@@ -82,5 +84,26 @@ public class BeersController : ControllerBase
         }
 
         return Ok();
+    }
+    
+    private Guid GetUserIdFromAccessToken()
+    {
+        var token = HttpContext.Request.Headers["Authorization"]
+            .FirstOrDefault(token => token!.StartsWith("Bearer"))!
+            .Split(" ")[1];
+
+        return _jwtTokenResolver.GetUserIdFromToken(token!);
+    }
+
+    protected override IActionResult ErrorResult(Error error)
+    {
+        var errorCode = error.ErrorCode;
+
+        if (errorCode is ErrorCode.BeerNotFound or ErrorCode.UserNotFound)
+        {
+            return NotFound(error);
+        }
+
+        return BadRequest(error);
     }
 }

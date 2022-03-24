@@ -2,7 +2,12 @@ import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {selectBeers, selectFilter, selectPage, selectPerPage} from "../redux/selectors";
 import BeerGrid from "../components/BeerGrid";
-import {getBeersRequest, incrementPage} from "../redux/actions/actions";
+import {
+    addFavoriteBeerRequest,
+    getBeersRequest,
+    incrementPage,
+    removeFavoriteBeerRequest,
+} from "../redux/actions/actions";
 import useObserver from "../hooks/useObserver";
 import createUrlFromFilter from "../helpers/createUrlFromFilter";
 import {useNavigate} from "react-router-dom";
@@ -36,7 +41,19 @@ const BeerGridContainer = () => {
 
     const handleNavigation = useCallback((beerId) => {
         navigate(`/${beerId}`);
-    });
+    }, [navigate]);
+
+    const handleAddingFavorite = useCallback((beerId) => {
+        dispatch(addFavoriteBeerRequest({
+            beer_id: beerId
+        }))
+    }, [dispatch]);
+
+    const handleRemovingFavorite = useCallback((beerId) => {
+        dispatch(removeFavoriteBeerRequest({
+            beerId: beerId
+        }));
+    }, [dispatch]);
 
     return (
         <BeerGrid
@@ -44,6 +61,8 @@ const BeerGridContainer = () => {
             endNotReached={page < totalPages}
             observableElement={observableElement}
             handleNavigation={handleNavigation}
+            handleAddingFavorite={handleAddingFavorite}
+            handleRemovingFavorite={handleRemovingFavorite}
         />
     );
 };

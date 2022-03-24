@@ -1,7 +1,9 @@
 ﻿using BeerCatalog.Application.Common.Enums;
+using BeerCatalog.Application.Common.Models;
 using BeerCatalog.Application.Interfaces.Services;
+using BeerCatalog.WebApi.Controllers.Common;
+using BeerCatalog.WebApi.DTO;
 using BeerCatalog.WebApi.Helpers.Interfaces;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +13,7 @@ namespace BeerCatalog.WebApi.Controllers;
 [ApiController]
 [Route("users")]
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-public class UsersController : ControllerBase
+public class UsersController : ControllerBaseClass
 {
     private readonly IJwtTokenResolver _jwtTokenResolver;
     private readonly IUserService _userService;
@@ -29,60 +31,36 @@ public class UsersController : ControllerBase
     {
         var retrievingResult = await _userService.GetAllAsync();
 
-        if (retrievingResult.Succeeded)
-        {
-            return Ok(retrievingResult.Result);
-        }
-
-        return BadRequest(retrievingResult.Error);
+        return HandleServiceResult(retrievingResult);
     }
     
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetById(string id)
+    public async Task<IActionResult> GetById(Guid id)
     {
-        var isIdValidGuid = Guid.TryParse(id, out var guid);
+        var retrievingResult = await _userService.GetByIdAsync(id);
 
-        if (!isIdValidGuid)
-        {
-            return BadRequest("Invalid guid");
-        }
+        return HandleServiceResult(retrievingResult);
+    }
+    
+    [HttpGet("me")]
+    public async Task<IActionResult> GetMe()
+    {
+        var userId = GetUserIdFromAccessToken();
         
-        var retrievingResult = await _userService.GetByIdAsync(guid);
+        var retrievingResult = await _userService.GetByIdAsync(userId);
 
-        if (retrievingResult.Succeeded)
-        {
-            return Ok(retrievingResult.Result);
-        }
-        
-        if (retrievingResult.Error.ErrorCode == ErrorCode.UserNotFound)
-        {
-            return NotFound(retrievingResult.Error);
-        }
-
-        return BadRequest(retrievingResult.Error);
+        return HandleServiceResult(retrievingResult);
     }
 
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteById(string id)
+    [HttpDelete("{userId}")]
+    public async Task<IActionResult> DeleteById(Guid userId)
     {
-        var isIdValidGuid = Guid.TryParse(id, out var guid);
-
-        if (!isIdValidGuid)
-        {
-            return BadRequest("Invalid guid");
-        }
-
-        if (!(await IsAllowedToDeleteAccount(guid)))
+        if (!(await IsAllowedToDeleteAccount(userId)))
             return BadRequest("Not allowed to delete this user");
 
-        var deletionResult = await _userService.DeleteByIdAsync(guid);
+        var deletionResult = await _userService.DeleteByIdAsync(userId);
 
-        if (deletionResult.Succeeded)
-        {
-            return Ok();
-        }
-
-        return BadRequest(deletionResult.Error);
+        return HandleServiceResult(deletionResult);
     }
 
     [AllowAnonymous]
@@ -102,14 +80,19 @@ public class UsersController : ControllerBase
 
         return exists ? Ok() : NotFound();
     }
-    
-    private async Task<bool> IsAllowedToDeleteAccount(Guid id)
+
+    private Guid GetUserIdFromAccessToken()
     {
         var token = HttpContext.Request.Headers["Authorization"]
             .FirstOrDefault(token => token!.StartsWith("Bearer"))!
             .Split(" ")[1];
 
-        var userId = _jwtTokenResolver.GetUserIdFromToken(token!);
+        return _jwtTokenResolver.GetUserIdFromToken(token!);
+    }
+    
+    private async Task<bool> IsAllowedToDeleteAccount(Guid id)
+    {
+        var userId = GetUserIdFromAccessToken();
 
         if (userId == id)
         {
@@ -124,5 +107,17 @@ public class UsersController : ControllerBase
         }
 
         return await _userService.IsInRoleAsync(userRetrievingResult.Result!.Id, "Admin");
+    }
+
+    protected override IActionResult ErrorResult(Error error)
+    {
+        var errorCode = error.ErrorCode;
+
+        if (errorCode is ErrorCode.UserNotFound)
+        {
+            return NotFound(error);
+        }
+
+        return BadRequest(error);
     }
 }

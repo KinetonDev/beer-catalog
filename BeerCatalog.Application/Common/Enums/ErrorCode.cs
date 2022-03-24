@@ -13,4 +13,6 @@ public enum ErrorCode
     EmailConfirmationFailed,
     
     BeerNotFound = 2000,
+    BeerIsAlreadyMarkedAsFavorite,
+    BeerIsNotMarkedAsFavorite
 }

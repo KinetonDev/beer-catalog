@@ -11,4 +11,6 @@ public interface IBeerService
     Task<ServiceResult<IEnumerable<BeerReadDto>>> GetAllAsync();
     Task<ServiceResult> DeleteByIdAsync(Guid id);
     Task<ServiceResult> UpdateByIdAsync(Guid id);
+    Task<ServiceResult<BeerWithFavoriteMarkDto>> GetByIdWithFavoriteMarkAsync(Guid id, Guid userId);
+    Task<ServiceResult<IEnumerable<BeerWithFavoriteMarkDto>>> GetAllWithFavoriteMarkAsync(Guid userId);
 }

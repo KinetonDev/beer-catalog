@@ -1,7 +1,9 @@
 import {call} from "redux-saga/effects";
 import {authorizedRequest, request, requestWithFetch, requestWithXHR} from "./request";
-import {GET, POST} from "../../helpers/HTTPMethods";
+import {DELETE, GET, POST} from "../../helpers/HTTPMethods";
 import createUrlFromFilter from "../../helpers/createUrlFromFilter";
+import createUrl from "../../helpers/createUrl";
+import {addFavoriteBeerRequest} from "../actions/actions";
 
 export function getBeers(payload, accessToken) {
     return call(
@@ -12,8 +14,45 @@ export function getBeers(payload, accessToken) {
         },
         requestWithFetch,
         accessToken
-    )
+    );
 };
+
+export function getFavorites(payload, accessToken) {
+    return call(
+        authorizedRequest,
+        {
+            url: createUrl(`favorites/${payload.userId}`),
+            method: GET,
+        },
+        requestWithFetch,
+        accessToken
+    );
+}
+
+export function addFavorite(payload, accessToken) {
+    return call(
+        authorizedRequest,
+        {
+            url: createUrl(`favorites`),
+            method: POST,
+            body: payload
+        },
+        requestWithFetch,
+        accessToken
+    );
+}
+
+export function removeFavorite(payload, accessToken) {
+    return call(
+        authorizedRequest,
+        {
+            url: createUrl(`favorites/${payload.beerId}`),
+            method: DELETE
+        },
+        requestWithFetch,
+        accessToken
+    );
+}
 
 export function getBeerById(payload, accessToken) {
     return call(
@@ -24,14 +63,14 @@ export function getBeerById(payload, accessToken) {
         },
         requestWithFetch,
         accessToken
-    )
+    );
 }
 
 export function register(payload) {
     return call(
         request,
         {
-            url: createUrlFromFilter("auth/register"),
+            url: createUrl("auth/register"),
             method: POST,
             body: payload,
         },
@@ -43,7 +82,7 @@ export function confirmEmail(payload) {
     return call(
         request,
         {
-            url: createUrlFromFilter("auth/confirm-email"),
+            url: createUrl("auth/confirm-email"),
             method: POST,
             body: payload
         },
@@ -55,7 +94,7 @@ export function login(payload) {
     return call(
         request,
         {
-            url: createUrlFromFilter("auth/login"),
+            url: createUrl("auth/login"),
             method: POST,
             body: payload
         },
@@ -63,11 +102,21 @@ export function login(payload) {
     );
 }
 
+export function getMe(_, accessToken) {
+    return call(
+        authorizedRequest,
+        {
+            url: createUrl("users/me"),
+            method: GET,
+        },
+        requestWithFetch,
+        accessToken
+    );}
 export function checkEmail(payload) {
     return call(
         request,
         {
-            url: createUrlFromFilter(`users/check-email/${payload.email}`),
+            url: createUrl(`users/check-email/${payload.email}`),
             method: GET
         },
         requestWithFetch
@@ -78,7 +127,7 @@ export function checkUsername(payload) {
     return call(
         request,
         {
-            url: createUrlFromFilter(`users/check-username/${payload.username}`),
+            url: createUrl(`users/check-username/${payload.username}`),
             method: GET
         },
         requestWithFetch
@@ -89,9 +138,9 @@ export function refreshToken() {
     return call(
         request,
         {
-            url: createUrlFromFilter("auth/refresh"),
+            url: createUrl("auth/refresh"),
             method: POST
         },
         requestWithFetch
-    )
+    );
 }

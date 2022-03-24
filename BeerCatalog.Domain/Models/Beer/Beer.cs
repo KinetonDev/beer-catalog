@@ -23,5 +23,7 @@ namespace BeerCatalog.Domain.Models.Beer
         public virtual ICollection<MashTemp> MashTemps { get; set; } = new HashSet<MashTemp>();
         public virtual Twist? Twist { get; set; }
         public virtual ICollection<Food> Foods { get; set; } = new HashSet<Food>();
+
+        public virtual ICollection<User> Fans { get; set; } = new HashSet<User>();
     }
 }

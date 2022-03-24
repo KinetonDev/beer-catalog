@@ -27,6 +27,8 @@ public class Error
         ErrorCode.UserNotDeleted => "User wasn't deleted",
         //beers
         ErrorCode.BeerNotFound => "Beer wasn't found",
-        _ => throw new Exception("Unknown error code")
+        ErrorCode.BeerIsAlreadyMarkedAsFavorite => "Beer is already favorite",
+        ErrorCode.BeerIsNotMarkedAsFavorite => "Beer is not favorite",
+        _ => throw new ArgumentException("Unknown error code")
     };
 }
