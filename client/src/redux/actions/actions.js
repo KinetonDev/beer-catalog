@@ -1,4 +1,5 @@
 import {
+    ADD_FAVORITE_REQUEST,
     CHANGE_FILTER,
     CHECK_EMAIL_REQUEST,
     CHECK_USERNAME_REQUEST,
@@ -102,6 +103,13 @@ export function refreshTokenRequest() {
 export function getFavoriteBeersRequest(payload) {
     return {
         type: GET_FAVORITES_REQUEST,
+        payload
+    }
+}
+
+export function addFavoriteBeerRequest(payload) {
+    return {
+        type: ADD_FAVORITE_REQUEST,
         payload
     }
 }

@@ -71,6 +71,34 @@ public class UserService : Service<UserReadDto>, IUserService
         return new ServiceResult<IEnumerable<FavoriteBeerDto>>(_mapper.Map<IEnumerable<FavoriteBeerDto>>(favorites));
     }
 
+    public async Task<ServiceResult> AddFavoriteBeerByIdAsync(Guid userId, Guid beerId)
+    {
+        var user = await _unitOfWork.UsersRepository.GetWithFavoritesByIdAsync(userId);
+
+        if (user == null)
+        {
+            return new (ErrorCode.UserNotFound);
+        }
+
+        var beer = await _unitOfWork.BeersRepository.FindByIdAsync(beerId);
+
+        if (beer == null)
+        {
+            return new (ErrorCode.BeerNotFound);
+        }
+
+        if (user.Favorites.Contains(beer))
+        {
+            return new(ErrorCode.BeerIsAlreadyMarkedAsFavorite);
+        }
+        
+        user.Favorites.Add(beer);
+
+        await _unitOfWork.SaveChangesAsync();
+
+        return Success();
+    }
+
     public async Task<bool> IsInRoleAsync(Guid id, string role)
     {
         var user = await _userManager.FindByIdAsync(id.ToString());

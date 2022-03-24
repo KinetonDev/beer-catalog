@@ -11,7 +11,14 @@ const WhiteTextButton = styled(Button)({
     },
 });
 
-const BeerCard = (props) => {
+const BeerCard = ({
+      alt,
+      name,
+      image,
+      tagline,
+      onNavigate,
+      onFavoriteAdd
+}) => {
     const classes = useStyles();
 
     return (
@@ -19,26 +26,26 @@ const BeerCard = (props) => {
             <CardMedia
                 className={classes.cardMedia}
                 component="img"
-                alt={props.alt}
+                alt={alt}
                 height="140"
-                image={props.image}
+                image={image}
             />
             <div className={classes.cardContent}>
                 <CardContent>
                     <Typography
                         variant="h6"
                     >
-                        {props.name}
+                        {name}
                     </Typography>
                     <Typography
                         variant="body2"
                     >
-                        {props.tagline}
+                        {tagline}
                     </Typography>
                 </CardContent>
                 <CardActions className={classes.cardActions}>
-                    <WhiteTextButton variant="text" onClick={props.onNavigate}>OPEN</WhiteTextButton>
-                    <WhiteTextButton variant="text">FAVORITE</WhiteTextButton>
+                    <WhiteTextButton variant="text" onClick={onNavigate}>OPEN</WhiteTextButton>
+                    <WhiteTextButton variant="text" onClick={onFavoriteAdd}>FAVORITE</WhiteTextButton>
                 </CardActions>
             </div>
         </Card>

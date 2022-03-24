@@ -1,5 +1,6 @@
 ﻿using BeerCatalog.Application.Common.Enums;
 using BeerCatalog.Application.Interfaces.Services;
+using BeerCatalog.WebApi.DTO;
 using BeerCatalog.WebApi.Helpers.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -88,19 +89,6 @@ public class UsersController : ControllerBase
         }
 
         return BadRequest(deletionResult.Error);
-    }
-
-    [HttpGet("{userId}/favorite-beers")]
-    public async Task<IActionResult> GetFavoriteBeers(Guid userId)
-    {
-        var favoritesResult = await _userService.GetFavoriteBeersAsync(userId);
-        
-        if (favoritesResult.Succeeded)
-        {
-            return Ok(favoritesResult.Result);
-        }
-        
-        return BadRequest(favoritesResult.Error);
     }
 
     [AllowAnonymous]

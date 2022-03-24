@@ -3,7 +3,7 @@ import {CircularProgress, Grid} from "@mui/material";
 import BeerCard from "../BeerCard";
 import useStyle from "./styles";
 
-const BeerGrid = (props) => {
+const BeerGrid = ({beers, endNotReached,observableElement, handleAddingFavorite, handleNavigation}) => {
     const classes = useStyle();
 
     return (
@@ -13,7 +13,7 @@ const BeerGrid = (props) => {
                  spacing={10}
                  alignItems="stretch"
              >
-                 {props.beers.map(beer => {
+                 {beers.map(beer => {
                      return (
                          <Grid item key={beer.id} xs={4}>
                              <BeerCard
@@ -22,14 +22,17 @@ const BeerGrid = (props) => {
                                  tagline={beer.tagline}
                                  name={beer.name}
                                  onNavigate={() => {
-                                     props.handleNavigation(beer.id);
+                                     handleNavigation(beer.id);
+                                 }}
+                                 onFavoriteAdd={() => {
+                                     handleAddingFavorite(beer.id);
                                  }}
                              />
                          </Grid>
                      )
                  })}
              </Grid>
-             {(props.endNotReached) && <div
+             {(endNotReached) && <div
                  style={{
                      width: "100%",
                      height: "40px",
@@ -38,7 +41,7 @@ const BeerGrid = (props) => {
                      alignItems: "center",
                      padding: "50px 0 20px"
                  }}
-                 ref={props.observableElement}
+                 ref={observableElement}
              >
                  <CircularProgress disableShrink/>
              </div>}

@@ -71,9 +71,9 @@ export function selectIsCheckingProcessing(state) {
 }
 
 export function selectFavoriteBeer(state) {
-    return state.user.favoriteBeer;
+    return state.favorites.favorites;
 }
 
 export function selectIsFavoritesLoading(state) {
-    return state.user.loadingFlags.isFavoritesLoading;
+    return state.favorites.loadingFlags.isFavoritesLoading;
 }

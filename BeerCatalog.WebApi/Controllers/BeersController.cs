@@ -3,6 +3,7 @@ using BeerCatalog.Application.Interfaces.Services;
 using BeerCatalog.Domain.Models.Beer;
 using BeerCatalog.Infrastructure;
 using BeerCatalog.WebApi.DTO;
+using BeerCatalog.WebApi.Helpers.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +21,9 @@ public class BeersController : ControllerBase
     private readonly IBeerService _beerService;
     private readonly DbContext _context;
 
-    public BeersController(IBeerService beerService, DbContext context)
+    public BeersController(
+        IBeerService beerService,
+        DbContext context)
     {
         _beerService = beerService;
         _context = context;
@@ -52,7 +55,6 @@ public class BeersController : ControllerBase
         return BadRequest(retrievingResult.Error);
     }
 
-    
     [HttpPost("parse")]
     [AllowAnonymous]
     public async Task<IActionResult> AddBeersFromPunkApi([FromServices]IHttpClientFactory factory)
