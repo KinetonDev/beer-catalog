@@ -9,7 +9,7 @@ import {
     GET_BEERS_REQUEST, GET_FAVORITES_REQUEST, GET_ME_REQUEST,
     INCREMENT_PAGE,
     LOGIN_REQUEST, REFRESH_TOKEN_REQUEST,
-    REGISTER_REQUEST,
+    REGISTER_REQUEST, REMOVE_FAVORITE_REQUEST,
     SET_WAS_SEARCH_PERFORMED, START_VALIDATING
 } from "../types/types";
 
@@ -110,6 +110,13 @@ export function getFavoriteBeersRequest(payload) {
 export function addFavoriteBeerRequest(payload) {
     return {
         type: ADD_FAVORITE_REQUEST,
+        payload
+    }
+}
+
+export function removeFavoriteBeerRequest(payload) {
+    return {
+        type: REMOVE_FAVORITE_REQUEST,
         payload
     }
 }

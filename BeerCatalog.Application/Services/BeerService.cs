@@ -49,4 +49,48 @@ public class BeerService : Service<BeerReadDto>, IBeerService
     {
         throw new NotImplementedException();
     }
+
+    public async Task<ServiceResult<BeerWithFavoriteMarkDto>> GetByIdWithFavoriteMarkAsync(Guid id, Guid userId)
+    {
+        var user = await _unitOfWork.UsersRepository.GetWithFavoritesByIdAsync(userId);
+
+        if (user == null)
+        {
+            return new(ErrorCode.UserNotFound);
+        }
+
+        var beer = await _unitOfWork.BeersRepository.FindByIdAsync(id);
+
+        if (beer == null)
+        {
+            return new(ErrorCode.BeerNotFound);
+        }
+
+        var mappedBeer = _mapper.Map<BeerWithFavoriteMarkDto>(beer);
+
+        mappedBeer.IsFavorite = user.Favorites.Contains(beer);
+
+        return new (mappedBeer);
+    }
+
+    public async Task<ServiceResult<IEnumerable<BeerWithFavoriteMarkDto>>> GetAllWithFavoriteMarkAsync(Guid userId)
+    {
+        var user = await _unitOfWork.UsersRepository.GetWithFavoritesByIdAsync(userId);
+
+        if (user == null)
+        {
+            return new(ErrorCode.UserNotFound);
+        }
+        
+        var beers = await _unitOfWork.BeersRepository.AllAsync();
+
+        var mappedBeers = beers.Select(b =>
+        {
+            var mappedBeer = _mapper.Map<BeerWithFavoriteMarkDto>(b);
+            mappedBeer.IsFavorite = user.Favorites.Contains(b);
+            return mappedBeer;
+        });
+
+        return new (mappedBeers);
+    }
 }

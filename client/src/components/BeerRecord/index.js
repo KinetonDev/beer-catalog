@@ -11,7 +11,16 @@ const BlackTextButton = styled(Button)({
     },
 });
 
-const BeerRecord = (props) => {
+const BeerRecord = (
+    {
+        name,
+        alt,
+        description,
+        image,
+        onNavigate,
+        tagline,
+        onFavoriteRemove
+    }) => {
     const classes = useStyles();
 
     return (
@@ -21,31 +30,31 @@ const BeerRecord = (props) => {
                     <Typography
                         variant="h6"
                     >
-                        {props.name}
+                        {name}
                     </Typography>
                     <Typography
                         className={classes.cardTagline}
                         variant="body1"
                     >
-                        {props.tagline}
+                        {tagline}
                     </Typography>
                     <Typography
                         variant="body2"
                     >
-                        {props.description}
+                        {description}
                     </Typography>
                 </CardContent>
                 <CardActions className={classes.cardActions}>
-                    <BlackTextButton variant="text" onClick={props.onNavigate}>OPEN</BlackTextButton>
-                    <BlackTextButton variant="text">REMOVE FAVORITE</BlackTextButton>
+                    <BlackTextButton variant="text" onClick={onNavigate}>OPEN</BlackTextButton>
+                    <BlackTextButton variant="text" onClick={onFavoriteRemove}>REMOVE FAVORITE</BlackTextButton>
                 </CardActions>
             </div>
             <CardMedia
                 className={classes.cardMedia}
                 component="img"
-                alt={props.alt}
+                alt={alt}
                 height="140"
-                image={props.image}
+                image={image}
             />
         </Card>
     );

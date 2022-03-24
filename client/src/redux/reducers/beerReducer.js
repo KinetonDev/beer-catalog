@@ -1,9 +1,10 @@
 import {
+    ADD_FAVORITE_SUCCESS,
     CHANGE_FILTER,
     GET_BEER_BY_ID_REQUEST,
     GET_BEER_BY_ID_SUCCESS,
     GET_BEERS_SUCCESS,
-    INCREMENT_PAGE,
+    INCREMENT_PAGE, REMOVE_FAVORITE_SUCCESS,
     SET_WAS_SEARCH_PERFORMED
 } from "../types/types";
 
@@ -41,7 +42,44 @@ export const beerReducer = (state = initialState, action) => {
             return {...state, filter: action.payload.filter, page: 1, beers: []};
         case INCREMENT_PAGE:
             return {...state, page: state.page + 1};
+        case ADD_FAVORITE_SUCCESS:
+            return {...state,
+                beers: toggleFavoriteOnEvery(state.beers, action.payload.beer_id),
+                currentBeer: toggleFavoriteOnCurrent(state.currentBeer, action.payload.beer_id)}
+        case REMOVE_FAVORITE_SUCCESS:
+            return {...state,
+                beers: toggleFavoriteOnEvery(state.beers, action.payload.beerId),
+                currentBeer: toggleFavoriteOnCurrent(state.currentBeer, action.payload.beerId)}
         default:
             return state;
     }
+}
+
+const toggleFavoriteOnEvery = (beers, id) => {
+    if (!beers.length) {
+        return beers;
+    }
+
+    const newBeers = [...beers];
+    const beer = newBeers.find(b => b.id === id);
+
+    beer.is_favorite = !beer.is_favorite;
+
+    return newBeers;
+}
+
+const toggleFavoriteOnCurrent = (currentBeer, id) => {
+    if (!currentBeer.value.id || currentBeer.value.id !== id)
+        return currentBeer;
+
+    const newBeer = {
+        ...currentBeer,
+        value: {
+            ...currentBeer.value
+        }
+    };
+
+    newBeer.value.is_favorite = !newBeer.value.is_favorite;
+
+    return newBeer;
 }

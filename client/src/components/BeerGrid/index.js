@@ -3,7 +3,15 @@ import {CircularProgress, Grid} from "@mui/material";
 import BeerCard from "../BeerCard";
 import useStyle from "./styles";
 
-const BeerGrid = ({beers, endNotReached,observableElement, handleAddingFavorite, handleNavigation}) => {
+const BeerGrid = (
+    {
+        beers,
+        endNotReached,
+        observableElement,
+        handleAddingFavorite,
+        handleRemovingFavorite,
+        handleNavigation
+    }) => {
     const classes = useStyle();
 
     return (
@@ -21,11 +29,15 @@ const BeerGrid = ({beers, endNotReached,observableElement, handleAddingFavorite,
                                  alt={beer.name}
                                  tagline={beer.tagline}
                                  name={beer.name}
+                                 isFavorite={beer.is_favorite}
                                  onNavigate={() => {
                                      handleNavigation(beer.id);
                                  }}
                                  onFavoriteAdd={() => {
                                      handleAddingFavorite(beer.id);
+                                 }}
+                                 onFavoriteRemove={() => {
+                                     handleRemovingFavorite(beer.id);
                                  }}
                              />
                          </Grid>

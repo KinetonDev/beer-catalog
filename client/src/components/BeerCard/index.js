@@ -17,7 +17,9 @@ const BeerCard = ({
       image,
       tagline,
       onNavigate,
-      onFavoriteAdd
+      onFavoriteAdd,
+      onFavoriteRemove,
+      isFavorite
 }) => {
     const classes = useStyles();
 
@@ -45,7 +47,10 @@ const BeerCard = ({
                 </CardContent>
                 <CardActions className={classes.cardActions}>
                     <WhiteTextButton variant="text" onClick={onNavigate}>OPEN</WhiteTextButton>
-                    <WhiteTextButton variant="text" onClick={onFavoriteAdd}>FAVORITE</WhiteTextButton>
+                    {isFavorite ?
+                        <WhiteTextButton variant="text" onClick={onFavoriteRemove}>REMOVE FAVORITE</WhiteTextButton> :
+                        <WhiteTextButton variant="text" onClick={onFavoriteAdd}>FAVORITE</WhiteTextButton>
+                    }
                 </CardActions>
             </div>
         </Card>

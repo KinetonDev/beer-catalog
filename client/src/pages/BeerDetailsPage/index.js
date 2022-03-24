@@ -4,19 +4,21 @@ import BeerHeader from "../../components/BeerHeader";
 import BeerCharacteristics from "../../components/BeerCharactersstics";
 import BeerBrewing from "../../components/BeerBrewing";
 
-const BeerDetailsPage = (props) => {
+const BeerDetailsPage = ({currentBeer, handleAddingFavorite, handleRemovingFavorite}) => {
     const classes = useStyle();
 
     return (
         <div className={classes.beerDetailsPage}>
             <BeerHeader
-                currentBeer={props.currentBeer}
+                currentBeer={currentBeer}
+                handleAddingFavorite={handleAddingFavorite}
+                handleRemovingFavorite={handleRemovingFavorite}
             />
             <BeerCharacteristics
-                currentBeer={props.currentBeer}
+                currentBeer={currentBeer}
             />
             <BeerBrewing
-                currentBeer={props.currentBeer}
+                currentBeer={currentBeer}
             />
         </div>
     );

@@ -1,6 +1,6 @@
 import {call} from "redux-saga/effects";
 import {authorizedRequest, request, requestWithFetch, requestWithXHR} from "./request";
-import {GET, POST} from "../../helpers/HTTPMethods";
+import {DELETE, GET, POST} from "../../helpers/HTTPMethods";
 import createUrlFromFilter from "../../helpers/createUrlFromFilter";
 import createUrl from "../../helpers/createUrl";
 import {addFavoriteBeerRequest} from "../actions/actions";
@@ -36,6 +36,18 @@ export function addFavorite(payload, accessToken) {
             url: createUrl(`favorites`),
             method: POST,
             body: payload
+        },
+        requestWithFetch,
+        accessToken
+    );
+}
+
+export function removeFavorite(payload, accessToken) {
+    return call(
+        authorizedRequest,
+        {
+            url: createUrl(`favorites/${payload.beerId}`),
+            method: DELETE
         },
         requestWithFetch,
         accessToken

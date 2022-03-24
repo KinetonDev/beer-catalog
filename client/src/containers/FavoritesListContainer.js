@@ -1,9 +1,9 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import FavoritesList from "../components/FavoritesList";
 import {useDispatch, useSelector} from "react-redux";
 import {selectFavoriteBeer, selectIsFavoritesLoading, selectUserId} from "../redux/selectors";
-import {getFavoriteBeersRequest} from "../redux/actions/actions";
+import {addFavoriteBeerRequest, getFavoriteBeersRequest, removeFavoriteBeerRequest} from "../redux/actions/actions";
 
 const pageSize = 10;
 
@@ -26,12 +26,19 @@ const FavoritesListContainer = () => {
         }));
     }, []);
 
+    const handleRemovingFavorite = useCallback((beerId) => {
+        dispatch(removeFavoriteBeerRequest({
+            beerId: beerId
+        }));
+    }, [dispatch]);
+
     return (
         <FavoritesList
             favorites={favorites}
             isFavoritesLoading={isFavoritesLoading}
             page={page}
             handlePageChange={handlePageChange}
+            handleRemovingFavorite={handleRemovingFavorite}
             totalPages={totalPages}
             showPaginationPanel={favorites.length > pageSize}
         />

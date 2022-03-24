@@ -5,7 +5,16 @@ import {Box, Typography} from "@mui/material";
 import useStyle from './styles'
 import Loader from "../PageLoader";
 
-const FavoritesList = ({favorites, isFavoritesLoading, page, totalPages, showPaginationPanel, handlePageChange}) => {
+const FavoritesList = (
+    {
+        favorites,
+        isFavoritesLoading,
+        page,
+        totalPages,
+        showPaginationPanel,
+        handlePageChange,
+        handleRemovingFavorite,
+    }) => {
     const classes = useStyle();
 
     return (
@@ -23,6 +32,7 @@ const FavoritesList = ({favorites, isFavoritesLoading, page, totalPages, showPag
                                 </Typography>
                                 <BeerListContainer
                                     beers={favorites}
+                                    handleRemovingFavorite={handleRemovingFavorite}
                                 />
                                 {showPaginationPanel && <BeerListPagination
                                     totalPages={totalPages}

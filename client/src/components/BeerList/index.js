@@ -3,12 +3,17 @@ import BeerRecord from "../BeerRecord";
 import {Stack} from "@mui/material";
 import useStyle from "./styles"
 
-const BeerList = (props) => {
+const BeerList = (
+    {
+        favorites,
+        handleNavigation,
+        handleRemovingFavorite,
+    }) => {
     return (
         <Stack
             alignItems="center"
         >
-            {props.favorites.map(favorite => (
+            {favorites.map(favorite => (
                 <BeerRecord
                     key={favorite.id}
                     name={favorite.name}
@@ -17,7 +22,10 @@ const BeerList = (props) => {
                     alt={"Favorite beer"}
                     image={favorite.image_url}
                     onNavigate={() => {
-                        props.handleNavigation(favorite.id);
+                        handleNavigation(favorite.id);
+                    }}
+                    onFavoriteRemove={() => {
+                        handleRemovingFavorite(favorite.id);
                     }}
                 />
             ))}
