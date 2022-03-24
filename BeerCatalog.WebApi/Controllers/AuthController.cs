@@ -1,4 +1,7 @@
-﻿using BeerCatalog.WebApi.Common.Models;
+﻿using BeerCatalog.Application.Common.Enums;
+using BeerCatalog.Application.Common.Models;
+using BeerCatalog.WebApi.Common.Models;
+using BeerCatalog.WebApi.Controllers.Common;
 using BeerCatalog.WebApi.DTO;
 using BeerCatalog.WebApi.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +10,7 @@ namespace BeerCatalog.WebApi.Controllers;
 
 [ApiController]
 [Route("auth")]
-public class AuthController : ControllerBase
+public class AuthController : ControllerBaseClass
 {
     private readonly IAuthService _authService;
 
@@ -21,12 +24,7 @@ public class AuthController : ControllerBase
     {
         var registrationResult = await _authService.RegisterAsync(registerDto);
 
-        if (registrationResult.Succeeded)
-        {
-            return Ok(registrationResult.Result);
-        }
-
-        return BadRequest(registrationResult.Error);
+        return HandleServiceResult(registrationResult);
     }
 
     [HttpPost("login")]
@@ -81,12 +79,7 @@ public class AuthController : ControllerBase
     {
         var confirmEmailResult = await _authService.ConfirmEmailAsync(confirmEmailDto);
 
-        if (confirmEmailResult.Succeeded)
-        {
-            return Ok();
-        }
-
-        return BadRequest(confirmEmailResult.Error);
+        return HandleServiceResult(confirmEmailResult);
     }
 
     private void AddRefreshTokenToCookies(string refreshToken)
@@ -101,5 +94,17 @@ public class AuthController : ControllerBase
         };
         
         Response.Cookies.Append("refresh_token", refreshToken, cookieOptions);
-    } 
+    }
+
+    protected override IActionResult ErrorResult(Error error)
+    {
+        var errorCode = error.ErrorCode;
+
+        if (errorCode is ErrorCode.UserNotFound)
+        {
+            return NotFound(error);
+        }
+
+        return BadRequest(error);
+    }
 }

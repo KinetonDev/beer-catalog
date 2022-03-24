@@ -28,6 +28,7 @@ public class Error
         //beers
         ErrorCode.BeerNotFound => "Beer wasn't found",
         ErrorCode.BeerIsAlreadyMarkedAsFavorite => "Beer is already favorite",
+        ErrorCode.BeerIsNotMarkedAsFavorite => "Beer is not favorite",
         _ => throw new ArgumentException("Unknown error code")
     };
 }

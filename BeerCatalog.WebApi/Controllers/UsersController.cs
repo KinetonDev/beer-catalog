@@ -1,5 +1,7 @@
 ﻿using BeerCatalog.Application.Common.Enums;
+using BeerCatalog.Application.Common.Models;
 using BeerCatalog.Application.Interfaces.Services;
+using BeerCatalog.WebApi.Controllers.Common;
 using BeerCatalog.WebApi.DTO;
 using BeerCatalog.WebApi.Helpers.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -11,7 +13,7 @@ namespace BeerCatalog.WebApi.Controllers;
 [ApiController]
 [Route("users")]
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-public class UsersController : ControllerBase
+public class UsersController : ControllerBaseClass
 {
     private readonly IJwtTokenResolver _jwtTokenResolver;
     private readonly IUserService _userService;
@@ -29,12 +31,7 @@ public class UsersController : ControllerBase
     {
         var retrievingResult = await _userService.GetAllAsync();
 
-        if (retrievingResult.Succeeded)
-        {
-            return Ok(retrievingResult.Result);
-        }
-
-        return BadRequest(retrievingResult.Error);
+        return HandleServiceResult(retrievingResult);
     }
     
     [HttpGet("{id}")]
@@ -42,17 +39,7 @@ public class UsersController : ControllerBase
     {
         var retrievingResult = await _userService.GetByIdAsync(id);
 
-        if (retrievingResult.Succeeded)
-        {
-            return Ok(retrievingResult.Result);
-        }
-        
-        if (retrievingResult.Error.ErrorCode == ErrorCode.UserNotFound)
-        {
-            return NotFound(retrievingResult.Error);
-        }
-
-        return BadRequest(retrievingResult.Error);
+        return HandleServiceResult(retrievingResult);
     }
     
     [HttpGet("me")]
@@ -62,17 +49,7 @@ public class UsersController : ControllerBase
         
         var retrievingResult = await _userService.GetByIdAsync(userId);
 
-        if (retrievingResult.Succeeded)
-        {
-            return Ok(retrievingResult.Result);
-        }
-        
-        if (retrievingResult.Error.ErrorCode == ErrorCode.UserNotFound)
-        {
-            return NotFound(retrievingResult.Error);
-        }
-
-        return BadRequest(retrievingResult.Error);
+        return HandleServiceResult(retrievingResult);
     }
 
     [HttpDelete("{userId}")]
@@ -83,12 +60,7 @@ public class UsersController : ControllerBase
 
         var deletionResult = await _userService.DeleteByIdAsync(userId);
 
-        if (deletionResult.Succeeded)
-        {
-            return Ok();
-        }
-
-        return BadRequest(deletionResult.Error);
+        return HandleServiceResult(deletionResult);
     }
 
     [AllowAnonymous]
@@ -135,5 +107,17 @@ public class UsersController : ControllerBase
         }
 
         return await _userService.IsInRoleAsync(userRetrievingResult.Result!.Id, "Admin");
+    }
+
+    protected override IActionResult ErrorResult(Error error)
+    {
+        var errorCode = error.ErrorCode;
+
+        if (errorCode is ErrorCode.UserNotFound)
+        {
+            return NotFound(error);
+        }
+
+        return BadRequest(error);
     }
 }

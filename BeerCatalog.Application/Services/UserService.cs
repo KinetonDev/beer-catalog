@@ -99,6 +99,34 @@ public class UserService : Service<UserReadDto>, IUserService
         return Success();
     }
 
+    public async Task<ServiceResult> RemoveFavoriteBeerByIdAsync(Guid userId, Guid beerId)
+    {
+        var user = await _unitOfWork.UsersRepository.GetWithFavoritesByIdAsync(userId);
+
+        if (user == null)
+        {
+            return new (ErrorCode.UserNotFound);
+        }
+
+        var beer = await _unitOfWork.BeersRepository.FindByIdAsync(beerId);
+
+        if (beer == null)
+        {
+            return new (ErrorCode.BeerNotFound);
+        }
+
+        if (!user.Favorites.Contains(beer))
+        {
+            return new(ErrorCode.BeerIsNotMarkedAsFavorite);
+        }
+        
+        user.Favorites.Remove(beer);
+
+        await _unitOfWork.SaveChangesAsync();
+
+        return Success();
+    }
+
     public async Task<bool> IsInRoleAsync(Guid id, string role)
     {
         var user = await _userManager.FindByIdAsync(id.ToString());

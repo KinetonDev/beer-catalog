@@ -1,5 +1,8 @@
 ﻿using BeerCatalog.Application.Common.Enums;
+using BeerCatalog.Application.Common.Models;
+using BeerCatalog.Application.Common.Service;
 using BeerCatalog.Application.Interfaces.Services;
+using BeerCatalog.WebApi.Controllers.Common;
 using BeerCatalog.WebApi.DTO;
 using BeerCatalog.WebApi.Helpers.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -11,7 +14,7 @@ namespace BeerCatalog.WebApi.Controllers;
 [ApiController]
 [Route("favorites")]
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-public class FavoritesController : ControllerBase
+public class FavoritesController : ControllerBaseClass
 {
     private readonly IJwtTokenResolver _jwtTokenResolver;
     private readonly IUserService _userService;
@@ -24,17 +27,12 @@ public class FavoritesController : ControllerBase
         _userService = userService;
     }
     
-    [HttpGet("{userId}")]
+    [HttpGet("{userId:guid}")]
     public async Task<IActionResult> GetFavoriteBeers(Guid userId)
     {
         var favoritesResult = await _userService.GetFavoriteBeersAsync(userId);
-        
-        if (favoritesResult.Succeeded)
-        {
-            return Ok(favoritesResult.Result);
-        }
-        
-        return BadRequest(favoritesResult.Error);
+
+        return HandleServiceResult(favoritesResult);
     }
 
     [HttpPost]
@@ -44,19 +42,17 @@ public class FavoritesController : ControllerBase
 
         var addingResult = await _userService.AddFavoriteBeerByIdAsync(userId, dto.BeerId);
 
-        if (addingResult.Succeeded)
-        {
-            return Ok();
-        }
+        return HandleServiceResult(addingResult);
+    }
 
-        var errorCode = addingResult.Error.ErrorCode;
+    [HttpDelete("{beerId:guid}")]
+    public async Task<IActionResult> RemoveFavoriteBeer(Guid beerId)
+    {
+        var userId = GetUserIdFromAccessToken();
 
-        if (errorCode is ErrorCode.BeerNotFound or ErrorCode.UserNotFound)
-        {
-            return NotFound(addingResult.Error);
-        }
+        var removingResult = await _userService.RemoveFavoriteBeerByIdAsync(userId, beerId);
 
-        return BadRequest(addingResult.Error);
+        return HandleServiceResult(removingResult);
     }
     
     private Guid GetUserIdFromAccessToken()
@@ -66,5 +62,17 @@ public class FavoritesController : ControllerBase
             .Split(" ")[1];
 
         return _jwtTokenResolver.GetUserIdFromToken(token!);
+    }
+
+    protected override IActionResult ErrorResult(Error error)
+    {
+        var errorCode = error.ErrorCode;
+        
+        if (errorCode is ErrorCode.BeerNotFound or ErrorCode.UserNotFound)
+        {
+            return NotFound(error);
+        }
+
+        return BadRequest(error);
     }
 }

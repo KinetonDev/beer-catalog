@@ -14,6 +14,7 @@ public interface IUserService
     Task<ServiceResult> UpdateByIdAsync(Guid id);
     Task<ServiceResult<IEnumerable<FavoriteBeerDto>>> GetFavoriteBeersAsync(Guid id);
     Task<ServiceResult> AddFavoriteBeerByIdAsync(Guid userId, Guid beerId);
+    Task<ServiceResult> RemoveFavoriteBeerByIdAsync(Guid userId, Guid beerId);
     Task<bool> IsInRoleAsync(Guid id, string role);
     Task<bool> CheckIfUserExistsByEmailAsync(string email);
     Task<bool> CheckIfUserExistsByUsernameAsync(string username);

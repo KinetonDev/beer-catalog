@@ -1,7 +1,10 @@
 ﻿using System.Text;
+using BeerCatalog.Application.Common.Enums;
+using BeerCatalog.Application.Common.Models;
 using BeerCatalog.Application.Interfaces.Services;
 using BeerCatalog.Domain.Models.Beer;
 using BeerCatalog.Infrastructure;
+using BeerCatalog.WebApi.Controllers.Common;
 using BeerCatalog.WebApi.DTO;
 using BeerCatalog.WebApi.Helpers.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -16,7 +19,7 @@ namespace BeerCatalog.WebApi.Controllers;
 [ApiController]
 [Route("beers")]
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-public class BeersController : ControllerBase
+public class BeersController : ControllerBaseClass
 {
     private readonly IBeerService _beerService;
     private readonly DbContext _context;
@@ -84,5 +87,17 @@ public class BeersController : ControllerBase
         }
 
         return Ok();
+    }
+
+    protected override IActionResult ErrorResult(Error error)
+    {
+        var errorCode = error.ErrorCode;
+
+        if (errorCode is ErrorCode.BeerNotFound)
+        {
+            return NotFound(error);
+        }
+
+        return BadRequest(error);
     }
 }
