@@ -71,6 +71,27 @@ public class UserService : Service<UserReadDto>, IUserService
         return new ServiceResult<IEnumerable<FavoriteBeerDto>>(_mapper.Map<IEnumerable<FavoriteBeerDto>>(favorites));
     }
 
+    public async Task<ServiceResult<ModelWithPagination<FavoriteBeerDto>>> GetFavoriteBeersWithPaginationAsync(Guid id, Pagination pagination)
+    {
+        var user = await _userManager.FindByIdAsync(id.ToString());
+
+        if (user == null)
+        {
+            return new (ErrorCode.UserNotFound);
+        }
+
+        var favorites = await _unitOfWork.BeersRepository.GetFavoritesByUserIdWithPaginationAsync(id, pagination);
+        var totalCount = await _unitOfWork.BeersRepository.CountOfFavoriteByUserIdAsync(id);
+
+        var mappedBeers = _mapper.Map<IEnumerable<FavoriteBeerDto>>(favorites);
+
+        return new(new ModelWithPagination<FavoriteBeerDto>
+        {
+            Collection = mappedBeers,
+            TotalCount = totalCount
+        });
+    }
+
     public async Task<ServiceResult> AddFavoriteBeerByIdAsync(Guid userId, Guid beerId)
     {
         var user = await _unitOfWork.UsersRepository.GetWithFavoritesByIdAsync(userId);

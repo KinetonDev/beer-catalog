@@ -4,6 +4,7 @@ const routes = {
     favorites: "/favorites",
     landing: "/",
     beerDetails: "/:beerId",
+    profile: "/profile"
 };
 
 export default routes;

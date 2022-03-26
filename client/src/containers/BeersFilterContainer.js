@@ -1,51 +1,33 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback} from 'react';
 import {useDispatch, useSelector} from "react-redux";
-import {selectFilter, selectWasSearchPerformed} from "../redux/selectors";
-import {changeFilter, setWasSearchPerformed} from "../redux/actions/actions";
+import {selectWasSearchPerformed} from "../redux/selectors";
+import {resetBeers, setWasSearchPerformed} from "../redux/actions/actions";
 import BeersFilter from "../components/BeersFilter";
 
-const BeersFilterContainer = () => {
-    const savedFilter = useSelector(state => selectFilter(state));
-    const [filter, setFilter] = useState({...savedFilter});
-
+const BeersFilterContainer = ({setPage, filter, setFilter, page}) => {
     const wasSearchPerformed = useSelector(state => selectWasSearchPerformed(state));
     const dispatch = useDispatch();
 
     const handleSubmit = useCallback((e) => {
         e.preventDefault();
 
-        if(!wasSearchPerformed) {
-            dispatch(setWasSearchPerformed(true));
+        if (page !== 1) {
+            if(!wasSearchPerformed) {
+                dispatch(setWasSearchPerformed(true));
+            }
+
+            dispatch(resetBeers());
+            setPage(1);
         }
 
-        dispatch(changeFilter({
-            filter
-        }));
-
-    }, [wasSearchPerformed, dispatch, filter]);
-
-    const handleFilterChange = useCallback((newFilter) => {
-        setFilter(newFilter);
-    }, []);
-
-    const handleFilterChangeCommitted = useCallback((newFilter) => {
-        setFilter(newFilter);
-    }, []);
-
-    useEffect(() => {
-        return () => {
-            dispatch(changeFilter({
-                filter: filter
-            }));
-        };
-    }, []);
+    }, [page, wasSearchPerformed, dispatch, setPage]);
 
     return (
         <BeersFilter
             filter={filter}
             handleSubmit={handleSubmit}
-            handleFilterChange={handleFilterChange}
-            handleFilterChangeCommitted={handleFilterChangeCommitted}
+            handleFilterChange={setFilter}
+            handleFilterChangeCommitted={setFilter}
             wasSearchPerformed={wasSearchPerformed}
         />
     );

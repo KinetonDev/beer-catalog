@@ -14,8 +14,16 @@ export function selectPage(state) {
     return state.beer.page;
 }
 
-export function selectPerPage(state) {
-    return state.beer.perPage;
+export function selectTotalBeerPages(state) {
+    return state.beer.totalPages;
+}
+
+export function selectTotalFavoritePages(state) {
+    return state.favorites.totalPages;
+}
+
+export function selectTotalFavoritesCount(state) {
+    return state.favorites.totalCount;
 }
 
 export function selectCurrentBeer(state) {

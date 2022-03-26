@@ -1,13 +1,12 @@
-﻿namespace BeerCatalog.WebApi.DTO;
+﻿using Microsoft.AspNetCore.Mvc;
 
-public class PaginationAndFilterDto
+namespace BeerCatalog.WebApi.DTO;
+
+public class PaginationDto
 {
-    public int Page { get; set; }
-    public int PerPage { get; set; }
-    public int AbvGreaterThan { get; set; }
-    public int AbvLessThan { get; set; }
-    public int IbuGreaterThan { get; set; }
-    public int IbuLessThan { get; set; }
-    public int EbcGreaterThan { get; set; }
-    public int EbcLessThan { get; set; }
+    [BindProperty(Name="page", SupportsGet=true)]
+    public int? Page { get; set; }
+    
+    [BindProperty(Name="per_page", SupportsGet=true)]
+    public int? PerPage { get; set; }
 }

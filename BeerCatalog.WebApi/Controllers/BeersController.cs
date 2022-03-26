@@ -1,9 +1,10 @@
 ﻿using System.Text;
 using BeerCatalog.Application.Common.Enums;
 using BeerCatalog.Application.Common.Models;
+using BeerCatalog.Application.Common.Service;
 using BeerCatalog.Application.Interfaces.Services;
-using BeerCatalog.Domain.Models.Beer;
-using BeerCatalog.Infrastructure;
+using BeerCatalog.Application.Models;
+using BeerCatalog.Application.Models.Beer;
 using BeerCatalog.WebApi.Controllers.Common;
 using BeerCatalog.WebApi.DTO;
 using BeerCatalog.WebApi.Helpers.Interfaces;
@@ -17,7 +18,7 @@ using Newtonsoft.Json.Linq;
 namespace BeerCatalog.WebApi.Controllers;
 
 [ApiController]
-[Route("beers")]
+[Route("api/v1/beers")]
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class BeersController : ControllerBaseClass
 {
@@ -36,13 +37,35 @@ public class BeersController : ControllerBaseClass
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll([FromQuery] PaginationAndFilterDto paginationDto)
+    public async Task<IActionResult> GetAll([FromQuery] PaginationAndFilterDto paginationAndFilterDto)
     {
         var userId = GetUserIdFromAccessToken();
-        
-        var retrievingResult = await _beerService.GetAllWithFavoriteMarkAsync(userId);
 
-        return HandleServiceResult(retrievingResult);
+        if (CheckIfPaginationAndFilterIsNull(paginationAndFilterDto))
+        {
+            var retrievingResult = await _beerService.GetAllWithFavoriteMarkAsync(userId);
+            return HandleServiceResult(retrievingResult);
+        }
+        else
+        {
+            var retrievingResult = await _beerService.GetWithFavoriteMarkAndPaginationFilteredAsync(userId,
+                new ()
+                {
+                    Page = paginationAndFilterDto.Page,
+                    PageSize = paginationAndFilterDto.PerPage
+                }, new ()
+                {
+                    AbvGreaterThan = paginationAndFilterDto.AbvGreaterThan,
+                    AbvLessThan = paginationAndFilterDto.AbvLessThan,
+                    IbuGreaterThan = paginationAndFilterDto.IbuGreaterThan,
+                    IbuLessThan = paginationAndFilterDto.IbuLessThan,
+                    EbcGreaterThan = paginationAndFilterDto.EbcGreaterThan,
+                    EbcLessThan = paginationAndFilterDto.EbcLessThan,
+                    BeerName = paginationAndFilterDto.BeerName
+                });
+
+            return HandlePaginationServiceResult(retrievingResult);
+        }
     }
 
     [HttpGet("{id}")]
@@ -57,30 +80,27 @@ public class BeersController : ControllerBaseClass
 
     [HttpPost("parse")]
     [AllowAnonymous]
-    public async Task<IActionResult> AddBeersFromPunkApi([FromServices]IHttpClientFactory factory)
+    public async Task<IActionResult> AddBeersFromPunkApi([FromServices]IHttpClientFactory factory, [FromQuery] int from, [FromQuery] int to)
     {
         var client = factory.CreateClient();
-        for (int i = 3; i < 20; i++)
+        for (int i = from; i <= to; i++)
         {
-            if (i != 1 && i != 2 && i != 12)
+            var response = await client.GetAsync($"https://api.punkapi.com/v2/beers/{i}");
+            var responseBody = await response.Content.ReadAsStringAsync();
+            var stringBuilder = new StringBuilder(responseBody);
+            stringBuilder.Replace("'", "''");
+            stringBuilder.Remove(stringBuilder.Length - 1, 1);
+            stringBuilder.Remove(0, 1);
+            try
             {
-                var response = await client.GetAsync($"https://api.punkapi.com/v2/beers/{i}");
-                var responseBody = await response.Content.ReadAsStringAsync();
-                var stringBuilder = new StringBuilder(responseBody);
-                stringBuilder.Replace("'", "''");
-                stringBuilder.Remove(stringBuilder.Length - 1, 1);
-                stringBuilder.Remove(0, 1);
-                try
-                {
-                    var obj = JToken.Parse(stringBuilder.ToString());
-                }
-                catch (Exception e)
-                {
-                    return BadRequest();
-                }
-                SqlParameter param = new ("@json", stringBuilder.ToString());
-                await _context.Database.ExecuteSqlRawAsync($"ParseJsonData @json", param);
+                var obj = JToken.Parse(stringBuilder.ToString());
             }
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
+            SqlParameter param = new ("@json", stringBuilder.ToString());
+            await _context.Database.ExecuteSqlRawAsync($"ParseJsonData @json", param);
         }
 
         return Ok();
@@ -93,6 +113,18 @@ public class BeersController : ControllerBaseClass
             .Split(" ")[1];
 
         return _jwtTokenResolver.GetUserIdFromToken(token!);
+    }
+
+    private static bool CheckIfPaginationAndFilterIsNull(PaginationAndFilterDto paginationAndFilterDto)
+    {
+        return !paginationAndFilterDto.Page.HasValue &&
+               !paginationAndFilterDto.PerPage.HasValue &&
+               !paginationAndFilterDto.AbvGreaterThan.HasValue &&
+               !paginationAndFilterDto.AbvLessThan.HasValue &&
+               !paginationAndFilterDto.EbcGreaterThan.HasValue &&
+               !paginationAndFilterDto.EbcLessThan.HasValue &&
+               !paginationAndFilterDto.IbuGreaterThan.HasValue &&
+               !paginationAndFilterDto.IbuLessThan.HasValue;
     }
 
     protected override IActionResult ErrorResult(Error error)

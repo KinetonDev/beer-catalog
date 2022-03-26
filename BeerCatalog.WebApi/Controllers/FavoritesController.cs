@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BeerCatalog.WebApi.Controllers;
 
 [ApiController]
-[Route("favorites")]
+[Route("api/v1/favorites")]
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class FavoritesController : ControllerBaseClass
 {
@@ -28,11 +28,23 @@ public class FavoritesController : ControllerBaseClass
     }
     
     [HttpGet("{userId:guid}")]
-    public async Task<IActionResult> GetFavoriteBeers(Guid userId)
+    public async Task<IActionResult> GetFavoriteBeers(Guid userId, [FromQuery] PaginationDto paginationDto)
     {
-        var favoritesResult = await _userService.GetFavoriteBeersAsync(userId);
+        if (CheckIfPaginationIsNull(paginationDto))
+        {
+            var favoritesResult = await _userService.GetFavoriteBeersAsync(userId);
+            return HandleServiceResult(favoritesResult);
+        }
+        else
+        {
+            var favoritesResult = await _userService.GetFavoriteBeersWithPaginationAsync(userId, new()
+            {
+                Page = paginationDto.Page,
+                PageSize = paginationDto.PerPage
+            });
 
-        return HandleServiceResult(favoritesResult);
+            return HandlePaginationServiceResult(favoritesResult);
+        }
     }
 
     [HttpPost]
@@ -64,6 +76,11 @@ public class FavoritesController : ControllerBaseClass
         return _jwtTokenResolver.GetUserIdFromToken(token!);
     }
 
+    private bool CheckIfPaginationIsNull(PaginationDto paginationDto)
+    {
+        return !paginationDto.Page.HasValue && !paginationDto.PerPage.HasValue;
+    }
+    
     protected override IActionResult ErrorResult(Error error)
     {
         var errorCode = error.ErrorCode;

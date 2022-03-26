@@ -9,7 +9,9 @@ const useObserver = (ref, callback) => {
             observer.current = new IntersectionObserver(callback);
             observer.current.observe(ref.current);
         }
-    }, []);
+    }, [callback, ref]);
+
+    return ref;
 }
 
 export default useObserver;

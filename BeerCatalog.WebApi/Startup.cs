@@ -98,8 +98,9 @@ public class Startup
             options.AddPolicy("SPA", builder =>
             {
                 builder.AllowAnyMethod()
-                    .AllowAnyHeader()
                     .AllowCredentials()
+                    .AllowAnyHeader()
+                    .WithExposedHeaders("x-total-count")
                     .WithOrigins("http://localhost:3000");
             });
 

@@ -4,7 +4,9 @@ using BeerCatalog.Application.Common.Enums;
 using BeerCatalog.Application.Common.Service;
 using BeerCatalog.Application.Interfaces.Repositories;
 using BeerCatalog.Application.Interfaces.Services;
+using BeerCatalog.Application.Models;
 using BeerCatalog.Application.Models.Beer;
+using BeerCatalog.Domain.Models;
 using BeerCatalog.Domain.Models.Beer;
 
 namespace BeerCatalog.Application.Services;
@@ -73,6 +75,30 @@ public class BeerService : Service<BeerReadDto>, IBeerService
         return new (mappedBeer);
     }
 
+    public async Task<ServiceResult<ModelWithPagination<BeerWithFavoriteMarkDto>>> GetWithFavoriteMarkAndPaginationFilteredAsync(
+        Guid userId,
+        Pagination pagination,
+        BeerFilter beerFilter)
+    {
+        var user = await _unitOfWork.UsersRepository.GetWithFavoritesByIdAsync(userId);
+
+        if (user == null)
+        {
+            return new(ErrorCode.UserNotFound);
+        }
+
+        var beers = await _unitOfWork.BeersRepository.GetWithPaginationFilteredAsync(pagination, beerFilter);
+        var totalBeerCount = await _unitOfWork.BeersRepository.CountAsync(beerFilter);
+
+        var mappedBeers = AddFavoriteMark(beers, user);
+        
+        return new (new ModelWithPagination<BeerWithFavoriteMarkDto>
+        {
+            Collection = mappedBeers,
+            TotalCount = totalBeerCount
+        });
+    }
+
     public async Task<ServiceResult<IEnumerable<BeerWithFavoriteMarkDto>>> GetAllWithFavoriteMarkAsync(Guid userId)
     {
         var user = await _unitOfWork.UsersRepository.GetWithFavoritesByIdAsync(userId);
@@ -84,13 +110,18 @@ public class BeerService : Service<BeerReadDto>, IBeerService
         
         var beers = await _unitOfWork.BeersRepository.AllAsync();
 
-        var mappedBeers = beers.Select(b =>
+        var mappedBeers = AddFavoriteMark(beers, user);
+
+        return new (mappedBeers);
+    }
+
+    private IEnumerable<BeerWithFavoriteMarkDto> AddFavoriteMark(IEnumerable<Beer> beers, User user)
+    {
+        return beers.Select(b =>
         {
             var mappedBeer = _mapper.Map<BeerWithFavoriteMarkDto>(b);
             mappedBeer.IsFavorite = user.Favorites.Contains(b);
             return mappedBeer;
         });
-
-        return new (mappedBeers);
     }
 }

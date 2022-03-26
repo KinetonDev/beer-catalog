@@ -3,7 +3,6 @@ import {authorizedRequest, request, requestWithFetch, requestWithXHR} from "./re
 import {DELETE, GET, POST} from "../../helpers/HTTPMethods";
 import createUrlFromFilter from "../../helpers/createUrlFromFilter";
 import createUrl from "../../helpers/createUrl";
-import {addFavoriteBeerRequest} from "../actions/actions";
 
 export function getBeers(payload, accessToken) {
     return call(
@@ -21,7 +20,7 @@ export function getFavorites(payload, accessToken) {
     return call(
         authorizedRequest,
         {
-            url: createUrl(`favorites/${payload.userId}`),
+            url: createUrl(`favorites/${payload.userId}?page=${payload.page}&per_page=${payload.perPage}`),
             method: GET,
         },
         requestWithFetch,

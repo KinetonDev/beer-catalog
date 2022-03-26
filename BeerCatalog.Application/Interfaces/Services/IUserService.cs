@@ -13,6 +13,7 @@ public interface IUserService
     Task<ServiceResult> DeleteByIdAsync(Guid id);
     Task<ServiceResult> UpdateByIdAsync(Guid id);
     Task<ServiceResult<IEnumerable<FavoriteBeerDto>>> GetFavoriteBeersAsync(Guid id);
+    Task<ServiceResult<ModelWithPagination<FavoriteBeerDto>>> GetFavoriteBeersWithPaginationAsync(Guid id, Pagination pagination);
     Task<ServiceResult> AddFavoriteBeerByIdAsync(Guid userId, Guid beerId);
     Task<ServiceResult> RemoveFavoriteBeerByIdAsync(Guid userId, Guid beerId);
     Task<bool> IsInRoleAsync(Guid id, string role);
