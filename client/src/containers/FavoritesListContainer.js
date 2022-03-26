@@ -2,8 +2,15 @@ import React, {useCallback, useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import FavoritesList from "../components/FavoritesList";
 import {useDispatch, useSelector} from "react-redux";
-import {selectFavoriteBeer, selectIsFavoritesLoading, selectUserId} from "../redux/selectors";
-import {addFavoriteBeerRequest, getFavoriteBeersRequest, removeFavoriteBeerRequest} from "../redux/actions/actions";
+import {
+    selectFavoriteBeer,
+    selectIsFavoritesLoading,
+    selectTotalFavoritePages,
+    selectTotalFavoritesCount,
+    selectUserId
+} from "../redux/selectors";
+import {getFavoriteBeersRequest, removeFavoriteBeerRequest} from "../redux/actions/actions";
+import {favoritesPaginationPageSize} from "../constants";
 
 const pageSize = 10;
 
@@ -12,25 +19,31 @@ const FavoritesListContainer = () => {
     const isFavoritesLoading = useSelector(state => selectIsFavoritesLoading(state));
     const userId = useSelector(state => selectUserId(state));
     const [page, setPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(10);
+    const totalPages = useSelector(state => selectTotalFavoritePages(state));
+    const totalCount = useSelector(state => selectTotalFavoritesCount(state));
     const dispatch = useDispatch();
 
-    const handlePageChange = (_, page) => {
+    const handlePageChange = useCallback((_, page) => {
         setPage(page)
         console.log(page)
-    };
+    }, []);
 
     useEffect(() => {
         dispatch(getFavoriteBeersRequest({
-            userId
+            userId,
+            page,
+            perPage: favoritesPaginationPageSize
         }));
-    }, []);
+    }, [dispatch, page, userId]);
 
     const handleRemovingFavorite = useCallback((beerId) => {
         dispatch(removeFavoriteBeerRequest({
             beerId: beerId
         }));
     }, [dispatch]);
+
+    console.log(totalPages)
+    console.log(page)
 
     return (
         <FavoritesList
@@ -40,7 +53,7 @@ const FavoritesListContainer = () => {
             handlePageChange={handlePageChange}
             handleRemovingFavorite={handleRemovingFavorite}
             totalPages={totalPages}
-            showPaginationPanel={favorites.length > pageSize}
+            showPaginationPanel={totalCount > pageSize}
         />
     );
 };

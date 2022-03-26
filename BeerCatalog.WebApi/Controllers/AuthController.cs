@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BeerCatalog.WebApi.Controllers;
 
 [ApiController]
-[Route("auth")]
+[Route("api/v1/auth")]
 public class AuthController : ControllerBaseClass
 {
     private readonly IAuthService _authService;
@@ -88,7 +88,7 @@ public class AuthController : ControllerBaseClass
         {
             HttpOnly = true,
             Expires = DateTimeOffset.Now.AddDays(14),
-            Path = "/auth", 
+            Path = "/api/v1/auth", 
             SameSite = SameSiteMode.None,
             Secure = true
         };

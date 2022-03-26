@@ -2,16 +2,16 @@ import React from 'react';
 import {Pagination} from "@mui/material";
 import useStyle from "./styles";
 
-const BeerListPagination = (props) => {
+const BeerListPagination = ({totalPages, page, onPageChange}) => {
     const classes = useStyle();
 
     return (
         <Pagination
             className={classes.beerListPagination}
-            count={props.totalPages}
+            count={totalPages}
             shape="rounded"
-            page={props.page}
-            onChange={props.onPageChange}
+            page={page}
+            onChange={onPageChange}
         />
     );
 };

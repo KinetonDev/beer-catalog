@@ -4,7 +4,7 @@ import FilterSliderOption from "../FilterSliderOption";
 import useStyles from "./styles";
 import advancedFilterOptions from "./advancedFilterOptions";
 
-const AdvancedFilter = (props) => {
+const AdvancedFilter = ({filter, changeFilter, changeFilterCommitted}) => {
     const classes = useStyles();
 
     return (
@@ -19,13 +19,13 @@ const AdvancedFilter = (props) => {
                 {advancedFilterOptions.map(option => (
                     <FilterSliderOption
                         label={option.label}
-                        currentValue={props.filter[option.value]}
-                        onChange={(newValue) => props.changeFilter({
-                            ...props.filter,
+                        currentValue={filter[option.value]}
+                        onChange={(newValue) => changeFilter({
+                            ...filter,
                             [option.value]: newValue
                         })}
-                        onChangeCommitted={(newValue) => props.changeFilterCommitted({
-                           ...props.filter,
+                        onChangeCommitted={(newValue) => changeFilterCommitted({
+                           ...filter,
                            [option.value]: newValue
                         })}
                         max={option.max}

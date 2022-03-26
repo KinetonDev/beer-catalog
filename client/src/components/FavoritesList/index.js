@@ -30,6 +30,11 @@ const FavoritesList = (
                                 >
                                     Your favorite beers
                                 </Typography>
+                                {showPaginationPanel && <BeerListPagination
+                                    totalPages={totalPages}
+                                    page={page}
+                                    onPageChange={handlePageChange}
+                                />}
                                 <BeerListContainer
                                     beers={favorites}
                                     handleRemovingFavorite={handleRemovingFavorite}

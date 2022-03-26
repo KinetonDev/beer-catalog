@@ -1,22 +1,15 @@
 import {
     ADD_FAVORITE_SUCCESS,
-    CHANGE_FILTER,
     GET_BEER_BY_ID_REQUEST,
     GET_BEER_BY_ID_SUCCESS,
     GET_BEERS_SUCCESS,
-    INCREMENT_PAGE, REMOVE_FAVORITE_SUCCESS,
+    REMOVE_FAVORITE_SUCCESS, RESET_BEERS,
     SET_WAS_SEARCH_PERFORMED
 } from "../types/types";
+import {landingPaginationPageSize} from "../../constants";
 
 const initialState = {
-    filter: {
-        abv: [2,14],
-        ibu: [0,120],
-        ebc: [4,80],
-        searchQuery: ''
-    },
-    page: 1,
-    perPage: 9,
+    totalPages: 2,
     wasSearchPerformed: false,
     beers: [],
     currentBeer: {
@@ -31,17 +24,15 @@ export const beerReducer = (state = initialState, action) => {
 
     switch (action.type) {
         case GET_BEERS_SUCCESS:
-            return {...state, beers: [...state.beers, ...action.payload.response]};
+            return {...state, beers: [...state.beers, ...action.payload.response], totalPages: Math.ceil(action.payload.totalCount / landingPaginationPageSize)};
         case GET_BEER_BY_ID_REQUEST:
             return {...state, currentBeer: {...state.currentBeer, isLoading: true} }
         case GET_BEER_BY_ID_SUCCESS:
             return {...state, currentBeer: {...state.currentBeer, value: action.payload.response, isLoading: false}};
         case SET_WAS_SEARCH_PERFORMED:
             return {...state, wasSearchPerformed: action.payload};
-        case CHANGE_FILTER:
-            return {...state, filter: action.payload.filter, page: 1, beers: []};
-        case INCREMENT_PAGE:
-            return {...state, page: state.page + 1};
+        case RESET_BEERS:
+            return {...state, beers: []};
         case ADD_FAVORITE_SUCCESS:
             return {...state,
                 beers: toggleFavoriteOnEvery(state.beers, action.payload.beer_id),

@@ -2,7 +2,7 @@
 
 namespace BeerCatalog.Application.Interfaces.Repositories;
 
-public interface IUserRepository
+public interface IUserRepository : IRepository<User>
 {
     Task<User?> GetWithFavoritesByIdAsync(Guid id);
 }

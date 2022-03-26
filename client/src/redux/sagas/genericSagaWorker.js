@@ -12,7 +12,7 @@ export function* genericSagaWorker (action) {
         const accessToken = yield select(selectAccessToken);
         const response = yield callMethods[methodName](payload, accessToken);
         const successType = type.replace("REQUEST", "SUCCESS");
-        yield put({type: successType, payload: {...payload, response: response.body}});
+        yield put({type: successType, payload: {...payload, response: response.body, totalCount: response.totalCount}});
     } catch (e) {
         if (e.status === 401) {
             try {
@@ -21,7 +21,7 @@ export function* genericSagaWorker (action) {
                 try {
                     const response = yield callMethods[methodName](payload, refreshResponse.body.access_token);
                     const successType = type.replace("REQUEST", "SUCCESS");
-                    yield put({type: successType, payload: {...payload, response: response.body}});
+                    yield put({type: successType, payload: {...payload, response: response.body, totalCount: response.totalCount}});
                 } catch (e) {
                     const failedType = type.replace("REQUEST", "FAILED");
                     yield put({type: failedType, payload: {...payload, error: e}});

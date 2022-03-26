@@ -50,7 +50,7 @@ public class EmailDispatcher : BackgroundService
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "Failed to send email");
+                _logger.LogError(e, "Failed to send email message to: {Email}", message.To);
             }
         }
     }

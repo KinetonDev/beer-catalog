@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BeerCatalog.WebApi.Controllers;
 
 [ApiController]
-[Route("users")]
+[Route("api/v1/users")]
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class UsersController : ControllerBaseClass
 {

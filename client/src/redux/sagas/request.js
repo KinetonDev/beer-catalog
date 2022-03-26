@@ -35,6 +35,7 @@ export function requestWithFetch({url, method, body, headers}) {
 
     return fetch(url, options).then(response => {
         const status = response.status;
+        const totalCount = response.headers.get('x-total-count');
         if (!response.ok) {
             const error = new Error();
             error.status = status;
@@ -49,7 +50,12 @@ export function requestWithFetch({url, method, body, headers}) {
                 });
         }
 
-        return response.text().then(data => data ? {status, body: JSON.parse(data)} : {status});
+        const result = {
+            status,
+            totalCount: totalCount ? totalCount : undefined
+        }
+
+        return response.text().then(data => data ? {...result, body: JSON.parse(data)} : {...result});
     });
 }
 

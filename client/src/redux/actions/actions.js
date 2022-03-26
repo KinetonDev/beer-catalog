@@ -1,15 +1,13 @@
 import {
     ADD_FAVORITE_REQUEST,
-    CHANGE_FILTER,
     CHECK_EMAIL_REQUEST,
     CHECK_USERNAME_REQUEST,
     CLEAR_FLAGS,
     CONFIRM_EMAIL_REQUEST,
     GET_BEER_BY_ID_REQUEST,
     GET_BEERS_REQUEST, GET_FAVORITES_REQUEST, GET_ME_REQUEST,
-    INCREMENT_PAGE,
     LOGIN_REQUEST, REFRESH_TOKEN_REQUEST,
-    REGISTER_REQUEST, REMOVE_FAVORITE_REQUEST,
+    REGISTER_REQUEST, REMOVE_FAVORITE_REQUEST, RESET_BEERS,
     SET_WAS_SEARCH_PERFORMED, START_VALIDATING
 } from "../types/types";
 
@@ -27,10 +25,9 @@ export function getBeerByIdRequest(payload) {
     }
 }
 
-export function changeFilter(payload) {
+export function resetBeers() {
     return {
-        type: CHANGE_FILTER,
-        payload
+        type: RESET_BEERS
     }
 }
 
@@ -38,12 +35,6 @@ export function setWasSearchPerformed(payload) {
     return {
         type: SET_WAS_SEARCH_PERFORMED,
         payload
-    }
-}
-
-export function incrementPage() {
-    return {
-        type: INCREMENT_PAGE
     }
 }
 

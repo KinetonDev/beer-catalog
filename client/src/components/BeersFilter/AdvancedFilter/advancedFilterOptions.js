@@ -2,22 +2,22 @@ const advancedFilterOptions = [
     {
         label: "Alcohol by volume",
         value: "abv",
-        max: 14,
-        min: 2,
+        max: 41,
+        min: 0,
         step: 0.1
     },
     {
         label: "International Bitterness Units",
         value: "ibu",
-        max: 120,
-        min: 0,
+        max: 1157,
+        min: 8,
         step: 0.1
     },
     {
         label: "Color by EBC",
         value: "ebc",
-        max: 80,
-        min: 4,
+        max: 500,
+        min: 2,
         step: 1
     }
 ];

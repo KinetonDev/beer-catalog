@@ -5,6 +5,7 @@ import {
     GET_FAVORITES_REQUEST,
     GET_FAVORITES_SUCCESS, REMOVE_FAVORITE_FAILED, REMOVE_FAVORITE_REQUEST, REMOVE_FAVORITE_SUCCESS
 } from "../types/types";
+import {favoritesPaginationPageSize} from "../../constants";
 
 const defaultFlagsValues = {
     flags: {
@@ -17,6 +18,8 @@ const defaultFlagsValues = {
 
 const initialState = {
     favorites: [],
+    totalPages: 2,
+    totalCount: 20,
     flags: {
         ...defaultFlagsValues.flags
     },
@@ -33,7 +36,10 @@ export const favoritesReducer = (state = initialState, action) => {
         case GET_FAVORITES_REQUEST:
             return {...state, loadingFlags: {...state.loadingFlags, isFavoritesLoading: true}};
         case GET_FAVORITES_SUCCESS:
-            return {...state, favorites: action.payload.response, loadingFlags: {...state.loadingFlags, isFavoritesLoading: false}}
+            return {...state, favorites: action.payload.response,
+                loadingFlags: {...state.loadingFlags, isFavoritesLoading: false},
+                totalPages: Math.ceil(action.payload.totalCount / favoritesPaginationPageSize),
+                totalCount: action.payload.totalCount};
         case GET_FAVORITES_FAILED:
             return {...state, loadingFlags: {...state.loadingFlags, isFavoritesLoading: false}};
         case ADD_FAVORITE_SUCCESS:
