@@ -2,10 +2,6 @@ export function selectBeers(state) {
     return state.beer.beers;
 }
 
-export function selectFilter(state) {
-    return state.beer.filter;
-}
-
 export function selectWasSearchPerformed(state) {
     return state.beer.wasSearchPerformed;
 }
@@ -31,7 +27,31 @@ export function selectCurrentBeer(state) {
 }
 
 export function selectUserId(state) {
-    return state.user.id;
+    return state.user.userInfo.id;
+}
+
+export function selectUserInfo(state) {
+    const user = state.user.userInfo;
+    console.log(user)
+
+    return {
+        username: user.username,
+        email: user.email,
+        avatarUrl: user.avatar_url,
+        birthDay: user.birth_day,
+        country: user.country,
+        firstName: user.first_name,
+        lastName: user.last_name,
+        gender: user.gender
+    }
+}
+
+export function selectUpdatingFlags(state) {
+    return {
+        isUpdating: state.user.loadingFlags.isUpdating,
+        updateSucceeded: state.user.flags.updateSucceeded,
+        wasUpdateRequested: state.user.flags.wasUpdateRequested
+    }
 }
 
 export function selectConfirmationSucceeded(state) {

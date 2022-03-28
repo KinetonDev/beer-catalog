@@ -11,11 +11,8 @@ const useStyles = makeStyles({
         backgroundColor: "rgba(0,0,0,0)"
     },
     drawerTopBox: {
-        padding: "20"
+        padding: "20px"
     },
-    appBar: {
-        marginBottom: "50px"
-    }
 });
 
 export default useStyles;

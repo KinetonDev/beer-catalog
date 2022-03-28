@@ -1,9 +1,64 @@
-import React from 'react';
+import React, {useCallback, useState} from 'react';
 import UserProfilePage from "../pages/UserProfilePage";
+import {barItems} from "../components/Profile/ProfileBar/barItems";
+import {useDispatch, useSelector} from "react-redux";
+import {selectUserId, selectUserInfo} from "../redux/selectors";
+import {updateUserRequest} from "../redux/actions/actions";
+import createJsonPatchDocument from "../helpers/createJsonPatchDocument";
+import retrieveChangedValues from "../helpers/retrieveChangedValues";
 
 const UserProfilePageContainer = () => {
+    const user = useSelector(state => selectUserInfo(state));
+    const userId = useSelector(state => selectUserId(state));
+    const [currentBarItem, setCurrentBarItem] = useState(barItems[0].title);
+    const [isEditing, setIsEditing] = useState(false);
+    const dispatch = useDispatch();
+
+    const [initialFormState, setInitialFormState] = useState({
+        firstName: user.firstName,
+        lastName: user.lastName,
+        birthDay: user.birthDay,
+        country: user.country,
+        gender: user.gender
+    });
+
+    const handleEdit = useCallback(() => {
+        setCurrentBarItem(barItems[0].title);
+        setIsEditing(true);
+    }, []);
+
+    const handleSave = useCallback((values, {setSubmitting, initialFormState}) => {
+        setIsEditing(false);
+        dispatch(updateUserRequest({
+            id: userId,
+            patchDocument: createJsonPatchDocument(
+                retrieveChangedValues(values, initialFormState)
+            )
+        }));
+        setSubmitting(false);
+        setInitialFormState(values);
+    }, [dispatch, userId]);
+
+    const handleBarItemChange = useCallback((title) => {
+        setCurrentBarItem(title);
+    }, []);
+
+    const handleCancel = useCallback((setValues, values) => {
+        setValues(values);
+        setIsEditing(false);
+    }, []);
+
     return (
-        <UserProfilePage/>
+        <UserProfilePage
+            user={user}
+            currentBarItem={currentBarItem}
+            handleBarItemChange={handleBarItemChange}
+            isEditing={isEditing}
+            handleEdit={handleEdit}
+            handleSave={handleSave}
+            initialFormState={initialFormState}
+            handleCancel={handleCancel}
+        />
     );
 };
 

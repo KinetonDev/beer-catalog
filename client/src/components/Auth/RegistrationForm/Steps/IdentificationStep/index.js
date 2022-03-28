@@ -31,7 +31,7 @@ const IdentificationStep = (
                            onBlur={handleUsernameBlur}
                            value={values.username}
                            error={(errors.username && touched.username) || (userWithUsernameExists && touched.username)}
-                           helperText={((errors.username && touched.username) ?  errors.username : "") ?
+                           helperText={((errors.username && touched.username) ?  errors.username : " ") ?
                                errors.username : (userWithUsernameExists ? "User with that username already exists" : "")}
                            name="username"
                 />
@@ -42,7 +42,7 @@ const IdentificationStep = (
                            onBlur={handleEmailBlur}
                            value={values.email}
                            error={(errors.email && touched.email) || (userWithEmailExists && touched.email)}
-                           helperText={((errors.email && touched.email) ?  errors.email : "") ?
+                           helperText={((errors.email && touched.email) ?  errors.email : " ") ?
                                errors.email : (userWithEmailExists ? "User with that email already exists" : "")}
                            name="email"
                 />

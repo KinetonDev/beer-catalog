@@ -42,7 +42,7 @@ const LoginForm = (
                                 type={"email"}
                                 name={"email"}
                                 error={(errors.email && touched.email)}
-                                helperText={((errors.email && touched.email) ? errors.email : "")}
+                                helperText={((errors.email && touched.email) ? errors.email : " ")}
                                 {...getFieldProps('email')}
                             />
                             <TextField
@@ -53,7 +53,7 @@ const LoginForm = (
                                 placeholder={"Write your password here"}
                                 type={isPasswordVisible ? "text" : "password"}
                                 error={(errors.password && touched.password)}
-                                helperText={((errors.password && touched.password) ? errors.password : "")}
+                                helperText={((errors.password && touched.password) ? errors.password : " ")}
                                 {...getFieldProps('password')}
                                 InputProps={{
                                     endAdornment: <InputAdornment position={"end"}>

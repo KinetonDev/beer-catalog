@@ -18,7 +18,7 @@ const PasswordStep = ({nextStep, prevStep, handleChange, handleBlur, values, err
                            onBlur={handleBlur}
                            value={values.password}
                            error={errors.password && touched.password}
-                           helperText={(errors.password && touched.password) ? errors.password : ""}
+                           helperText={(errors.password && touched.password) ? errors.password : " "}
                            name="password"
                 />
                 <TextField fullWidth variant={"outlined"} label={"Confirm password"}
@@ -28,7 +28,7 @@ const PasswordStep = ({nextStep, prevStep, handleChange, handleBlur, values, err
                            onBlur={handleBlur}
                            value={values.confirmationPassword}
                            error={errors.confirmationPassword && touched.confirmationPassword}
-                           helperText={(errors.confirmationPassword && touched.confirmationPassword) ? errors.confirmationPassword : ""}
+                           helperText={(errors.confirmationPassword && touched.confirmationPassword) ? errors.confirmationPassword : " "}
                            name="confirmationPassword"
                 />
             </div>

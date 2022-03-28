@@ -20,6 +20,7 @@ const LoginFormContainer = () => {
 
     const handleSubmit = useCallback((values, {setSubmitting}) => {
         dispatch(loginRequest(values));
+        setSubmitting(false);
     }, [navigate]);
 
     const handleNavigationToRegisterPage = useCallback(() => {

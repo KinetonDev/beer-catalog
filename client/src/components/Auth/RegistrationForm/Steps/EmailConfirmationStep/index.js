@@ -34,7 +34,7 @@ const EmailConfirmationStep = ({handleChange, handleBlur, values, touched, error
                     onBlur={handleBlur}
                     value={values.code}
                     error={errors.code && touched.code}
-                    helperText={(errors.code && touched.code) ? errors.code : ""}
+                    helperText={(errors.code && touched.code) ? errors.code : " "}
                     name="code"
                 />
                 {showIcon(isConfirmationProcessing, confirmationSucceeded, wasConfirmationRequested)}
