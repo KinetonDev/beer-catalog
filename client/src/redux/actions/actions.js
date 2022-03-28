@@ -8,7 +8,7 @@ import {
     GET_BEERS_REQUEST, GET_FAVORITES_REQUEST, GET_ME_REQUEST,
     LOGIN_REQUEST, REFRESH_TOKEN_REQUEST,
     REGISTER_REQUEST, REMOVE_FAVORITE_REQUEST, RESET_BEERS,
-    SET_WAS_SEARCH_PERFORMED, START_VALIDATING
+    SET_WAS_SEARCH_PERFORMED, START_VALIDATING, UPDATE_USER_REQUEST
 } from "../types/types";
 
 export function getBeersRequest(payload) {
@@ -48,6 +48,13 @@ export function registerRequest(payload) {
 export function loginRequest(payload) {
     return {
         type: LOGIN_REQUEST,
+        payload
+    }
+}
+
+export function updateUserRequest(payload) {
+    return {
+        type: UPDATE_USER_REQUEST,
         payload
     }
 }

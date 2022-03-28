@@ -22,8 +22,9 @@ import
     REFRESH_TOKEN_SUCCESS,
     REGISTER_REQUEST,
     REGISTER_SUCCESS,
-    START_VALIDATING
+    START_VALIDATING, UPDATE_USER_REQUEST, UPDATE_USER_SUCCESS, UPDATE_USER_FAILED
 } from "../types/types";
+import createObjFromPatchDocJson from "../../helpers/createObjFromPatchDocJson";
 
 const defaultFlagsValues = {
     flags: {
@@ -33,21 +34,30 @@ const defaultFlagsValues = {
         wasLoginRequested: false,
         userWithEmailExists: false,
         userWithUsernameExists: false,
+        updateSucceeded: false,
+        wasUpdateRequested: false
     },
     loadingFlags: {
         isConfirmationProcessing: false,
         isCheckingProcessing: false,
-        isFavoritesLoading: true
+        isFavoritesLoading: true,
+        isUpdating: false
     }
 }
 
 const initialState = {
-    isAuth: false,
-    id: "",
-    username: "",
-    email: "",
-    password: "",
-    avatarUrl: "",
+    isAuth: true,
+    userInfo: {
+        id: "",
+        username: "",
+        email: "",
+        avatar_url: "",
+        country: "",
+        birth_day: "1990-01-01",
+        first_name: "",
+        last_name: "",
+        gender: ""
+    },
     accessToken: "",
     flags: {
         ...defaultFlagsValues.flags
@@ -115,9 +125,41 @@ export const userReducer = (state = initialState, action) => {
         case REFRESH_TOKEN_FAILED:
             return {...state, isAuth: false};
         case GET_ME_SUCCESS:
-            return {...state, id: action.payload.response.id, username: action.payload.response.username, email: action.payload.response.email};
+            return {...state, userInfo: {...state.userInfo, ...action.payload.response}};
+        case UPDATE_USER_REQUEST:
+            return {...state, loadingFlags: {...state.loadingFlags, isUpdating: true}};
+        case UPDATE_USER_SUCCESS:
+            return {...state,
+                loadingFlags: {...state.loadingFlags, isUpdating: false},
+                flags: {...state.flags, updateSucceeded: true, wasUpdateRequested: true},
+                userInfo: patchUser(state.userInfo, action.payload.patchDocument)
+            };
+        case UPDATE_USER_FAILED:
+            return {...state,
+                loadingFlags: {...state.loadingFlags, isUpdating: false},
+                flags: {...state.flags, updateSucceeded: false, wasUpdateRequested: true}};
         case GET_ME_REQUEST:
         default:
             return state;
     }
 }
+
+const patchUser = (userInfo, patchDoc) => {
+    const newUserInfo = createObjFromPatchDocJson(patchDoc);
+
+    const oldCopy = {
+        ...userInfo
+    };
+
+    Object.entries(newUserInfo).forEach(([key, value]) => {
+        const snakeKey = camelToSnakeCase(key);
+
+        if(!!oldCopy[snakeKey]) {
+            oldCopy[snakeKey] = value
+        }
+    });
+
+    return oldCopy;
+};
+
+const camelToSnakeCase = str => str.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);

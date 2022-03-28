@@ -1,8 +1,9 @@
 import {call} from "redux-saga/effects";
 import {authorizedRequest, request, requestWithFetch, requestWithXHR} from "./request";
-import {DELETE, GET, POST} from "../../helpers/HTTPMethods";
+import {DELETE, GET, PATCH, POST} from "../../helpers/HTTPMethods";
 import createUrlFromFilter from "../../helpers/createUrlFromFilter";
 import createUrl from "../../helpers/createUrl";
+import createJsonPatchDocument from "../../helpers/createJsonPatchDocument";
 
 export function getBeers(payload, accessToken) {
     return call(
@@ -99,6 +100,19 @@ export function login(payload) {
         },
         requestWithFetch
     );
+}
+
+export function updateUser(payload, accessToken) {
+    return call(
+        authorizedRequest,
+        {
+            url: createUrl(`users/${payload.id}`),
+            method: PATCH,
+            body: payload.patchDocument
+        },
+        requestWithFetch,
+        accessToken
+    )
 }
 
 export function getMe(_, accessToken) {
