@@ -1,11 +1,14 @@
 ﻿using BeerCatalog.Application.Common.Enums;
 using BeerCatalog.Application.Common.Models;
 using BeerCatalog.Application.Interfaces.Services;
+using BeerCatalog.Application.Models;
+using BeerCatalog.Domain.Models;
 using BeerCatalog.WebApi.Controllers.Common;
 using BeerCatalog.WebApi.DTO;
 using BeerCatalog.WebApi.Helpers.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BeerCatalog.WebApi.Controllers;
@@ -52,13 +55,22 @@ public class UsersController : ControllerBaseClass
         return HandleServiceResult(retrievingResult);
     }
 
-    [HttpDelete("{userId}")]
-    public async Task<IActionResult> DeleteById(Guid userId)
+    [HttpPatch("{id:guid}")]
+    public async Task<IActionResult> Update(Guid id, [FromBody] JsonPatchDocument<UserUpdateDto> updateDto)
     {
-        if (!(await IsAllowedToDeleteAccount(userId)))
-            return BadRequest("Not allowed to delete this user");
+        var userId = GetUserIdFromAccessToken();
+        
+        var updatingResult = await _userService.PatchUserAsync(userId, id, updateDto);
 
-        var deletionResult = await _userService.DeleteByIdAsync(userId);
+        return HandleServiceResult(updatingResult);
+    }
+
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> DeleteById(Guid id)
+    {
+        var userId = GetUserIdFromAccessToken();
+
+        var deletionResult = await _userService.DeleteByIdAsync(userId, id);
 
         return HandleServiceResult(deletionResult);
     }

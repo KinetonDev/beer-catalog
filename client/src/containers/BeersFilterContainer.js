@@ -11,16 +11,14 @@ const BeersFilterContainer = ({setPage, filter, setFilter, page}) => {
     const handleSubmit = useCallback((e) => {
         e.preventDefault();
 
-        if (page !== 1) {
-            if(!wasSearchPerformed) {
-                dispatch(setWasSearchPerformed(true));
-            }
-
-            dispatch(resetBeers());
-            setPage(1);
+        if(!wasSearchPerformed) {
+            dispatch(setWasSearchPerformed(true));
         }
 
-    }, [page, wasSearchPerformed, dispatch, setPage]);
+        dispatch(resetBeers());
+        setPage(1);
+
+    }, [wasSearchPerformed, dispatch, setPage]);
 
     return (
         <BeersFilter

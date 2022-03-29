@@ -1,6 +1,21 @@
-﻿namespace BeerCatalog.Application.Models;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace BeerCatalog.Application.Models;
 
 public class UserUpdateDto
 {
-    
+    [MaxLength(50, ErrorMessage = "First name should be shorted than 50 characters")]
+    [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "First name can only contain letters")]
+    public string? FirstName { get; set; }
+    [MaxLength(50, ErrorMessage = "Last name should be shorted than 50 characters")]
+    [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Last name can only contain letters")]
+    public string? LastName { get; set; }
+    [StringLength(1, MinimumLength = 1, ErrorMessage = "Gender should consist of 1 letter only")]
+    [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Gender can only contain letters")]
+    public string? Gender { get; set; }
+    [MaxLength(100, ErrorMessage = "Country should be shorter than 100 letters")]
+    [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Country can only contain letters")]
+    public string? Country { get; set; }
+    [DataType(DataType.DateTime, ErrorMessage = "Invalid date")]
+    public DateTime? BirthDay { get; set; }
 }

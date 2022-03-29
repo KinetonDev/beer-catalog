@@ -20,13 +20,11 @@ const LandingPageContainer = () => {
     console.log(`total pages + ${totalPages}`)
 
     useEffect(() => {
-        if (page <= totalPages) {
-            dispatch(getBeersRequest({
-                page,
-                perPage: landingPaginationPageSize,
-                filter
-            }));
-        }
+        dispatch(getBeersRequest({
+            page,
+            perPage: landingPaginationPageSize,
+            filter
+        }));
     }, [page, dispatch]);
 
     return (

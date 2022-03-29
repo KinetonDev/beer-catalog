@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.ComponentModel.DataAnnotations;
+using AutoMapper;
 using BeerCatalog.Application.Common.Enums;
 using BeerCatalog.Application.Common.Service;
 using BeerCatalog.Application.Interfaces.Repositories;
@@ -7,6 +8,8 @@ using BeerCatalog.Application.Models;
 using BeerCatalog.Application.Models.Beer;
 using BeerCatalog.Domain.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.JsonPatch.Exceptions;
 
 namespace BeerCatalog.Application.Services;
 
@@ -38,23 +41,80 @@ public class UserService : Service<UserReadDto>, IUserService
         return Task.FromResult(Result(_mapper.Map<IEnumerable<UserReadDto>>(_userManager.Users)));
     }
 
-    public async Task<ServiceResult> DeleteByIdAsync(Guid id)
+    public async Task<ServiceResult> DeleteByIdAsync(Guid whoRequested, Guid userToDeleteId)
     {
-        var user = await _userManager.FindByIdAsync(id.ToString());
+        var user = await _userManager.FindByIdAsync(whoRequested.ToString());
 
         if (user == null)
         {
             return Error(ErrorCode.UserNotFound);
         }
 
+        if (!(await IsAllowedToOperate(whoRequested, userToDeleteId)))
+        {
+            return Error(ErrorCode.NotAllowedToDeleteAccount);
+        }
+
+        var userToDelete = await _userManager.FindByIdAsync(userToDeleteId.ToString());
+
+        if (userToDelete == null)
+        {
+            return Error(ErrorCode.UserNotFound);
+        }
+        
         var deletionResult = await _userManager.DeleteAsync(user);
 
         return !deletionResult.Succeeded ? Error(ErrorCode.UserNotDeleted) : Success();
     }
 
-    public Task<ServiceResult> UpdateByIdAsync(Guid id)
+    public async Task<ServiceResult> PatchUserAsync(Guid whoRequested, Guid userToUpdateId, JsonPatchDocument<UserUpdateDto> patchDocument)
     {
-        throw new NotImplementedException();
+        var user = await _userManager.FindByIdAsync(whoRequested.ToString());
+
+        if (user == null)
+        {
+            return Error(ErrorCode.UserNotFound);
+        }
+
+        if (!(await IsAllowedToOperate(whoRequested, userToUpdateId)))
+        {
+            return Error(ErrorCode.NotAllowedToUpdateAccount);
+        }
+
+        var userToUpdate = await _userManager.FindByIdAsync(userToUpdateId.ToString());
+
+        if (userToUpdate == null)
+        {
+            return Error(ErrorCode.UserNotFound);
+        }
+
+        var userToUpdateDto = _mapper.Map<UserUpdateDto>(userToUpdate);
+
+        try
+        {
+            patchDocument.ApplyTo(userToUpdateDto);
+        }
+        catch (JsonPatchException e)
+        {
+            return Error(ErrorCode.UserNotUpdated);
+        }
+
+        _mapper.Map(userToUpdateDto, userToUpdate);
+        var results = new List<ValidationResult>();
+
+        if (!Validator.TryValidateObject(userToUpdate, new ValidationContext(userToUpdate), results, true))
+        {
+            return Error(ErrorCode.ValidationFailed);
+        }
+
+        var updatingResult = await _userManager.UpdateAsync(userToUpdate);
+
+        if (!updatingResult.Succeeded)
+        {
+            return Error(ErrorCode.UserNotUpdated);
+        }
+
+        return Success();
     }
 
     public async Task<ServiceResult<IEnumerable<FavoriteBeerDto>>> GetFavoriteBeersAsync(Guid id)
@@ -172,5 +232,15 @@ public class UserService : Service<UserReadDto>, IUserService
         var user = await _userManager.FindByNameAsync(username);
 
         return user != null;
+    }
+    
+    private async Task<bool> IsAllowedToOperate(Guid whoRequested, Guid userToOperateId)
+    {
+        if (whoRequested == userToOperateId)
+        {
+            return true;
+        }
+        
+        return await IsInRoleAsync(whoRequested, "Admin");
     }
 }

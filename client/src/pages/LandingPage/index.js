@@ -3,7 +3,7 @@ import BeerGridContainer from "../../containers/BeerGridContainer";
 import BeersFilterContainer from "../../containers/BeersFilterContainer";
 import useStyle from "./styles";
 
-const LandingPage = ({page, setPage, perPage, beers, setFilter, filter, totalPages}) => {
+const LandingPage = ({page, setPage, beers, setFilter, filter, totalPages}) => {
     const classes = useStyle();
 
     return (

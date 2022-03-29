@@ -1,9 +1,9 @@
-import React, {useCallback, useRef} from 'react';
+import React, {useCallback, useEffect, useRef} from 'react';
 import {useDispatch} from "react-redux";
 import BeerGrid from "../components/BeerGrid";
 import {
     addFavoriteBeerRequest,
-    removeFavoriteBeerRequest,
+    removeFavoriteBeerRequest, resetBeers,
 } from "../redux/actions/actions";
 import useObserver from "../hooks/useObserver";
 import {useNavigate} from "react-router-dom";
@@ -36,6 +36,12 @@ const BeerGridContainer = ({page, setPage, beers, totalPages}) => {
         }));
     }, [dispatch]);
 
+    useEffect(() => {
+        return () => {
+            dispatch(resetBeers());
+        }
+    }, []);
+    
     return (
         <BeerGrid
             beers={beers}

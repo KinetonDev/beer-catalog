@@ -6,7 +6,7 @@ public class LoginDto
 {
     [Required(ErrorMessage = "Email is required")]
     [EmailAddress(ErrorMessage = "Provided value is not email")]
-    [MaxLength(30, ErrorMessage = "Email is too long. Required: 30 chars max")]
+    [MaxLength(40, ErrorMessage = "Email is too long. Required: 30 chars max")]
     public string Email { get; set; }
     [Required(ErrorMessage = "Password is required")]
     [MaxLength(50, ErrorMessage = "Login is too long. Required: 50 chars max")]
