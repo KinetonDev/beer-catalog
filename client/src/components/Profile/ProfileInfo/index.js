@@ -64,9 +64,13 @@ const ProfileInfo = (
     const dispatch = useDispatch();
 
     useEffect(() => {
-        setTimeout(() => {
+        const timer = setTimeout(() => {
             dispatch(clearFlags());
         }, 3000);
+
+        return () => {
+            clearTimeout(timer);
+        }
     }, [updatingFlags.updateSucceeded]);
 
     return (

@@ -3,6 +3,7 @@ using BeerCatalog.Application.Common.Service;
 using BeerCatalog.Application.Models;
 using BeerCatalog.Application.Models.Beer;
 using BeerCatalog.Domain.Models;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace BeerCatalog.Application.Interfaces.Services;
 
@@ -10,8 +11,9 @@ public interface IUserService
 {
     Task<ServiceResult<UserReadDto>> GetByIdAsync(Guid id);
     Task<ServiceResult<IEnumerable<UserReadDto>>> GetAllAsync();
-    Task<ServiceResult> DeleteByIdAsync(Guid id);
-    Task<ServiceResult> UpdateByIdAsync(Guid id);
+    Task<ServiceResult> DeleteByIdAsync(Guid whoRequested, Guid userToDeleteId);
+    Task<ServiceResult> PatchUserAsync(Guid whoRequested, Guid userToUpdateId,
+        JsonPatchDocument<UserUpdateDto> patchDocument);
     Task<ServiceResult<IEnumerable<FavoriteBeerDto>>> GetFavoriteBeersAsync(Guid id);
     Task<ServiceResult<ModelWithPagination<FavoriteBeerDto>>> GetFavoriteBeersWithPaginationAsync(Guid id, Pagination pagination);
     Task<ServiceResult> AddFavoriteBeerByIdAsync(Guid userId, Guid beerId);

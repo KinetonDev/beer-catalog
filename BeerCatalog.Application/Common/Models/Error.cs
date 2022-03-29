@@ -25,10 +25,14 @@ public class Error
         ErrorCode.EmailIsNotConfirmed => "User didn't confirm email address",
         ErrorCode.EmailConfirmationFailed => "Email confirmation failed",
         ErrorCode.UserNotDeleted => "User wasn't deleted",
+        ErrorCode.NotAllowedToUpdateAccount => "You're not allowed to update this user",
+        ErrorCode.NotAllowedToDeleteAccount => "You're not allowed to delete this user",
         //beers
         ErrorCode.BeerNotFound => "Beer wasn't found",
         ErrorCode.BeerIsAlreadyMarkedAsFavorite => "Beer is already favorite",
         ErrorCode.BeerIsNotMarkedAsFavorite => "Beer is not favorite",
+        //common
+        ErrorCode.ValidationFailed => "Validation failed",
         _ => throw new ArgumentException("Unknown error code")
     };
 }

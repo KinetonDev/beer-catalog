@@ -25,7 +25,6 @@ const FavoritesListContainer = () => {
 
     const handlePageChange = useCallback((_, page) => {
         setPage(page)
-        console.log(page)
     }, []);
 
     useEffect(() => {
@@ -41,9 +40,6 @@ const FavoritesListContainer = () => {
             beerId: beerId
         }));
     }, [dispatch]);
-
-    console.log(totalPages)
-    console.log(page)
 
     return (
         <FavoritesList

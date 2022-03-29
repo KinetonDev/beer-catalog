@@ -12,6 +12,7 @@
 
     <ItemGroup>
       <PackageReference Include="AutoMapper" Version="11.0.1" />
+      <PackageReference Include="Microsoft.AspNetCore.JsonPatch" Version="7.0.0-preview.2.22153.2" />
     </ItemGroup>
 
 </Project>

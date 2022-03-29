@@ -11,7 +11,10 @@ public enum ErrorCode
     RefreshTokenIsNotValid,
     EmailIsNotConfirmed,
     EmailConfirmationFailed,
-    
+    NotAllowedToDeleteAccount,
+    NotAllowedToUpdateAccount,
+    ValidationFailed,
+
     BeerNotFound = 2000,
     BeerIsAlreadyMarkedAsFavorite,
     BeerIsNotMarkedAsFavorite
