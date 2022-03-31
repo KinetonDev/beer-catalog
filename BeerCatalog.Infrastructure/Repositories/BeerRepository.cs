@@ -104,11 +104,12 @@ public class BeerRepository : IBeerRepository
                                  (filter.EbcLessThan.HasValue && b.Ebc <= filter.EbcLessThan) &&
                                  (filter.IbuLessThan.HasValue && b.Ibu <= filter.IbuLessThan) &&
                                  (b.Name.ToLower().Contains(string.IsNullOrEmpty(filter.BeerName) ? "" : filter.BeerName.ToLower())));
- 
+        
+        query = query.OrderBy(b => b.Name);
       
         query = ApplyPagination(query, pagination.PageSize, pagination.Page);
 
-        return await query.OrderBy(b => b.Name).ToListAsync();
+        return await query.ToListAsync();
     }
 
     public async Task<IEnumerable<Beer>> GetFavoritesByUserIdWithPaginationAsync(Guid userId, Pagination pagination)
@@ -117,9 +118,11 @@ public class BeerRepository : IBeerRepository
             .Where(b => b.Fans.Any(u => u.Id == userId))
             .AsQueryable();
         
+        query = query.OrderBy(b => b.Name);
+        
         query = ApplyPagination(query, pagination.PageSize, pagination.Page);
 
-        return await query.OrderBy(b => b.Name).ToListAsync();
+        return await query.ToListAsync();
     }
 
     public async Task<int> CountOfFavoriteByUserIdAsync(Guid userId)

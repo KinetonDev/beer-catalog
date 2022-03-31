@@ -17,5 +17,7 @@ public enum ErrorCode
 
     BeerNotFound = 2000,
     BeerIsAlreadyMarkedAsFavorite,
-    BeerIsNotMarkedAsFavorite
+    BeerIsNotMarkedAsFavorite,
+    
+    InvalidBase64 = 10000
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Route, Routes} from "react-router-dom"
+import {Redirect, Route, Routes} from "react-router-dom"
 import LandingPageContainer from "../containers/LandingPageContainer";
 import FavoritesPageContainer from "../containers/FavoritesPageContainer"
 import BeerDetailsPageContainer from "../containers/BeerDetailsPageContainer";

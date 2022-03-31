@@ -93,6 +93,16 @@ public class UsersController : ControllerBaseClass
         return exists ? Ok() : NotFound();
     }
 
+    [HttpPut("change-avatar")]
+    public async Task<IActionResult> ChangeAvatar([FromBody] ChangeAvatarDto changeAvatarDto)
+    {
+        var userId = GetUserIdFromAccessToken();
+        
+        var changingResult = await _userService.ChangeUserAvatarAsync(userId, changeAvatarDto);
+
+        return HandleServiceResult(changingResult);
+    }
+
     private Guid GetUserIdFromAccessToken()
     {
         var token = HttpContext.Request.Headers["Authorization"]

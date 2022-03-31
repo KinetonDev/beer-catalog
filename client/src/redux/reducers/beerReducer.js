@@ -1,7 +1,7 @@
 import {
     ADD_FAVORITE_SUCCESS,
     GET_BEER_BY_ID_REQUEST,
-    GET_BEER_BY_ID_SUCCESS,
+    GET_BEER_BY_ID_SUCCESS, GET_BEERS_REQUEST,
     GET_BEERS_SUCCESS,
     REMOVE_FAVORITE_SUCCESS, RESET_BEERS,
     SET_WAS_SEARCH_PERFORMED
@@ -11,6 +11,7 @@ import {landingPaginationPageSize} from "../../constants";
 const initialState = {
     totalPages: 2,
     wasSearchPerformed: false,
+    firstBeersLoading: false,
     beers: [],
     currentBeer: {
         value: { },
@@ -23,16 +24,38 @@ export const beerReducer = (state = initialState, action) => {
     console.log(action.payload);
 
     switch (action.type) {
-        case GET_BEERS_SUCCESS:
-            return {...state, beers: [...state.beers, ...action.payload.response], totalPages: Math.ceil(action.payload.totalCount / landingPaginationPageSize)};
+        case GET_BEERS_REQUEST: {
+            const newState = {
+                ...state
+            };
+
+            if (action.payload.page === 1) {
+                newState.firstBeersLoading = true;
+            }
+
+            return newState;
+        }
+        case GET_BEERS_SUCCESS: {
+            const newState = {
+                ...state,
+                totalPages: Math.ceil(action.payload.totalCount / landingPaginationPageSize)
+            };
+
+            if (action.payload.page !== 1) {
+                newState.beers = [...state.beers, ...action.payload.response];
+            } else {
+                newState.firstBeersLoading = false;
+                newState.beers = [...action.payload.response];
+            }
+
+            return newState;
+        }
         case GET_BEER_BY_ID_REQUEST:
             return {...state, currentBeer: {...state.currentBeer, isLoading: true} }
         case GET_BEER_BY_ID_SUCCESS:
             return {...state, currentBeer: {...state.currentBeer, value: action.payload.response, isLoading: false}};
         case SET_WAS_SEARCH_PERFORMED:
             return {...state, wasSearchPerformed: action.payload};
-        case RESET_BEERS:
-            return {...state, beers: []};
         case ADD_FAVORITE_SUCCESS:
             return {...state,
                 beers: toggleFavoriteOnEvery(state.beers, action.payload.beer_id),

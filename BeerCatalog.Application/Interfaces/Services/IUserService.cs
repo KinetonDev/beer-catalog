@@ -17,6 +17,7 @@ public interface IUserService
     Task<ServiceResult<IEnumerable<FavoriteBeerDto>>> GetFavoriteBeersAsync(Guid id);
     Task<ServiceResult<ModelWithPagination<FavoriteBeerDto>>> GetFavoriteBeersWithPaginationAsync(Guid id, Pagination pagination);
     Task<ServiceResult> AddFavoriteBeerByIdAsync(Guid userId, Guid beerId);
+    Task<ServiceResult<Avatar>> ChangeUserAvatarAsync(Guid id, ChangeAvatarDto changeAvatarDto);
     Task<ServiceResult> RemoveFavoriteBeerByIdAsync(Guid userId, Guid beerId);
     Task<bool> IsInRoleAsync(Guid id, string role);
     Task<bool> CheckIfUserExistsByEmailAsync(string email);

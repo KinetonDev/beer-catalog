@@ -2,6 +2,10 @@ export function selectBeers(state) {
     return state.beer.beers;
 }
 
+export function selectFirstBeersLoading(state) {
+    return state.beer.firstBeersLoading;
+}
+
 export function selectWasSearchPerformed(state) {
     return state.beer.wasSearchPerformed;
 }

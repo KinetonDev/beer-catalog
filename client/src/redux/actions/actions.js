@@ -1,5 +1,5 @@
 import {
-    ADD_FAVORITE_REQUEST,
+    ADD_FAVORITE_REQUEST, CHANGE_AVATAR_REQUEST,
     CHECK_EMAIL_REQUEST,
     CHECK_USERNAME_REQUEST,
     CLEAR_FLAGS,
@@ -25,15 +25,16 @@ export function getBeerByIdRequest(payload) {
     }
 }
 
-export function resetBeers() {
-    return {
-        type: RESET_BEERS
-    }
-}
-
 export function setWasSearchPerformed(payload) {
     return {
         type: SET_WAS_SEARCH_PERFORMED,
+        payload
+    }
+}
+
+export function changeAvatarRequest(payload) {
+    return {
+        type: CHANGE_AVATAR_REQUEST,
         payload
     }
 }

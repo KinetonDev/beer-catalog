@@ -2,6 +2,7 @@ import React from 'react';
 import {CircularProgress, Grid} from "@mui/material";
 import BeerCard from "../BeerCard";
 import useStyle from "./styles";
+import BeerCardSkeleton from "../BeerCard/BeerCardSkeleton";
 
 const BeerGrid = (
     {
@@ -10,7 +11,8 @@ const BeerGrid = (
         observableElement,
         handleAddingFavorite,
         handleRemovingFavorite,
-        handleNavigation
+        handleNavigation,
+        firstBeersLoading
     }) => {
     const classes = useStyle();
 
@@ -24,22 +26,24 @@ const BeerGrid = (
                  {beers.map(beer => {
                      return (
                          <Grid item key={beer.id} xs={4}>
-                             <BeerCard
-                                 image={beer.image_url}
-                                 alt={beer.name}
-                                 tagline={beer.tagline}
-                                 name={beer.name}
-                                 isFavorite={beer.is_favorite}
-                                 onNavigate={() => {
-                                     handleNavigation(beer.id);
-                                 }}
-                                 onFavoriteAdd={() => {
-                                     handleAddingFavorite(beer.id);
-                                 }}
-                                 onFavoriteRemove={() => {
-                                     handleRemovingFavorite(beer.id);
-                                 }}
-                             />
+                             {!firstBeersLoading ? (
+                                 <BeerCard
+                                     image={beer.image_url}
+                                     alt={beer.name}
+                                     tagline={beer.tagline}
+                                     name={beer.name}
+                                     isFavorite={beer.is_favorite}
+                                     onNavigate={() => {
+                                         handleNavigation(beer.id);
+                                     }}
+                                     onFavoriteAdd={() => {
+                                         handleAddingFavorite(beer.id);
+                                     }}
+                                     onFavoriteRemove={() => {
+                                         handleRemovingFavorite(beer.id);
+                                     }}
+                                 />
+                             ) : <BeerCardSkeleton/>}
                          </Grid>
                      )
                  })}
@@ -47,7 +51,7 @@ const BeerGrid = (
              {(endNotReached) && <div
                  style={{
                      width: "100%",
-                     height: "40px",
+                     height: "60px",
                      display: "flex",
                      justifyContent: "center",
                      alignItems: "center",

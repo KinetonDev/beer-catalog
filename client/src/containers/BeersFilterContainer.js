@@ -1,10 +1,17 @@
 import React, {useCallback} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {selectWasSearchPerformed} from "../redux/selectors";
-import {resetBeers, setWasSearchPerformed} from "../redux/actions/actions";
+import {setWasSearchPerformed} from "../redux/actions/actions";
 import BeersFilter from "../components/BeersFilter";
 
-const BeersFilterContainer = ({setPage, filter, setFilter, page}) => {
+const BeersFilterContainer = (
+    {
+        setPage,
+        visualFilter,
+        setVisualFilter,
+        setFilter,
+        page
+    }) => {
     const wasSearchPerformed = useSelector(state => selectWasSearchPerformed(state));
     const dispatch = useDispatch();
 
@@ -15,17 +22,18 @@ const BeersFilterContainer = ({setPage, filter, setFilter, page}) => {
             dispatch(setWasSearchPerformed(true));
         }
 
-        dispatch(resetBeers());
-        setPage(1);
-
-    }, [wasSearchPerformed, dispatch, setPage]);
+        setFilter({
+            ...visualFilter
+        })
+        setPage(1)
+    }, [wasSearchPerformed, dispatch, setFilter, visualFilter, setPage]);
 
     return (
         <BeersFilter
-            filter={filter}
+            visualFilter={visualFilter}
             handleSubmit={handleSubmit}
-            handleFilterChange={setFilter}
-            handleFilterChangeCommitted={setFilter}
+            handleFilterChange={setVisualFilter}
+            handleFilterChangeCommitted={setVisualFilter}
             wasSearchPerformed={wasSearchPerformed}
         />
     );

@@ -22,7 +22,7 @@ import
     REFRESH_TOKEN_SUCCESS,
     REGISTER_REQUEST,
     REGISTER_SUCCESS,
-    START_VALIDATING, UPDATE_USER_REQUEST, UPDATE_USER_SUCCESS, UPDATE_USER_FAILED
+    START_VALIDATING, UPDATE_USER_REQUEST, UPDATE_USER_SUCCESS, UPDATE_USER_FAILED, CHANGE_AVATAR_SUCCESS
 } from "../types/types";
 import createObjFromPatchDocJson from "../../helpers/createObjFromPatchDocJson";
 
@@ -46,7 +46,7 @@ const defaultFlagsValues = {
 }
 
 const initialState = {
-    isAuth: true,
+    isAuth: false,
     userInfo: {
         id: "",
         username: "",
@@ -138,6 +138,14 @@ export const userReducer = (state = initialState, action) => {
             return {...state,
                 loadingFlags: {...state.loadingFlags, isUpdating: false},
                 flags: {...state.flags, updateSucceeded: false, wasUpdateRequested: true}};
+        case CHANGE_AVATAR_SUCCESS:
+            return {
+                ...state,
+                userInfo: {
+                    ...state.userInfo,
+                    avatar_url: action.payload.response.url
+                }
+            };
         case GET_ME_REQUEST:
         default:
             return state;
