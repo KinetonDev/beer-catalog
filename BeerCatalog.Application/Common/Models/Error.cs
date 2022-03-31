@@ -33,6 +33,7 @@ public class Error
         ErrorCode.BeerIsNotMarkedAsFavorite => "Beer is not favorite",
         //common
         ErrorCode.ValidationFailed => "Validation failed",
+        ErrorCode.InvalidBase64 => "Invalid base 64 was provided",
         _ => throw new ArgumentException("Unknown error code")
     };
 }

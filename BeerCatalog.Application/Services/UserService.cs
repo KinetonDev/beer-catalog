@@ -1,7 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Buffers.Text;
+using System.ComponentModel.DataAnnotations;
 using AutoMapper;
 using BeerCatalog.Application.Common.Enums;
 using BeerCatalog.Application.Common.Service;
+using BeerCatalog.Application.Interfaces.Cloud;
 using BeerCatalog.Application.Interfaces.Repositories;
 using BeerCatalog.Application.Interfaces.Services;
 using BeerCatalog.Application.Models;
@@ -16,15 +18,18 @@ namespace BeerCatalog.Application.Services;
 public class UserService : Service<UserReadDto>, IUserService
 {
     private readonly UserManager<User> _userManager;
+    private readonly IRemoteStorage _remoteStorage;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
 
     public UserService(
         UserManager<User> userManager,
+        IRemoteStorage remoteStorage,
         IUnitOfWork unitOfWork,
         IMapper mapper)
     {
         _userManager = userManager;
+        _remoteStorage = remoteStorage;
         _unitOfWork = unitOfWork;
         _mapper = mapper;
     }
@@ -178,6 +183,57 @@ public class UserService : Service<UserReadDto>, IUserService
         await _unitOfWork.SaveChangesAsync();
 
         return Success();
+    }
+
+    public async Task<ServiceResult<Avatar>> ChangeUserAvatarAsync(Guid id, ChangeAvatarDto changeAvatarDto)
+    {
+        var user = await _userManager.FindByIdAsync(id.ToString());
+
+        if (user == null)
+        {
+            return new(ErrorCode.UserNotFound);
+        }
+
+        if (!string.IsNullOrEmpty(user.AvatarUrl))
+        {
+            await _remoteStorage.DeleteFileAsync(id);
+            user.AvatarUrl = null;
+        }
+        
+        MemoryStream memoryStream;
+        
+        try
+        {
+            memoryStream = new MemoryStream(
+                Convert.FromBase64String(changeAvatarDto.AvatarBase64));
+        }
+        catch (Exception e)
+        {
+            return new(ErrorCode.InvalidBase64);
+        }
+
+        try
+        {
+            var avatarLink = await _remoteStorage.UploadFileAsync(id, memoryStream);
+
+            user.AvatarUrl = avatarLink;
+            
+            var updatingResult = await _userManager.UpdateAsync(user);
+
+            if (!updatingResult.Succeeded)
+            {
+                return new(ErrorCode.UserNotUpdated);
+            }
+
+            return new (new Avatar
+            {
+                Url = avatarLink
+            });
+        }
+        catch (Exception e)
+        {
+            return new (ErrorCode.UserNotUpdated);
+        }
     }
 
     public async Task<ServiceResult> RemoveFavoriteBeerByIdAsync(Guid userId, Guid beerId)

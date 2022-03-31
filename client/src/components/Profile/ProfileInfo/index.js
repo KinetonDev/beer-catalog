@@ -148,8 +148,6 @@ const ProfileInfo = (
                                         labelId="gender-select"
                                         label="Gender"
                                         value={values.gender}
-                                        error={!!errors.gender && touched.gender}
-                                        helperText={(!!errors.gender && touched.gender) ? errors.gender : " "}
                                         disabled={!isEditing}
                                         {...getFieldProps("gender")}
                                     >

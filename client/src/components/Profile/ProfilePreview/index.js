@@ -12,7 +12,12 @@ const CustomButton = styled(Button)({
     },
 });
 
-const ProfilePreview = ({user, handleEdit}) => {
+const ProfilePreview = (
+    {
+        user,
+        handleEdit,
+        handleDialogOpening
+    }) => {
     const classes = useStyle();
 
     return (
@@ -62,7 +67,7 @@ const ProfilePreview = ({user, handleEdit}) => {
             </div>
             <div className={classes.profilePreviewActions}>
                 <CustomButton onClick={handleEdit}>Edit</CustomButton>
-                <CustomButton>Change avatar</CustomButton>
+                <CustomButton onClick={handleDialogOpening}>Change avatar</CustomButton>
             </div>
         </div>
     );

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import useStyle from './styles'
 import ProfileBar from "../../components/Profile/ProfileBar";
@@ -7,6 +7,7 @@ import {barItems} from "../../components/Profile/ProfileBar/barItems";
 import ProfileInfo from "../../components/Profile/ProfileInfo";
 import ProfileBeerReviews from "../../components/Profile/ProfileBeerReviews";
 import Divider from '@mui/material/Divider';
+import AvatarDialog from "../../components/Profile/ProfilePreview/AvatarDialog";
 
 const UserProfilePage = (
     {
@@ -17,12 +18,25 @@ const UserProfilePage = (
         handleEdit,
         handleSave,
         initialFormState,
-        handleCancel
+        handleAvatarChanging,
+        handleCancel,
+        handleDialogClosing,
+        handleDialogOpening,
+        isDialogOpened,
+        avatarBase64,
+        handleAvatarSaving
     }) => {
     const classes = useStyle();
 
     return (
         <div className={classes.profilePage}>
+            <AvatarDialog
+                avatarBase64={avatarBase64}
+                handleAvatarChanging={handleAvatarChanging}
+                handleClose={handleDialogClosing}
+                isOpened={isDialogOpened}
+                handleAvatarSaving={handleAvatarSaving}
+            />
             <div className={classes.content}>
                 <ProfileBar
                     handleBarItemChange={handleBarItemChange}
@@ -33,6 +47,7 @@ const UserProfilePage = (
             <ProfilePreview
                 user={user}
                 handleEdit={handleEdit}
+                handleDialogOpening={handleDialogOpening}
             />
         </div>
     );

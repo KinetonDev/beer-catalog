@@ -4,23 +4,30 @@ import AdvancedFilter from "./AdvancedFilter";
 import SearchField from "./SearchField";
 import useStyle from "./style";
 
-const BeersFilter = (props) => {
+const BeersFilter = (
+    {
+        handleSubmit,
+        handleFilterChange,
+        handleFilterChangeCommitted,
+        visualFilter,
+        wasSearchPerformed
+    }) => {
     const classes = useStyle();
 
     return (
-        <form onSubmit={props.handleSubmit} className={classes.beerFilter}>
+        <form onSubmit={handleSubmit} className={classes.beerFilter}>
             <Stack
                 alignItems="center"
             >
                 <SearchField
-                    filter={props.filter}
-                    onChangeFilter={props.handleFilterChange}
-                    onSubmit={props.handleSubmit}
+                    filter={visualFilter}
+                    onChangeFilter={handleFilterChange}
+                    onSubmit={handleSubmit}
                 />
-                {props.wasSearchPerformed && <AdvancedFilter
-                    filter={props.filter}
-                    changeFilter={props.handleFilterChange}
-                    changeFilterCommitted={props.handleFilterChangeCommitted}
+                {wasSearchPerformed && <AdvancedFilter
+                    filter={visualFilter}
+                    changeFilter={handleFilterChange}
+                    changeFilterCommitted={handleFilterChangeCommitted}
                 />}
             </Stack>
         </form>

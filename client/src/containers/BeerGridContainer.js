@@ -8,7 +8,14 @@ import {
 import useObserver from "../hooks/useObserver";
 import {useNavigate} from "react-router-dom";
 
-const BeerGridContainer = ({page, setPage, beers, totalPages}) => {
+const BeerGridContainer = (
+    {
+        page,
+        setPage,
+        beers,
+        totalPages,
+        firstBeersLoading
+    }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -16,9 +23,12 @@ const BeerGridContainer = ({page, setPage, beers, totalPages}) => {
         const [entry] = entries;
         if (!entry.isIntersecting) return;
 
-        setPage(page => page + 1);
-    }, [setPage]);
-    const observableElement = useObserver(useRef(null), observerCallback);
+        if (page <= totalPages) {
+            setPage(page => page + 1);
+        }
+    }, [page, setPage, totalPages]);
+    const observableElement = useRef(null);
+    useObserver(observableElement, observerCallback);
 
     const handleNavigation = useCallback((beerId) => {
         navigate(`/${beerId}`);
@@ -35,17 +45,12 @@ const BeerGridContainer = ({page, setPage, beers, totalPages}) => {
             beerId: beerId
         }));
     }, [dispatch]);
-
-    useEffect(() => {
-        return () => {
-            dispatch(resetBeers());
-        }
-    }, []);
     
     return (
         <BeerGrid
             beers={beers}
-            endNotReached={page <= totalPages}
+            firstBeersLoading={firstBeersLoading}
+            endNotReached={page < totalPages}
             observableElement={observableElement}
             handleNavigation={handleNavigation}
             handleAddingFavorite={handleAddingFavorite}

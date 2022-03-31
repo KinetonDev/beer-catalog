@@ -1,6 +1,6 @@
 import {call} from "redux-saga/effects";
 import {authorizedRequest, request, requestWithFetch, requestWithXHR} from "./request";
-import {DELETE, GET, PATCH, POST} from "../../helpers/HTTPMethods";
+import {DELETE, GET, PATCH, POST, PUT} from "../../helpers/HTTPMethods";
 import createUrlFromFilter from "../../helpers/createUrlFromFilter";
 import createUrl from "../../helpers/createUrl";
 import createJsonPatchDocument from "../../helpers/createJsonPatchDocument";
@@ -115,6 +115,19 @@ export function updateUser(payload, accessToken) {
     )
 }
 
+export function changeAvatar(payload, accessToken) {
+    return call(
+        authorizedRequest,
+        {
+            url: createUrl("users/change-avatar"),
+            method: PUT,
+            body: payload
+        },
+        requestWithFetch,
+        accessToken
+    )
+}
+
 export function getMe(_, accessToken) {
     return call(
         authorizedRequest,
@@ -124,7 +137,9 @@ export function getMe(_, accessToken) {
         },
         requestWithFetch,
         accessToken
-    );}
+    );
+}
+
 export function checkEmail(payload) {
     return call(
         request,

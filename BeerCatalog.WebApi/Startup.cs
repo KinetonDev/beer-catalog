@@ -1,8 +1,11 @@
-﻿using BeerCatalog.Application.Interfaces.Repositories;
+﻿using BeerCatalog.Application.Interfaces.Cloud;
+using BeerCatalog.Application.Interfaces.Repositories;
 using BeerCatalog.Application.Interfaces.Services;
 using BeerCatalog.Application.Services;
 using BeerCatalog.Domain.Models;
 using BeerCatalog.Infrastructure;
+using BeerCatalog.Infrastructure.Cloud.Firebase;
+using BeerCatalog.Infrastructure.Cloud.Firebase.Models;
 using BeerCatalog.Infrastructure.Data;
 using BeerCatalog.WebApi.BackgroundServices;
 using BeerCatalog.WebApi.Common.Models;
@@ -28,7 +31,11 @@ public class Startup
     public Startup(IWebHostEnvironment environment, IConfiguration configuration)
     {
         _environment = environment;
-        _configuration = configuration;
+
+        _configuration = new ConfigurationBuilder()
+            .AddJsonFile(Path.Combine(Directory.GetCurrentDirectory(), "firebaseSettings.json"))
+            .AddConfiguration(configuration)
+            .Build();
     }
     
     public void ConfigureServices(IServiceCollection services)
@@ -59,6 +66,7 @@ public class Startup
 
         services.AddScoped<DbContext>(_ => _.GetRequiredService<AppDbContext>());
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<IRemoteStorage, FirebaseRemoteStorage>();
         
         services.AddIdentity<User, IdentityRole<Guid>>(options =>
             {
@@ -76,6 +84,7 @@ public class Startup
 
         services.Configure<JwtSettings>(_configuration.GetSection(JwtSettings.JwtSettingsSectionName));
         services.Configure<SmtpClientSettings>(_configuration.GetSection(SmtpClientSettings.SmtpSettingsSectionName));
+        services.Configure<FirebaseSettings>(_configuration.GetSection(FirebaseSettings.FirebaseSettingsSectionName));
 
         services.AddTransient<IAuthService, AuthService>();
         services.AddTransient<IUserService, UserService>(); 

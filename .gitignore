@@ -19,6 +19,9 @@ riderModule.iml
 /_ReSharper.Caches/
 .idea/
 
+#Project
+BeerCatalog.WebApi/firebaseSettings.json
+
 # Sensitive or high-churn files
 .idea/**/dataSources/
 .idea/**/dataSources.ids
