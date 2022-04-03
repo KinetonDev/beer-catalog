@@ -297,6 +297,6 @@ public class UserService : Service<UserReadDto>, IUserService
             return true;
         }
         
-        return await IsInRoleAsync(whoRequested, "Admin");
+        return await IsInRoleAsync(whoRequested, UserRoles.Admin);
     }
 }

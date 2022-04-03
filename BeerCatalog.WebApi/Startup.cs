@@ -1,4 +1,5 @@
-﻿using BeerCatalog.Application.Interfaces.Cloud;
+﻿using BeerCatalog.Application.Common.Enums;
+using BeerCatalog.Application.Interfaces.Cloud;
 using BeerCatalog.Application.Interfaces.Repositories;
 using BeerCatalog.Application.Interfaces.Services;
 using BeerCatalog.Application.Services;
@@ -8,6 +9,7 @@ using BeerCatalog.Infrastructure.Cloud.Firebase;
 using BeerCatalog.Infrastructure.Cloud.Firebase.Models;
 using BeerCatalog.Infrastructure.Data;
 using BeerCatalog.WebApi.BackgroundServices;
+using BeerCatalog.WebApi.Common.Authorization;
 using BeerCatalog.WebApi.Common.Models;
 using BeerCatalog.WebApi.Helpers;
 using BeerCatalog.WebApi.Helpers.Interfaces;
@@ -58,6 +60,16 @@ public class Startup
                     ClockSkew = TimeSpan.Zero
                 };
             });
+
+        services.AddAuthorization(config =>
+        {
+            config.AddPolicy(Policies.RequireAdminRole, builder =>
+            {
+                builder.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme);
+                builder.RequireAuthenticatedUser();
+                builder.RequireRole(UserRoles.Admin);
+            });
+        });
         
         services.AddDbContext<AppDbContext>(config =>
         {

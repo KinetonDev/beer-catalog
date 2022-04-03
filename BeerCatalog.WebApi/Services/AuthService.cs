@@ -46,7 +46,8 @@ public class AuthService : Service<JwtTokens>, IAuthService
         var user = _mapper.Map<User>(registerDto);
 
         var creatingResult = await _userManager.CreateAsync(user, registerDto.Password);
-
+        await _userManager.AddToRoleAsync(user, UserRoles.User);
+        
         if (!creatingResult.Succeeded)
             return new ServiceResult<Guid>(ErrorCode.UserNotCreated);
 
@@ -85,10 +86,11 @@ public class AuthService : Service<JwtTokens>, IAuthService
 
         var claims = new List<Claim>
         {
-            new (JwtRegisteredClaimNames.Sub, existingUser.Id.ToString())
+            new (JwtRegisteredClaimNames.Sub, existingUser.Id.ToString()),
+            new (ClaimTypes.Role, (await _userManager.GetRolesAsync(existingUser)).FirstOrDefault()!)
         };
 
-        var refreshToken = _jwtTokenGenerator.GenerateRefreshToken(claims);
+        var refreshToken = _jwtTokenGenerator.GenerateRefreshToken(existingUser.Id);
         existingUser.RefreshToken = refreshToken;
         var updatingResult = await _userManager.UpdateAsync(existingUser);
 
@@ -140,11 +142,12 @@ public class AuthService : Service<JwtTokens>, IAuthService
         
         var claims = new List<Claim>
         {
-            new (JwtRegisteredClaimNames.Sub, existingUser.Id.ToString())
+            new (JwtRegisteredClaimNames.Sub, existingUser.Id.ToString()),
+            new (ClaimTypes.Role, (await _userManager.GetRolesAsync(existingUser)).FirstOrDefault()!)
         };
 
         var newAccessToken = _jwtTokenGenerator.GenerateAccessToken(claims);
-        var newRefreshToken = _jwtTokenGenerator.GenerateRefreshToken(claims);
+        var newRefreshToken = _jwtTokenGenerator.GenerateRefreshToken(existingUser.Id);
         existingUser.RefreshToken = newRefreshToken;
         var updatingResult = await _userManager.UpdateAsync(existingUser);
         

@@ -33,8 +33,13 @@ public class JwtTokenGenerator : IJwtTokenGenerator
         return tokenString;
     }
 
-    public string GenerateRefreshToken(List<Claim> claims)
+    public string GenerateRefreshToken(Guid userId)
     {
+        var claims = new List<Claim>
+        {
+            new (JwtRegisteredClaimNames.Sub, userId.ToString()),
+        };
+        
         var refreshToken = new JwtSecurityToken(
             _jwtSettings.Issuer,
             _jwtSettings.Audience,
