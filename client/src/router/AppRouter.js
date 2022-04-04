@@ -12,6 +12,8 @@ import LoginFormContainer from "../containers/Auth/LoginFormContainer";
 import PrivateRoute from "./PrivateRoute";
 import UserProfilePageContainer from "../containers/UserProfilePageContainer";
 import AboutPage from "../pages/AboutPage";
+import AdminPanelPageContainer from "../containers/AdminPanelPageContainer";
+import AdminRoute from "./AdminRoute";
 
 const AppRouter = () => {
     return (
@@ -25,6 +27,9 @@ const AppRouter = () => {
                     <Route path={routes.favorites} element={<FavoritesPageContainer/>}/>
                     <Route path={routes.profile} element={<UserProfilePageContainer/>}/>
                     <Route path={routes.about} element={<AboutPage/>}/>
+                    <Route element={<AdminRoute/>}>
+                        <Route path={routes.admin} element={<AdminPanelPageContainer/>}/>
+                    </Route>
                 </Route>
             </Route>
             <Route element={<WithoutAppBar/>}>

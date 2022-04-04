@@ -15,7 +15,14 @@ import MenuIcon from '@mui/icons-material/Menu';
 import applicationItems from "./applicationItems";
 import useStyles from "./styles";
 
-const ApplicationBar = (props) => {
+const ApplicationBar = (
+    {
+        role,
+        isDrawerOpened,
+        onNavigate,
+        setIsDrawerOpened
+    }
+) => {
     const classes = useStyles();
 
     return (
@@ -27,7 +34,7 @@ const ApplicationBar = (props) => {
                 disableGutters={true}
             >
                 <IconButton
-                    onClick={() => props.setIsDrawerOpened(isOpened => !isOpened)}
+                    onClick={() => setIsDrawerOpened(isOpened => !isOpened)}
                 >
                     <MenuIcon className={classes.menuIcon}/>
                 </IconButton>
@@ -39,8 +46,8 @@ const ApplicationBar = (props) => {
                 <Drawer
                     anchor="left"
                     variant="temporary"
-                    open={props.isDrawerOpened}
-                    onClose={() => props.setIsDrawerOpened(isOpened => !isOpened)}
+                    open={isDrawerOpened}
+                    onClose={() => setIsDrawerOpened(isOpened => !isOpened)}
                     ModalProps={{
                         BackdropProps: {
                             className: classes.transparentBackdrop
@@ -68,19 +75,20 @@ const ApplicationBar = (props) => {
                     </Box>
                     <List>
                         {applicationItems.map(item => {
-                            return (
-                                <ListItemButton
-                                    key={item.title}
-                                    onClick={() => props.onNavigate(item.path)}
-                                >
-                                    <ListItemIcon>
-                                        {item.icon}
-                                    </ListItemIcon>
-                                    <ListItemText>
-                                        {item.title}
-                                    </ListItemText>
-                                </ListItemButton>
-                            )
+                            return (item.showOn(role) ?
+                                ((
+                                    <ListItemButton
+                                        key={item.title}
+                                        onClick={() => onNavigate(item.path)}
+                                    >
+                                        <ListItemIcon>
+                                            {item.icon}
+                                        </ListItemIcon>
+                                        <ListItemText>
+                                            {item.title}
+                                        </ListItemText>
+                                    </ListItemButton>
+                                )) : null);
                         })}
                     </List>
                 </Drawer>

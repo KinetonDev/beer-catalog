@@ -41,6 +41,21 @@ public class UserService : Service<UserReadDto>, IUserService
         return user == null ? Error(ErrorCode.UserNotFound) : Result(_mapper.Map<UserReadDto>(user));
     }
 
+    public async Task<ServiceResult<UserWithRoleReadDto>> GetWithRoleById(Guid id)
+    {
+        var user = await _userManager.FindByIdAsync(id.ToString());
+
+        if (user == null)
+        {
+            return new (ErrorCode.UserNotFound);
+        }
+        
+        var userReadDto = _mapper.Map<UserWithRoleReadDto>(user);
+        userReadDto.Role = (await _userManager.GetRolesAsync(user)).FirstOrDefault()!;
+
+        return new(userReadDto);
+    }
+
     public Task<ServiceResult<IEnumerable<UserReadDto>>> GetAllAsync()
     {
         return Task.FromResult(Result(_mapper.Map<IEnumerable<UserReadDto>>(_userManager.Users)));

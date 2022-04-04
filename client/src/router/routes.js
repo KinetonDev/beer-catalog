@@ -5,7 +5,8 @@ const routes = {
     landing: "/",
     beerDetails: "/:beerId",
     profile: "/profile",
-    about: "/about"
+    about: "/about",
+    admin: "/admin"
 };
 
 export default routes;

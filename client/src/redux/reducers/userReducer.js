@@ -22,7 +22,7 @@ import
     REFRESH_TOKEN_SUCCESS,
     REGISTER_REQUEST,
     REGISTER_SUCCESS,
-    START_VALIDATING, UPDATE_USER_REQUEST, UPDATE_USER_SUCCESS, UPDATE_USER_FAILED, CHANGE_AVATAR_SUCCESS
+    START_VALIDATING, UPDATE_USER_REQUEST, UPDATE_USER_SUCCESS, UPDATE_USER_FAILED, CHANGE_AVATAR_SUCCESS, GET_ME_FAILED
 } from "../types/types";
 import createObjFromPatchDocJson from "../../helpers/createObjFromPatchDocJson";
 
@@ -49,6 +49,7 @@ const initialState = {
     isAuth: false,
     userInfo: {
         id: "",
+        role: "",
         username: "",
         email: "",
         avatar_url: "",
@@ -126,6 +127,8 @@ export const userReducer = (state = initialState, action) => {
             return {...state, isAuth: false};
         case GET_ME_SUCCESS:
             return {...state, userInfo: {...state.userInfo, ...action.payload.response}};
+        case GET_ME_FAILED:
+            return {...state, isAuth: false};
         case UPDATE_USER_REQUEST:
             return {...state, loadingFlags: {...state.loadingFlags, isUpdating: true}};
         case UPDATE_USER_SUCCESS:

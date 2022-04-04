@@ -10,6 +10,7 @@ namespace BeerCatalog.Application.Interfaces.Services;
 public interface IUserService
 {
     Task<ServiceResult<UserReadDto>> GetByIdAsync(Guid id);
+    Task<ServiceResult<UserWithRoleReadDto>> GetWithRoleById(Guid id);
     Task<ServiceResult<IEnumerable<UserReadDto>>> GetAllAsync();
     Task<ServiceResult> DeleteByIdAsync(Guid whoRequested, Guid userToDeleteId);
     Task<ServiceResult> PatchUserAsync(Guid whoRequested, Guid userToUpdateId,

@@ -34,6 +34,10 @@ export function selectUserId(state) {
     return state.user.userInfo.id;
 }
 
+export function selectUserRole(state) {
+    return state.user.userInfo.role;
+}
+
 export function selectUserInfo(state) {
     const user = state.user.userInfo;
     console.log(user)

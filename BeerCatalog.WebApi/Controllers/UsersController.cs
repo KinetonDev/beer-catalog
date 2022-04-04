@@ -50,7 +50,7 @@ public class UsersController : ControllerBaseClass
     {
         var userId = GetUserIdFromAccessToken();
         
-        var retrievingResult = await _userService.GetByIdAsync(userId);
+        var retrievingResult = await _userService.GetWithRoleById(userId);
 
         return HandleServiceResult(retrievingResult);
     }
