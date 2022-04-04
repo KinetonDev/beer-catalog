@@ -3,6 +3,7 @@ using BeerCatalog.Application.Interfaces.Repositories;
 using BeerCatalog.Application.Models;
 using BeerCatalog.Domain.Models.Beer;
 using BeerCatalog.Infrastructure.Data;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 
@@ -57,9 +58,15 @@ public class BeerRepository : IBeerRepository
             .FirstOrDefaultAsync(b => b.Id == id);
     }
 
-    public Task<Beer> CreateAsync(Beer entity)
+    public Task CreateAsync(Beer beer)
     {
         throw new NotImplementedException();
+    }
+
+    public async Task CreateWithJsonAsync(string json)
+    {
+        SqlParameter param = new ("@json", json);
+        await _dbContext.Database.ExecuteSqlRawAsync($"ParseJsonData @json", param);
     }
 
     public Task<IEnumerable<Beer>> CreateManyAsync(IEnumerable<Beer> entities)
@@ -146,6 +153,13 @@ public class BeerRepository : IBeerRepository
             (b.Name.ToLower().Contains(string.IsNullOrEmpty(filter.BeerName) ? "" : filter.BeerName.ToLower())));
         
         return await query.CountAsync();
+    }
+
+    public async Task<bool> ExistsAsync(string name)
+    {
+        var query = _dbContext.Beers.AsQueryable();
+
+        return await query.AnyAsync(b => b.Name == name);
     }
 
     public async Task SaveChangesAsync()

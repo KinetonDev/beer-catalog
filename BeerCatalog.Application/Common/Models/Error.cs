@@ -31,6 +31,8 @@ public class Error
         ErrorCode.BeerNotFound => "Beer wasn't found",
         ErrorCode.BeerIsAlreadyMarkedAsFavorite => "Beer is already favorite",
         ErrorCode.BeerIsNotMarkedAsFavorite => "Beer is not favorite",
+        ErrorCode.BeerAlreadyExists => "Beer already exists",
+        ErrorCode.BeerNotCreated => "Beer was not created",
         //common
         ErrorCode.ValidationFailed => "Validation failed",
         ErrorCode.InvalidBase64 => "Invalid base 64 was provided",

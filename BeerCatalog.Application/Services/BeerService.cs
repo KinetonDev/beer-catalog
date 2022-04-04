@@ -8,6 +8,8 @@ using BeerCatalog.Application.Models;
 using BeerCatalog.Application.Models.Beer;
 using BeerCatalog.Domain.Models;
 using BeerCatalog.Domain.Models.Beer;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace BeerCatalog.Application.Services;
 
@@ -50,6 +52,31 @@ public class BeerService : Service<BeerReadDto>, IBeerService
     public Task<ServiceResult> UpdateByIdAsync(Guid id)
     {
         throw new NotImplementedException();
+    }
+
+    public async Task<ServiceResult> CreateAsync(CreateBeerDto createBeerDto)
+    {
+        if (await _unitOfWork.BeersRepository.ExistsAsync(createBeerDto.Name))
+        {
+            return Error(ErrorCode.BeerAlreadyExists);
+        }
+
+        var json = JsonConvert.SerializeObject(createBeerDto, new JsonSerializerSettings
+        {
+            ContractResolver = new DefaultContractResolver
+            {
+                NamingStrategy = new SnakeCaseNamingStrategy()
+            }
+        });
+        
+        await _unitOfWork.BeersRepository.CreateWithJsonAsync(json);
+        
+        if (!(await _unitOfWork.BeersRepository.ExistsAsync(createBeerDto.Name)))
+        {
+            return Error(ErrorCode.BeerNotCreated);
+        }
+
+        return Success();
     }
 
     public async Task<ServiceResult<BeerWithFavoriteMarkDto>> GetByIdWithFavoriteMarkAsync(Guid id, Guid userId)

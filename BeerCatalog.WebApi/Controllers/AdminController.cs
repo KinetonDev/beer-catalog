@@ -1,8 +1,12 @@
 ﻿using BeerCatalog.Application.Common.Models;
+using BeerCatalog.Application.Interfaces.Services;
+using BeerCatalog.Application.Models.Beer;
 using BeerCatalog.WebApi.Common.Authorization;
 using BeerCatalog.WebApi.Controllers.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace BeerCatalog.WebApi.Controllers;
 
@@ -11,15 +15,20 @@ namespace BeerCatalog.WebApi.Controllers;
 [Authorize(Policy = Policies.RequireAdminRole)]
 public class AdminController : ControllerBaseClass
 {
+    private readonly IBeerService _beerService;
 
-    [HttpGet]
-    public IActionResult GetSomething()
+    public AdminController(
+        IBeerService beerService
+        )
     {
-        return Ok("Admin detected");
+        _beerService = beerService;
     }
-    
-    protected override IActionResult ErrorResult(Error error)
+
+    [HttpPost("create-beer")]
+    public async Task<IActionResult> CreateBeer(CreateBeerDto createBeerDto)
     {
-        throw new NotImplementedException();
+        var creatingResult = await _beerService.CreateAsync(createBeerDto);
+        
+        return HandleServiceResult(creatingResult);
     }
 }

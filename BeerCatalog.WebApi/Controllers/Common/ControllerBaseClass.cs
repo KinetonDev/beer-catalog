@@ -44,7 +44,10 @@ public abstract class ControllerBaseClass : ControllerBase
         return HandleServiceResult(result);
     }
 
-    protected abstract IActionResult ErrorResult(Error error);
+    protected virtual IActionResult ErrorResult(Error error)
+    {
+        return BadRequest(error);
+    }
 
     protected void SetPaginationHeader(int totalCount)
     {

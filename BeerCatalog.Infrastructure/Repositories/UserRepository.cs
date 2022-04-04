@@ -37,7 +37,7 @@ public class UserRepository : IUserRepository
         throw new NotImplementedException();
     }
 
-    public Task<User> CreateAsync(User entity)
+    public Task CreateAsync(User entity)
     {
         throw new NotImplementedException();
     }

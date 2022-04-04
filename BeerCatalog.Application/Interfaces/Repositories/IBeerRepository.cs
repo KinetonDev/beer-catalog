@@ -9,4 +9,6 @@ public interface IBeerRepository : IRepository<Beer>
     Task<IEnumerable<Beer>> GetFavoritesByUserIdWithPaginationAsync(Guid userId, Pagination pagination);
     Task<int> CountOfFavoriteByUserIdAsync(Guid userId);
     Task<int> CountAsync(BeerFilter beerFilter);
+    Task<bool> ExistsAsync(string name);
+    Task CreateWithJsonAsync(string json);
 }

@@ -12,6 +12,7 @@ public interface IBeerService
     Task<ServiceResult<IEnumerable<BeerReadDto>>> GetAllAsync();
     Task<ServiceResult> DeleteByIdAsync(Guid id);
     Task<ServiceResult> UpdateByIdAsync(Guid id);
+    Task<ServiceResult> CreateAsync(CreateBeerDto createBeerDto);
     Task<ServiceResult<BeerWithFavoriteMarkDto>> GetByIdWithFavoriteMarkAsync(Guid id, Guid userId);
     Task<ServiceResult<ModelWithPagination<BeerWithFavoriteMarkDto>>> GetWithFavoriteMarkAndPaginationFilteredAsync(
         Guid userId,
