@@ -6,6 +6,7 @@ import {Visibility, VisibilityOff} from "@mui/icons-material";
 import {POST} from "../../../helpers/HTTPMethods";
 import PropTypes from 'prop-types'
 import validationSchema from "./validationSchema";
+import {FormattedMessage, injectIntl} from "react-intl";
 
 const LoginForm = (
     {
@@ -15,13 +16,38 @@ const LoginForm = (
         handleNavigationToRegisterPage,
         loginError,
         loginSucceeded,
-        wasLoginRequested
+        wasLoginRequested,
+        intl
     }) => {
     const classes = useStyle();
+    const emailPlaceholder = intl.formatMessage(
+        {id: "login.email.placeHolder",
+            defaultMessage: "Write your email here",
+            description: "Email placeholder"});
+    const passwordPlaceholder = intl.formatMessage(
+        {id: "login.password.placeHolder",
+            defaultMessage: "Write your password here",
+            description: "Password placeholder"});
+    const emailInput = intl.formatMessage(
+        {id: "login.email",
+            defaultMessage: "Email",
+            description: "Email input label"}
+    );
+    const passwordInput = intl.formatMessage(
+        {id: "login.password",
+            defaultMessage: "Password",
+            description: "Password input labelr"}
+    );
 
     return (
         <div className={classes.loginSection}>
-            <Typography variant={"h4"} className={classes.loginHeader}>Login</Typography>
+            <Typography variant={"h4"} className={classes.loginHeader}>
+                <FormattedMessage
+                    description="message"
+                    defaultMessage="Login"
+                    id="login.header"
+                />
+            </Typography>
             <Formik
                 initialValues={{
                     email: '',
@@ -37,8 +63,8 @@ const LoginForm = (
                                 fullWidth
                                 className={classes.input}
                                 variant={"outlined"}
-                                label={"Email"}
-                                placeholder={"Write your email here"}
+                                label={emailInput}
+                                placeholder={emailPlaceholder}
                                 type={"email"}
                                 name={"email"}
                                 error={(errors.email && touched.email)}
@@ -49,8 +75,8 @@ const LoginForm = (
                                 fullWidth
                                 className={classes.input}
                                 variant={"outlined"}
-                                label={"Password"}
-                                placeholder={"Write your password here"}
+                                label={passwordInput}
+                                placeholder={passwordPlaceholder}
                                 type={isPasswordVisible ? "text" : "password"}
                                 error={(errors.password && touched.password)}
                                 helperText={((errors.password && touched.password) ? errors.password : " ")}
@@ -80,7 +106,11 @@ const LoginForm = (
                                 size={"large"}
                                 type={"submit"}
                                 className={classes.submitButton}>
-                                Log in
+                                <FormattedMessage
+                                    description="log in button"
+                                    defaultMessage="Log in"
+                                    id="login.loginButton"
+                                />
                             </Button>
                         </form>
                     </>
@@ -88,10 +118,18 @@ const LoginForm = (
             </Formik>
             <div className={classes.registerHint}>
                 <Typography variant={"subtitle1"}>
-                    Don't have an account yet?
+                    <FormattedMessage
+                        description="no account yet"
+                        defaultMessage="Don't have an account yet?"
+                        id="login.noAccountYet"
+                    />
                 </Typography>
                 <Button variant={"text"} size={"large"} onClick={handleNavigationToRegisterPage}>
-                    Sign up
+                    <FormattedMessage
+                        description="sign up"
+                        defaultMessage="Sign up"
+                        id="login.signUp"
+                    />
                 </Button>
             </div>
         </div>
@@ -105,4 +143,4 @@ LoginForm.propTypes = {
     handleNavigationToRegisterPage: PropTypes.func.isRequired
 };
 
-export default LoginForm;
+export default injectIntl(LoginForm);

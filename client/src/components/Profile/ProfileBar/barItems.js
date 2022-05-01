@@ -3,11 +3,11 @@ import SportsBarIcon from '@mui/icons-material/SportsBar';
 
 export const barItems = [
     {
-        title: 'User info',
+        localeId: "profile.itemsBar.userInfo",
         icon: <InfoIcon/>
     },
     {
-        title: 'Beer reviews',
+        localeId: "profile.itemsBar.beerReviews",
         icon: <SportsBarIcon/>
     }
 ];

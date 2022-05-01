@@ -20,6 +20,7 @@ import {selectUpdatingFlags} from "../../../redux/selectors";
 import {useDispatch, useSelector} from "react-redux";
 import {clearFlags} from "../../../redux/actions/actions";
 import validationSchema from "./validationSchema";
+import {FormattedMessage, injectIntl} from "react-intl";
 
 function showIcon(isUpdating, updateSucceeded, wasUpdateRequested) {
     if (isUpdating) return (<CircularProgress/>);
@@ -57,11 +58,38 @@ const ProfileInfo = (
         isEditing,
         handleSave,
         initialFormState,
-        handleCancel
+        handleCancel,
+        intl
     }) => {
     const classes = useStyle();
     const updatingFlags = useSelector(state => selectUpdatingFlags(state));
     const dispatch = useDispatch();
+
+    const firstNameLabel = intl.formatMessage({
+        id: "profile.firstName",
+        defaultMessage: "First name",
+        description: "First name label"
+    });
+    const lastNameLabel = intl.formatMessage({
+        id: "profile.lastName",
+        defaultMessage: "Last name",
+        description: "Last name label"
+    });
+    const dobLabel = intl.formatMessage({
+        id: "profile.dob",
+        defaultMessage: "Date of birth",
+        description: "Date of birth label"
+    });
+    const countryLabel = intl.formatMessage({
+        id: "profile.country",
+        defaultMessage: "Country",
+        description: "Country label"
+    });
+    const genderLabel = intl.formatMessage({
+        id: "profile.gender",
+        defaultMessage: "Gender",
+        description: "Gender label"
+    });
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -71,7 +99,7 @@ const ProfileInfo = (
         return () => {
             clearTimeout(timer);
         }
-    }, [updatingFlags.updateSucceeded]);
+    }, [dispatch, updatingFlags.updateSucceeded]);
 
     return (
         <div>
@@ -95,7 +123,7 @@ const ProfileInfo = (
                                     className={classes.textField}
                                     value={values.firstName}
                                     variant={"outlined"}
-                                    label={"First name"}
+                                    label={firstNameLabel}
                                     error={(errors.firstName && touched.firstName)}
                                     helperText={(errors.firstName && touched.firstName) ? errors.firstName : " "}
                                     disabled={!isEditing}
@@ -105,7 +133,7 @@ const ProfileInfo = (
                                     className={classes.textField}
                                     value={values.lastName}
                                     variant={"outlined"}
-                                    label={"Last name"}
+                                    label={lastNameLabel}
                                     error={!!errors.lastName && touched.lastName}
                                     helperText={(!!errors.lastName && touched.lastName) ? errors.lastName : " "}
                                     disabled={!isEditing}
@@ -116,7 +144,7 @@ const ProfileInfo = (
                                     value={values.birthDay}
                                     type={"date"}
                                     variant={"outlined"}
-                                    label={"Date of birth"}
+                                    label={dobLabel}
                                     error={!!errors.birthDay && touched.birthDay}
                                     helperText={(!!errors.birthDay && touched.birthDay) ? errors.birthDay : " "}
                                     InputLabelProps={{
@@ -137,16 +165,16 @@ const ProfileInfo = (
                                     disabled={!isEditing}
                                     renderInput={(params) => <TextField
                                         {...params}
-                                        label="Country"
+                                        label={countryLabel}
                                         error={!!errors.country && touched.country}
                                         helperText={(!!errors.country && touched.country) ? errors.country : " "}
                                     />}
                                 />
                                 <FormControl className={classes.textField}>
-                                    <InputLabel id="gender-select">Gender</InputLabel>
+                                    <InputLabel id="gender-select">{genderLabel}</InputLabel>
                                     <Select
                                         labelId="gender-select"
-                                        label="Gender"
+                                        label={genderLabel}
                                         value={values.gender}
                                         disabled={!isEditing}
                                         {...getFieldProps("gender")}
@@ -167,7 +195,11 @@ const ProfileInfo = (
                                     }}
                                     disabled={(!isEditing) || (!areFieldsChanged(values, initialFormState) || hasErrors(errors))}
                                 >
-                                    Save
+                                    <FormattedMessage
+                                        description="save button"
+                                        defaultMessage="Save"
+                                        id="profile.saveButton"
+                                    />
                                 </Button>
                                 <div className={classes.resultIcon}>
                                     {showIcon(updatingFlags.isUpdating, updatingFlags.updateSucceeded, updatingFlags.wasUpdateRequested)}
@@ -182,7 +214,11 @@ const ProfileInfo = (
                                     }}
                                     disabled={!isEditing}
                                 >
-                                    Cancel
+                                    <FormattedMessage
+                                        description="cancel button"
+                                        defaultMessage="Cancel"
+                                        id="profile.cancelButton"
+                                    />
                                 </Button>
                             </div>
                         </form>
@@ -195,4 +231,4 @@ const ProfileInfo = (
 
 ProfileInfo.propTypes = {};
 
-export default ProfileInfo;
+export default injectIntl(ProfileInfo);

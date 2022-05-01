@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import useStyle from './styles'
 import {Typography} from "@mui/material";
+import {FormattedMessage} from "react-intl";
 
 const AboutPage = () => {
     const classes = useStyle();
@@ -11,7 +12,11 @@ const AboutPage = () => {
             <Typography
                 variant={"h5"}
             >
-                Simple application for real fans of craft beer.
+                <FormattedMessage
+                    description="Application description"
+                    defaultMessage="Simple application for real fans of craft beer."
+                    id="about.body"
+                />
             </Typography>
         </div>
     );

@@ -1,16 +1,28 @@
 import React from 'react';
 import {Box, IconButton, TextField} from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
+import {injectIntl} from "react-intl";
 
-const SearchField = (props) => {
+const SearchField = (
+    {
+        intl,
+        filter,
+        onChangeFilter
+    }) => {
+    const inputPlaceholder = intl.formatMessage({
+       id: "landing.filter.searchBeerInput.placeholder",
+       description: "Search beers text input",
+       defaultMessage: "Search beers..."
+    });
+
     return (
         <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
             <TextField
                 id="standard-basic"
-                placeholder="Search beers..."
+                placeholder={inputPlaceholder}
                 variant="standard"
-                value={props.filter.searchQuery}
-                onChange={(e) => props.onChangeFilter({...props.filter, searchQuery: e.target.value})}
+                value={filter.searchQuery}
+                onChange={(e) => onChangeFilter({...filter, searchQuery: e.target.value})}
             />
             <IconButton
                 type="submit"
@@ -21,4 +33,4 @@ const SearchField = (props) => {
     );
 };
 
-export default SearchField;
+export default injectIntl(SearchField);

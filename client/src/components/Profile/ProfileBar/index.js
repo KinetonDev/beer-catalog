@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {Button, Toolbar} from "@mui/material";
 import {barItems} from "./barItems";
 import {styled} from "@mui/styles";
+import {FormattedMessage} from "react-intl";
 
 const CustomButton = styled(Button)({
     '&:hover': {
@@ -22,12 +23,16 @@ const ProfileBar = ({handleBarItemChange}) => {
         >
             {barItems.map(item => (
                 <CustomButton
-                    key={item.title}
+                    key={item.localeId}
                     onClick={() => {
-                        handleBarItemChange(item.title)
+                        handleBarItemChange(item.localeId)
                     }}
                 >
-                    {item.title}
+                    <FormattedMessage
+                        description="profile bar item"
+                        defaultMessage="profile bar item"
+                        id={item.localeId}
+                    />
                 </CustomButton>
             ))}
         </Toolbar>

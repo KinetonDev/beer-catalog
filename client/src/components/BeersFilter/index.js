@@ -22,7 +22,6 @@ const BeersFilter = (
                 <SearchField
                     filter={visualFilter}
                     onChangeFilter={handleFilterChange}
-                    onSubmit={handleSubmit}
                 />
                 {wasSearchPerformed && <AdvancedFilter
                     filter={visualFilter}

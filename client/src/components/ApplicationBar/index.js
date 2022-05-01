@@ -9,18 +9,30 @@ import {
     List,
     Box,
     ListItemIcon,
-    ListItemText
+    ListItemText, Button
 } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 import applicationItems from "./applicationItems";
 import useStyles from "./styles";
+import {FormattedMessage} from "react-intl";
+import {styled} from "@mui/styles";
+import {LOCALES} from "../../lang/locales";
+
+const WhiteTextButton = styled(Button)({
+    color: "white",
+    '&:hover': {
+        backgroundColor: 'rgba(0, 0, 0, 0.1)',
+    },
+});
 
 const ApplicationBar = (
     {
         role,
         isDrawerOpened,
         onNavigate,
-        setIsDrawerOpened
+        setIsDrawerOpened,
+        onLanguageChange,
+        currentLocale
     }
 ) => {
     const classes = useStyles();
@@ -33,16 +45,27 @@ const ApplicationBar = (
             <Toolbar
                 disableGutters={true}
             >
-                <IconButton
-                    onClick={() => setIsDrawerOpened(isOpened => !isOpened)}
-                >
-                    <MenuIcon className={classes.menuIcon}/>
-                </IconButton>
-                <Typography
-                    className={classes.appTitle}
-                >
-                    Beer Catalog
-                </Typography>
+                <div className={classes.tools}>
+                    <IconButton
+                        onClick={() => setIsDrawerOpened(isOpened => !isOpened)}
+                    >
+                        <MenuIcon className={classes.menuIcon}/>
+                    </IconButton>
+                    <Typography
+                        className={classes.appTitle}
+                    >
+                        <FormattedMessage
+                            defaultMessage="Beer Catalog"
+                            description="Application title"
+                            id="applicationBar.title"
+                        />
+                    </Typography>
+                    <WhiteTextButton onClick={onLanguageChange} className={classes.lang}>
+                        <Typography>
+                            {currentLocale.toUpperCase()}
+                        </Typography>
+                    </WhiteTextButton>
+                </div>
                 <Drawer
                     anchor="left"
                     variant="temporary"
@@ -70,7 +93,11 @@ const ApplicationBar = (
                         <Typography
                             className={classes.appTitle}
                         >
-                            Beer Catalog
+                            <FormattedMessage
+                                defaultMessage="Beer Catalog"
+                                description="Application title"
+                                id="applicationBar.title"
+                            />
                         </Typography>
                     </Box>
                     <List>
@@ -78,14 +105,20 @@ const ApplicationBar = (
                             return (item.showOn(role) ?
                                 ((
                                     <ListItemButton
-                                        key={item.title}
+                                        key={item.localeId}
                                         onClick={() => onNavigate(item.path)}
                                     >
                                         <ListItemIcon>
                                             {item.icon}
                                         </ListItemIcon>
                                         <ListItemText>
-                                            {item.title}
+                                            <Typography>
+                                                <FormattedMessage
+                                                    description="Application bar item"
+                                                    defaultMessage="appbar item"
+                                                    id={item.localeId}
+                                                />
+                                            </Typography>
                                         </ListItemText>
                                     </ListItemButton>
                                 )) : null);

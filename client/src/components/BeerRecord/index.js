@@ -2,6 +2,7 @@ import React from 'react';
 import {Button, Card, CardActions, CardContent, CardMedia, Typography} from "@mui/material";
 import useStyles from "./styles";
 import {styled} from "@mui/styles";
+import {FormattedMessage} from "react-intl";
 
 const BlackTextButton = styled(Button)({
     color: "black",
@@ -45,8 +46,20 @@ const BeerRecord = (
                     </Typography>
                 </CardContent>
                 <CardActions className={classes.cardActions}>
-                    <BlackTextButton variant="text" onClick={onNavigate}>OPEN</BlackTextButton>
-                    <BlackTextButton variant="text" onClick={onFavoriteRemove}>REMOVE FAVORITE</BlackTextButton>
+                    <BlackTextButton variant="text" onClick={onNavigate}>
+                        <FormattedMessage
+                            description="open button"
+                            defaultMessage="Open"
+                            id="favorites.openButton"
+                        />
+                    </BlackTextButton>
+                    <BlackTextButton variant="text" onClick={onFavoriteRemove}>
+                        <FormattedMessage
+                            description="remove favorite button"
+                            defaultMessage="Remove Favorite"
+                            id="favorites.removeFavoriteButton"
+                        />
+                    </BlackTextButton>
                 </CardActions>
             </div>
             <CardMedia

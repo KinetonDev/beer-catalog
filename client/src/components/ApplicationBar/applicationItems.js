@@ -8,31 +8,31 @@ import {appRoles} from "../../constants";
 
 const defaultShowOn = (role) => {
     return true;
-}
+};
 
 const applicationItems = [
     {
-        title: "Home",
+        localeId: "applicationBar.home",
         icon: (<HomeIcon/>),
         path: routes.landing
     },
     {
-        title: "Favorites",
+        localeId: "applicationBar.favorites",
         icon: <StarIcon/>,
         path: routes.favorites
     },
     {
-        title: "Profile",
+        localeId: "applicationBar.profile",
         icon: <PersonIcon/>,
         path: routes.profile
     },
     {
-        title: "About",
+        localeId: "applicationBar.about",
         icon: <InfoIcon/>,
         path: routes.about
     },
     {
-        title: "Admin panel",
+        localeId: "applicationBar.admin",
         icon: <AdminPanelSettingsIcon/>,
         path: routes.admin,
         showOn: (role) => {

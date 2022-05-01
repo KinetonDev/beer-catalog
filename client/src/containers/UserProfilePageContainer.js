@@ -10,7 +10,7 @@ import retrieveChangedValues from "../helpers/retrieveChangedValues";
 const UserProfilePageContainer = () => {
     const user = useSelector(state => selectUserInfo(state));
     const userId = useSelector(state => selectUserId(state));
-    const [currentBarItem, setCurrentBarItem] = useState(barItems[0].title);
+    const [currentBarItem, setCurrentBarItem] = useState(barItems[0].localeId);
     const [isEditing, setIsEditing] = useState(false);
     const dispatch = useDispatch();
 
@@ -27,7 +27,7 @@ const UserProfilePageContainer = () => {
     const [avatarBase64, setAvatarBase64] = useState(user.avatarUrl);
 
     const handleEdit = useCallback(() => {
-        setCurrentBarItem(barItems[0].title);
+        setCurrentBarItem(barItems[0].localeId);
         setIsEditing(true);
     }, []);
 

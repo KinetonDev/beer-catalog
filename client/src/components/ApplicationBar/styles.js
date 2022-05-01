@@ -13,6 +13,14 @@ const useStyles = makeStyles({
     drawerTopBox: {
         padding: "20px"
     },
+    tools: {
+        display: "flex",
+        alignItems: "center",
+        width: "100%"
+    },
+    lang: {
+        margin: "0 15px 0 auto"
+    }
 });
 
 export default useStyles;

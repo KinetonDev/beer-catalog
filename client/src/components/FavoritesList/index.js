@@ -4,6 +4,7 @@ import BeerListPagination from "../BeerListPagination";
 import {Box, Typography} from "@mui/material";
 import useStyle from './styles'
 import Loader from "../PageLoader";
+import {FormattedMessage} from "react-intl";
 
 const FavoritesList = (
     {
@@ -28,7 +29,11 @@ const FavoritesList = (
                                     align="center"
                                     variant="h4"
                                 >
-                                    Your favorite beers
+                                    <FormattedMessage
+                                        description="Favorites title"
+                                        defaultMessage="Your favorite beers"
+                                        id="favorites.title"
+                                    />
                                 </Typography>
                                 {showPaginationPanel && <BeerListPagination
                                     totalPages={totalPages}

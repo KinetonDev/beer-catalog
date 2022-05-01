@@ -1,5 +1,5 @@
 import {
-    ADD_FAVORITE_REQUEST, CHANGE_AVATAR_REQUEST,
+    ADD_FAVORITE_REQUEST, CHANGE_AVATAR_REQUEST, CHANGE_LANGUAGE,
     CHECK_EMAIL_REQUEST,
     CHECK_USERNAME_REQUEST,
     CLEAR_FLAGS,
@@ -123,5 +123,11 @@ export function removeFavoriteBeerRequest(payload) {
 export function getMeRequest() {
     return {
         type: GET_ME_REQUEST
+    }
+}
+
+export function changeLanguage() {
+    return {
+        type: CHANGE_LANGUAGE
     }
 }

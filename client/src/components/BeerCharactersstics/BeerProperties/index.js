@@ -3,8 +3,14 @@ import advancedFilterOptions from "../../BeersFilter/AdvancedFilter/advancedFilt
 import {Chip, List, ListItem, Tooltip, Typography} from "@mui/material";
 import InfoIcon from "@mui/icons-material/Info";
 import useStyle from './styles'
+import {injectIntl} from "react-intl";
 
-const BeerProperties = (props) => {
+const BeerProperties = (
+    {
+        intl,
+        currentBeer
+    }
+) => {
     const classes = useStyle();
 
     return (
@@ -16,10 +22,16 @@ const BeerProperties = (props) => {
                         className={classes.listItem}
                     >
                         <Typography variant="body2" className={classes.listLabel}>{option.value.toUpperCase()}</Typography>
-                        <Tooltip title={option.label} placement="right">
+                        <Tooltip
+                            title={intl.formatMessage({
+                                id: option.localeId,
+                                description: "Beer property hint",
+                                defaultMessage: "Beer property hint"
+                            })}
+                            placement="right">
                             <InfoIcon/>
                         </Tooltip>
-                        <Chip label={props.currentBeer[option.value]} className={classes.listItemValue}/>
+                        <Chip label={currentBeer[option.value]} className={classes.listItemValue}/>
                     </ListItem>
                 )
             })}
@@ -27,4 +39,4 @@ const BeerProperties = (props) => {
     );
 };
 
-export default BeerProperties;
+export default injectIntl(BeerProperties);

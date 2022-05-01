@@ -55,7 +55,7 @@ const UserProfilePage = (
 
 function selectBarItem(barTitle, {user, isEditing, handleSave, initialFormState, handleCancel}) {
     switch (barTitle) {
-        case barItems[0].title:
+        case barItems[0].localeId:
             return <ProfileInfo
                 user={user}
                 isEditing={isEditing}
@@ -63,7 +63,7 @@ function selectBarItem(barTitle, {user, isEditing, handleSave, initialFormState,
                 initialFormState={initialFormState}
                 handleCancel={handleCancel}
             />
-        case barItems[1].title:
+        case barItems[1].localeId:
             return <ProfileBeerReviews
                 user={user}
             />

@@ -1,6 +1,7 @@
 import React from 'react';
 import {Button, Typography} from "@mui/material";
 import useStyle from "./styles";
+import {FormattedMessage} from "react-intl";
 
 const BeerHeader = ({currentBeer, handleAddingFavorite, handleRemovingFavorite}) => {
     const classes = useStyle();
@@ -25,14 +26,22 @@ const BeerHeader = ({currentBeer, handleAddingFavorite, handleRemovingFavorite})
                         className={classes.beerFavoritesButton}
                         onClick={handleRemovingFavorite}
                     >
-                        REMOVE FROM FAVORITES
+                        <FormattedMessage
+                            description="Remove from favorites button"
+                            defaultMessage="REMOVE FROM FAVORITES"
+                            id="beerDetails.removeFavoriteButton"
+                        />
                     </Button> :
                     <Button
                         variant="contained"
                         className={classes.beerFavoritesButton}
                         onClick={handleAddingFavorite}
                     >
-                        ADD TO FAVORITES
+                        <FormattedMessage
+                            description="Add to favorites button"
+                            defaultMessage="ADD TO FAVORITES"
+                            id="beerDetails.addFavoriteButton"
+                        />
                     </Button>}
                 <Typography
                     variant="body1"

@@ -3,6 +3,7 @@ import {List, ListItem, Typography} from "@mui/material";
 import useStyle from "./styles";
 import IngredientsList from "./Ingredients";
 import MethodList from "./Method";
+import {FormattedMessage} from "react-intl";
 
 const BeerBrewing = (props) => {
     const classes = useStyle();
@@ -12,7 +13,11 @@ const BeerBrewing = (props) => {
             <Typography
                 variant="h5"
             >
-                Brewing
+                <FormattedMessage
+                    description="Brewing header"
+                    defaultMessage="Brewing"
+                    id="beerDetails.brewing.header"
+                />
             </Typography>
             <Typography
                 variant="body1"
@@ -26,7 +31,11 @@ const BeerBrewing = (props) => {
                         variant="h5"
                         className={classes.title}
                     >
-                        Ingredients
+                        <FormattedMessage
+                            description="Ingredients header"
+                            defaultMessage="Ingredients"
+                            id="beerDetails.ingredients.header"
+                        />
                     </Typography>
                     <IngredientsList
                         ingredients={props.currentBeer.ingredients}
@@ -37,7 +46,11 @@ const BeerBrewing = (props) => {
                         variant="h5"
                         className={classes.title}
                     >
-                        Method
+                        <FormattedMessage
+                            description="Method header"
+                            defaultMessage="Method"
+                            id="beerDetails.method.header"
+                        />
                     </Typography>
                     <MethodList
                         method={props.currentBeer.method}

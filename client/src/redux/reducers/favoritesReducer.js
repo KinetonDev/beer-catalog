@@ -29,9 +29,6 @@ const initialState = {
 }
 
 export const favoritesReducer = (state = initialState, action) => {
-    console.log(action.type);
-    console.log(action.payload);
-
     switch (action.type) {
         case GET_FAVORITES_REQUEST:
             return {...state, loadingFlags: {...state.loadingFlags, isFavoritesLoading: true}};

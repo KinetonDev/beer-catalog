@@ -113,3 +113,7 @@ export function selectFavoriteBeer(state) {
 export function selectIsFavoritesLoading(state) {
     return state.favorites.loadingFlags.isFavoritesLoading;
 }
+
+export function selectLocale(state) {
+    return state.app.lang;
+}

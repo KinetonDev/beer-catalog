@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {Button, Card, CardActions, CardContent, CardMedia, Typography} from "@mui/material";
 import useStyles from "./styles";
 import {styled} from "@mui/styles";
+import {FormattedMessage} from "react-intl";
 
 const WhiteTextButton = styled(Button)({
     color: "white",
@@ -46,10 +47,28 @@ const BeerCard = ({
                     </Typography>
                 </CardContent>
                 <CardActions className={classes.cardActions}>
-                    <WhiteTextButton variant="text" onClick={onNavigate}>OPEN</WhiteTextButton>
+                    <WhiteTextButton variant="text" onClick={onNavigate}>
+                        <FormattedMessage
+                            description="Open button"
+                            defaultMessage="Open"
+                            id="landing.beer.openButton"
+                        />
+                    </WhiteTextButton>
                     {isFavorite ?
-                        <WhiteTextButton variant="text" onClick={onFavoriteRemove}>REMOVE FAVORITE</WhiteTextButton> :
-                        <WhiteTextButton variant="text" onClick={onFavoriteAdd}>FAVORITE</WhiteTextButton>
+                        <WhiteTextButton variant="text" onClick={onFavoriteRemove}>
+                            <FormattedMessage
+                                description="remove favorite button"
+                                defaultMessage="Remove favorite"
+                                id="landing.beer.removeFavoriteButton"
+                            />
+                        </WhiteTextButton> :
+                        <WhiteTextButton variant="text" onClick={onFavoriteAdd}>
+                            <FormattedMessage
+                                description="add favorite button"
+                                defaultMessage="Favorite"
+                                id="landing.beer.favoriteButton"
+                            />
+                        </WhiteTextButton>
                     }
                 </CardActions>
             </div>

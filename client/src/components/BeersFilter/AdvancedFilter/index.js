@@ -3,6 +3,7 @@ import {Typography} from "@mui/material";
 import FilterSliderOption from "../FilterSliderOption";
 import useStyles from "./styles";
 import advancedFilterOptions from "./advancedFilterOptions";
+import {FormattedMessage} from "react-intl";
 
 const AdvancedFilter = ({filter, changeFilter, changeFilterCommitted}) => {
     const classes = useStyles();
@@ -13,12 +14,16 @@ const AdvancedFilter = ({filter, changeFilter, changeFilterCommitted}) => {
                 align="center"
                 className={classes.advancedFilterTitle}
             >
-                Filter results
+                <FormattedMessage
+                    description="filter results title"
+                    defaultMessage="Filter results"
+                    id="landing.filter.title"
+                />
             </Typography>
             <div>
                 {advancedFilterOptions.map(option => (
                     <FilterSliderOption
-                        label={option.label}
+                        localeId={option.localeId}
                         currentValue={filter[option.value]}
                         onChange={(newValue) => changeFilter({
                             ...filter,
@@ -31,7 +36,7 @@ const AdvancedFilter = ({filter, changeFilter, changeFilterCommitted}) => {
                         max={option.max}
                         min={option.min}
                         step={option.step}
-                        key={option.label}
+                        key={option.localeId}
                     />
                 ))}
             </div>

@@ -6,8 +6,7 @@ import {selectCurrentBeer} from "../redux/selectors";
 import {
     addFavoriteBeerRequest,
     getBeerByIdRequest,
-    removeFavoriteBeerRequest,
-    removeFavoriteRequest
+    removeFavoriteBeerRequest
 } from "../redux/actions/actions";
 import Loader from "../components/PageLoader";
 

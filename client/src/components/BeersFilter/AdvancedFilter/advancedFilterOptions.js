@@ -1,20 +1,20 @@
 const advancedFilterOptions = [
     {
-        label: "Alcohol by volume",
+        localeId: "landing.filter.abv",
         value: "abv",
         max: 41,
         min: 0,
         step: 0.1
     },
     {
-        label: "International Bitterness Units",
+        localeId: "landing.filter.ibu",
         value: "ibu",
         max: 1157,
         min: 8,
         step: 0.1
     },
     {
-        label: "Color by EBC",
+        localeId: "landing.filter.ebc",
         value: "ebc",
         max: 500,
         min: 2,

@@ -4,6 +4,7 @@ import useStyle from './styles'
 import {Avatar, Button, Typography} from "@mui/material";
 import {styled} from "@mui/styles";
 import {countriesList} from "../../Common/countries";
+import {FormattedMessage} from "react-intl";
 
 const CustomButton = styled(Button)({
     '&:hover': {
@@ -66,8 +67,20 @@ const ProfilePreview = (
                 </Typography>
             </div>
             <div className={classes.profilePreviewActions}>
-                <CustomButton onClick={handleEdit}>Edit</CustomButton>
-                <CustomButton onClick={handleDialogOpening}>Change avatar</CustomButton>
+                <CustomButton onClick={handleEdit}>
+                    <FormattedMessage
+                        description="Edit button"
+                        defaultMessage="Edit"
+                        id="profile.editButton"
+                    />
+                </CustomButton>
+                <CustomButton onClick={handleDialogOpening}>
+                    <FormattedMessage
+                        description="Change avatar button"
+                        defaultMessage="Change avatar"
+                        id="profile.changeAvatarButton"
+                    />
+                </CustomButton>
             </div>
         </div>
     );
