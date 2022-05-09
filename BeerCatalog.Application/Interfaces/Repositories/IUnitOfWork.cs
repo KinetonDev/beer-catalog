@@ -6,5 +6,6 @@ public interface IUnitOfWork
 {
     IBeerRepository BeersRepository { get; }
     IUserRepository UsersRepository { get; }
+    IBeerReviewRepository BeerReviewRepository { get; }
     Task SaveChangesAsync();
 }

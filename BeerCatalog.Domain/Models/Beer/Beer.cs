@@ -25,5 +25,7 @@ namespace BeerCatalog.Domain.Models.Beer
         public virtual ICollection<Food> Foods { get; set; } = new HashSet<Food>();
 
         public virtual ICollection<User> Fans { get; set; } = new HashSet<User>();
+
+        public virtual ICollection<User> Reviewers { get; set; } = new HashSet<User>();
     }
 }

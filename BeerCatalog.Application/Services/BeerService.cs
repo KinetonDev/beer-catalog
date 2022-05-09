@@ -8,6 +8,7 @@ using BeerCatalog.Application.Models;
 using BeerCatalog.Application.Models.Beer;
 using BeerCatalog.Domain.Models;
 using BeerCatalog.Domain.Models.Beer;
+using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
@@ -17,13 +18,16 @@ public class BeerService : Service<BeerReadDto>, IBeerService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
+    private readonly UserManager<User> _userManager;
 
     public BeerService(
         IUnitOfWork unitOfWork,
-        IMapper mapper)
+        IMapper mapper,
+        UserManager<User> userManager)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
+        _userManager = userManager;
     }
     
     public async Task<ServiceResult<BeerReadDto>> GetByIdAsync(Guid id)
@@ -140,6 +144,44 @@ public class BeerService : Service<BeerReadDto>, IBeerService
         var mappedBeers = AddFavoriteMark(beers, user);
 
         return new (mappedBeers);
+    }
+
+    public async Task<ServiceResult<IEnumerable<ReviewReadDto>>> GetReviewsById(Guid beerId)
+    {
+        var beer = await _unitOfWork.BeersRepository.FindByIdAsync(beerId);
+
+        if (beer is null)
+        {
+            return new(ErrorCode.BeerNotFound);
+        }
+
+        var reviews = await _unitOfWork.BeerReviewRepository.GetAllByBeerId(beerId);
+
+        var mappedReviews = _mapper.Map<IEnumerable<ReviewReadDto>>(reviews);
+
+        return new(mappedReviews);
+    }
+
+    public async Task<ServiceResult> CreateReview(CreateReviewDto createReviewDto)
+    {
+        var beer = await _unitOfWork.BeersRepository.FindByIdAsync(createReviewDto.BeerId);
+
+        if (beer is null)
+        {
+            return new(ErrorCode.BeerNotFound);
+        }
+
+        var user = await _userManager.FindByIdAsync(createReviewDto.UserId.ToString());
+
+        if (user is null)
+        {
+            return new(ErrorCode.UserNotFound);
+        }
+
+        await _unitOfWork.BeerReviewRepository.CreateAsync(_mapper.Map<BeerReview>(createReviewDto));
+        await _unitOfWork.SaveChangesAsync();
+
+        return new ServiceResult();
     }
 
     private IEnumerable<BeerWithFavoriteMarkDto> AddFavoriteMark(IEnumerable<Beer> beers, User user)

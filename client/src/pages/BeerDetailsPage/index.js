@@ -3,8 +3,15 @@ import useStyle from './styles';
 import BeerHeader from "../../components/BeerHeader";
 import BeerCharacteristics from "../../components/BeerCharactersstics";
 import BeerBrewing from "../../components/BeerBrewing";
+import ReviewsSectionContainer from "../../containers/ReviewsSectionContainer";
 
-const BeerDetailsPage = ({currentBeer, handleAddingFavorite, handleRemovingFavorite}) => {
+const BeerDetailsPage = (
+    {
+        currentBeer,
+        handleAddingFavorite,
+        handleRemovingFavorite,
+        beerId
+    }) => {
     const classes = useStyle();
 
     return (
@@ -19,6 +26,9 @@ const BeerDetailsPage = ({currentBeer, handleAddingFavorite, handleRemovingFavor
             />
             <BeerBrewing
                 currentBeer={currentBeer}
+            />
+            <ReviewsSectionContainer
+                beerId={beerId}
             />
         </div>
     );

@@ -117,3 +117,11 @@ export function selectIsFavoritesLoading(state) {
 export function selectLocale(state) {
     return state.app.lang;
 }
+
+export function selectReviews(state) {
+    return state.reviews.currentBeerReviews;
+}
+
+export function selectUserAvatar(state) {
+    return state.user.userInfo.avatar_url;
+}

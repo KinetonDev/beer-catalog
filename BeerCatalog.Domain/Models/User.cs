@@ -31,4 +31,6 @@ public class User : IdentityUser<Guid>
     public string? RefreshToken { get; set; }
     public string? EmailConfirmationCode { get; set; }
     public virtual List<Beer.Beer> Favorites { get; set; } = new();
+
+    public virtual ICollection<Beer.Beer> ReviewedBeers { get; set; } = new HashSet<Beer.Beer>();
 }

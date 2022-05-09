@@ -33,6 +33,7 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     public virtual DbSet<Twist> Twists { get; set; } = null!;
     public virtual DbSet<WhenToAdd> WhenToAdds { get; set; } = null!;
     public virtual DbSet<Yeast> Yeasts { get; set; } = null!;
+    public virtual DbSet<BeerReview> Reviews => Set<BeerReview>(nameof(BeerReview));
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -97,6 +98,17 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
                         j.HasKey("UserId", "BeerId").HasName("PK__Favorite__F51B050768A08B47");
 
                         j.ToTable("FavoriteBeers");
+                    });
+            
+            entity.HasMany(d => d.Reviewers)
+                .WithMany(p => p.ReviewedBeers)
+                .UsingEntity<BeerReview>(
+                    nameof(BeerReview),
+                    j =>
+                    {
+                        j.HasKey(a => a.Id).HasName("PK_REVIEWS_ID");
+                        
+                        j.ToTable("Reviews", "Beer");
                     });
         });
 

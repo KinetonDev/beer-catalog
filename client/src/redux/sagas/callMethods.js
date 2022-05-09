@@ -58,7 +58,7 @@ export function getBeerById(payload, accessToken) {
     return call(
         authorizedRequest,
         {
-            url: createUrlFromFilter(`beers/${payload.id}`),
+            url: createUrl(`beers/${payload.id}`),
             method: GET,
         },
         requestWithFetch,
@@ -121,6 +121,31 @@ export function changeAvatar(payload, accessToken) {
         {
             url: createUrl("users/change-avatar"),
             method: PUT,
+            body: payload
+        },
+        requestWithFetch,
+        accessToken
+    )
+}
+
+export function getReviewsByBeerId(payload, accessToken) {
+    return call(
+        authorizedRequest,
+        {
+            url: createUrl(`reviews/${payload.beerId}`),
+            method: GET
+        },
+        requestWithFetch,
+        accessToken
+    )
+}
+
+export function createReview(payload, accessToken) {
+    return call(
+        authorizedRequest,
+        {
+            url: createUrl(`reviews`),
+            method: POST,
             body: payload
         },
         requestWithFetch,

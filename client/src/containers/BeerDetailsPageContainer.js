@@ -37,6 +37,7 @@ const BeerDetailsPageContainer = () => {
         (isLoading ?
             <Loader/> :
             <BeerDetailsPage
+                beerId={beerId}
                 currentBeer={beer}
                 handleAddingFavorite={handleAddingFavorite}
                 handleRemovingFavorite={handleRemovingFavorite}

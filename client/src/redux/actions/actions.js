@@ -3,9 +3,9 @@ import {
     CHECK_EMAIL_REQUEST,
     CHECK_USERNAME_REQUEST,
     CLEAR_FLAGS,
-    CONFIRM_EMAIL_REQUEST,
+    CONFIRM_EMAIL_REQUEST, CREATE_REVIEW_REQUEST,
     GET_BEER_BY_ID_REQUEST,
-    GET_BEERS_REQUEST, GET_FAVORITES_REQUEST, GET_ME_REQUEST,
+    GET_BEERS_REQUEST, GET_FAVORITES_REQUEST, GET_ME_REQUEST, GET_REVIEWS_BY_BEER_ID_REQUEST,
     LOGIN_REQUEST, REFRESH_TOKEN_REQUEST,
     REGISTER_REQUEST, REMOVE_FAVORITE_REQUEST, RESET_BEERS,
     SET_WAS_SEARCH_PERFORMED, START_VALIDATING, UPDATE_USER_REQUEST
@@ -109,6 +109,20 @@ export function getFavoriteBeersRequest(payload) {
 export function addFavoriteBeerRequest(payload) {
     return {
         type: ADD_FAVORITE_REQUEST,
+        payload
+    }
+}
+
+export function getReviewsByBeerIdRequest(payload) {
+    return {
+        type: GET_REVIEWS_BY_BEER_ID_REQUEST,
+        payload
+    }
+}
+
+export function createBeerReviewRequest(payload) {
+    return {
+        type: CREATE_REVIEW_REQUEST,
         payload
     }
 }

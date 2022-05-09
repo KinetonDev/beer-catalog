@@ -11,6 +11,7 @@ public class UnitOfWork : IUnitOfWork, IDisposable
 
     private IBeerRepository? _beerRepository;
     private IUserRepository? _userRepository;
+    private IBeerReviewRepository? _beerReviewRepository;
 
     public UnitOfWork(DbContext dbContext)
     {
@@ -19,6 +20,8 @@ public class UnitOfWork : IUnitOfWork, IDisposable
     
     public IBeerRepository BeersRepository => _beerRepository ??= new BeerRepository(_dbContext);
     public IUserRepository UsersRepository => _userRepository ??= new UserRepository(_dbContext);
+    public IBeerReviewRepository BeerReviewRepository => _beerReviewRepository ??= new BeerReviewRepository(_dbContext);
+    
     public async Task SaveChangesAsync()
     {
         await _dbContext.SaveChangesAsync();
