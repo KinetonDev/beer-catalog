@@ -1,0 +1,10 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\BeerCatalog.Domain",
+    "\\BeerCatalog.Domain\\Models",
+    "\\BeerCatalog.Domain\\Models\\Ingredients"
+  ],
+  "SelectedNode": "\\BeerCatalog.Domain\\Models\\Ingredients\\Hop.cs",
+  "PreviewInSolutionExplorer": false
+}

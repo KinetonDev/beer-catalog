@@ -6,7 +6,8 @@ import Review from "../Review";
 
 const ReviewsList = (
     {
-        reviews
+        reviews,
+        handleDialogOpening
     }
 ) => {
     const classes = useStyle();
@@ -16,12 +17,15 @@ const ReviewsList = (
             {reviews.length ?
                 reviews.map((review, index) => {
                     return <Review
+                        handleDialogOpening={handleDialogOpening}
                         username={review.username}
                         avatarUrl={review.avatar_url}
                         rating={review.rating}
                         description={review.description}
                         postedOn={review.posted_on}
-                        key={index}
+                        userId={review.user_id}
+                        id={review.id}
+                        key={review.id}
                     />;
                 }) :
                 <Typography

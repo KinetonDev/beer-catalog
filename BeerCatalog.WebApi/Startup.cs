@@ -121,7 +121,7 @@ public class Startup
                 builder.AllowAnyMethod()
                     .AllowCredentials()
                     .AllowAnyHeader()
-                    .WithExposedHeaders("x-total-count")
+                    .WithExposedHeaders("x-total-count", "Content-Disposition")
                     .WithOrigins("http://localhost:3000");
             });
 

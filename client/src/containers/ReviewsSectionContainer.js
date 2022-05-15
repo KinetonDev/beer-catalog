@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ReviewsSection from "../components/ReviewsSection";
 import {useDispatch, useSelector} from "react-redux";
 import {selectReviews, selectUserAvatar, selectUserId} from "../redux/selectors";
-import {createBeerReviewRequest, getReviewsByBeerIdRequest} from "../redux/actions/actions";
+import {createBeerReviewRequest, deleteReviewRequest, getReviewsByBeerIdRequest} from "../redux/actions/actions";
 
 const ReviewsSectionContainer = (
     {
@@ -17,11 +17,13 @@ const ReviewsSectionContainer = (
         rating: 0,
         description: ""
     });
+    const [isDialogOpened, setIsDialogOpened] = useState(false);
+    const [reviewToDeleteId, setReviewToDeleteId] = useState('');
 
     useEffect(() => {
         dispatch(getReviewsByBeerIdRequest({
             beerId: beerId
-        }))
+        }));
     }, [beerId, dispatch]);
     
     const handleReviewCreation = useCallback(() => {
@@ -39,6 +41,23 @@ const ReviewsSectionContainer = (
         });
     }, [beerId, dispatch, review.description, review.rating, userId]);
 
+    const handleDeletingReview = useCallback(() => {
+        dispatch(deleteReviewRequest({
+            id: reviewToDeleteId
+        }));
+        setIsDialogOpened(prev => !prev);
+    }, [dispatch, reviewToDeleteId]);
+
+    const handleDialogOpening = useCallback((id) => {
+        setReviewToDeleteId(id);
+        setIsDialogOpened(prev => !prev);
+    }, [])
+
+    const handleDialogClosing = useCallback(() => {
+        setReviewToDeleteId('');
+        setIsDialogOpened(prev => !prev);
+    }, []);
+
     return (
         <ReviewsSection
             avatarUrl={avatarUrl}
@@ -46,6 +65,10 @@ const ReviewsSectionContainer = (
             review={review}
             setReview={setReview}
             handleReviewCreation={handleReviewCreation}
+            handleDeletingReview={handleDeletingReview}
+            handleDialogOpening={handleDialogOpening}
+            handleDialogClosing={handleDialogClosing}
+            isDialogOpened={isDialogOpened}
         />
     );
 };

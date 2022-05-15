@@ -15,5 +15,6 @@ public class ReviewProfile : Profile
                 opt.MapFrom(a => a.User.AvatarUrl))
             .ForMember(b => b.Username, opt =>
                 opt.MapFrom(a => a.User.UserName));
+        CreateMap<DeleteReviewDto, BeerReview>();
     }
 }

@@ -25,9 +25,9 @@ public class BeerReviewRepository : IBeerReviewRepository
         throw new NotImplementedException();
     }
 
-    public Task<BeerReview?> FindByIdAsync(Guid id)
+    public async Task<BeerReview?> FindByIdAsync(Guid id)
     {
-        throw new NotImplementedException();
+        return await _dbContext.Reviews.FirstOrDefaultAsync(r => r.Id == id);
     }
 
     public async Task CreateAsync(BeerReview entity)
@@ -45,9 +45,9 @@ public class BeerReviewRepository : IBeerReviewRepository
         throw new NotImplementedException();
     }
 
-    public Task DeleteAsync(BeerReview entity)
+    public async Task DeleteAsync(BeerReview entity)
     {
-        throw new NotImplementedException();
+        await Task.FromResult(_dbContext.Reviews.Remove(entity));
     }
 
     public async Task<IEnumerable<BeerReview>> GetAllByBeerId(Guid beerId)

@@ -3,7 +3,7 @@ import {
     CHECK_EMAIL_REQUEST,
     CHECK_USERNAME_REQUEST,
     CLEAR_FLAGS,
-    CONFIRM_EMAIL_REQUEST, CREATE_REVIEW_REQUEST,
+    CONFIRM_EMAIL_REQUEST, CREATE_REVIEW_REQUEST, DELETE_REVIEW_REQUEST, EXPORT_REVIEWS_PDF_REQUEST,
     GET_BEER_BY_ID_REQUEST,
     GET_BEERS_REQUEST, GET_FAVORITES_REQUEST, GET_ME_REQUEST, GET_REVIEWS_BY_BEER_ID_REQUEST,
     LOGIN_REQUEST, REFRESH_TOKEN_REQUEST,
@@ -143,5 +143,12 @@ export function getMeRequest() {
 export function changeLanguage() {
     return {
         type: CHANGE_LANGUAGE
+    }
+}
+
+export function deleteReviewRequest(payload) {
+    return {
+        type: DELETE_REVIEW_REQUEST,
+        payload
     }
 }

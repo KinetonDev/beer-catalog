@@ -37,7 +37,7 @@ public class UsersController : ControllerBaseClass
         return HandleServiceResult(retrievingResult);
     }
     
-    [HttpGet("{id}")]
+    [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetById(Guid id)
     {
         var retrievingResult = await _userService.GetByIdAsync(id);
@@ -110,25 +110,6 @@ public class UsersController : ControllerBaseClass
             .Split(" ")[1];
 
         return _jwtTokenResolver.GetUserIdFromToken(token!);
-    }
-    
-    private async Task<bool> IsAllowedToDeleteAccount(Guid id)
-    {
-        var userId = GetUserIdFromAccessToken();
-
-        if (userId == id)
-        {
-            return true;
-        }
-
-        var userRetrievingResult = await _userService.GetByIdAsync(userId);
-
-        if (!userRetrievingResult.Succeeded)
-        {
-            return false;
-        }
-
-        return await _userService.IsInRoleAsync(userRetrievingResult.Result!.Id, "Admin");
     }
 
     protected override IActionResult ErrorResult(Error error)

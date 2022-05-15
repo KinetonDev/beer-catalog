@@ -10,7 +10,9 @@ const BeerDetailsPage = (
         currentBeer,
         handleAddingFavorite,
         handleRemovingFavorite,
-        beerId
+        beerId,
+        role,
+        handleExportReviewsAsPdf
     }) => {
     const classes = useStyle();
 
@@ -20,6 +22,8 @@ const BeerDetailsPage = (
                 currentBeer={currentBeer}
                 handleAddingFavorite={handleAddingFavorite}
                 handleRemovingFavorite={handleRemovingFavorite}
+                handleExportReviewsAsPdf={handleExportReviewsAsPdf}
+                role={role}
             />
             <BeerCharacteristics
                 currentBeer={currentBeer}

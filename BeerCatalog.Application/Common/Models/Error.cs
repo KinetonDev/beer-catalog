@@ -33,6 +33,9 @@ public class Error
         ErrorCode.BeerIsNotMarkedAsFavorite => "Beer is not favorite",
         ErrorCode.BeerAlreadyExists => "Beer already exists",
         ErrorCode.BeerNotCreated => "Beer was not created",
+        //reviews
+        ErrorCode.ReviewNotFound => "Review wasn't found",
+        ErrorCode.NotAllowedToDeleteReview => "You're not allowed to delete this review",
         //common
         ErrorCode.ValidationFailed => "Validation failed",
         ErrorCode.InvalidBase64 => "Invalid base 64 was provided",

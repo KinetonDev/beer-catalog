@@ -19,6 +19,7 @@ public interface IBeerService
         Pagination pagination,
         BeerFilter beerFilter);
     Task<ServiceResult<IEnumerable<BeerWithFavoriteMarkDto>>> GetAllWithFavoriteMarkAsync(Guid userId);
-    Task<ServiceResult<IEnumerable<ReviewReadDto>>> GetReviewsById(Guid beerId);
-    Task<ServiceResult> CreateReview(CreateReviewDto createReviewDto);
+    Task<ServiceResult<IEnumerable<ReviewReadDto>>> GetReviewsByIdAsync(Guid beerId);
+    Task<ServiceResult> CreateReviewAsync(CreateReviewDto createReviewDto);
+    Task<ServiceResult> DeleteReviewAsync(Guid reviewId, Guid whoRequested);
 }

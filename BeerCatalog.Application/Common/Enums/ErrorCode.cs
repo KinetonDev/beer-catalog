@@ -13,7 +13,6 @@ public enum ErrorCode
     EmailConfirmationFailed,
     NotAllowedToDeleteAccount,
     NotAllowedToUpdateAccount,
-    ValidationFailed,
 
     BeerNotFound = 2000,
     BeerIsAlreadyMarkedAsFavorite,
@@ -21,5 +20,9 @@ public enum ErrorCode
     BeerAlreadyExists,
     BeerNotCreated,
     
-    InvalidBase64 = 10000
+    ReviewNotFound = 3000,
+    NotAllowedToDeleteReview,
+    
+    InvalidBase64 = 10000,
+    ValidationFailed,
 }

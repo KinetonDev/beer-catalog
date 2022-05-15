@@ -146,7 +146,7 @@ public class BeerService : Service<BeerReadDto>, IBeerService
         return new (mappedBeers);
     }
 
-    public async Task<ServiceResult<IEnumerable<ReviewReadDto>>> GetReviewsById(Guid beerId)
+    public async Task<ServiceResult<IEnumerable<ReviewReadDto>>> GetReviewsByIdAsync(Guid beerId)
     {
         var beer = await _unitOfWork.BeersRepository.FindByIdAsync(beerId);
 
@@ -162,7 +162,7 @@ public class BeerService : Service<BeerReadDto>, IBeerService
         return new(mappedReviews);
     }
 
-    public async Task<ServiceResult> CreateReview(CreateReviewDto createReviewDto)
+    public async Task<ServiceResult> CreateReviewAsync(CreateReviewDto createReviewDto)
     {
         var beer = await _unitOfWork.BeersRepository.FindByIdAsync(createReviewDto.BeerId);
 
@@ -184,6 +184,27 @@ public class BeerService : Service<BeerReadDto>, IBeerService
         return new ServiceResult();
     }
 
+    public async Task<ServiceResult> DeleteReviewAsync(Guid reviewId, Guid whoRequested)
+    {
+        var review = await _unitOfWork.BeerReviewRepository.FindByIdAsync(reviewId);
+
+        if (review == null)
+        {
+            return new(ErrorCode.ReviewNotFound);
+        }
+
+        if (!await IsAllowedToOperateAsync(whoRequested, review.UserId))
+        {
+            return new(ErrorCode.NotAllowedToDeleteReview);
+        }
+        
+        await _unitOfWork.BeerReviewRepository.DeleteAsync(review);
+        
+        await _unitOfWork.SaveChangesAsync();
+
+        return new ServiceResult();
+    }
+
     private IEnumerable<BeerWithFavoriteMarkDto> AddFavoriteMark(IEnumerable<Beer> beers, User user)
     {
         return beers.Select(b =>
@@ -192,5 +213,22 @@ public class BeerService : Service<BeerReadDto>, IBeerService
             mappedBeer.IsFavorite = user.Favorites.Contains(b);
             return mappedBeer;
         });
+    }
+    
+    private async Task<bool> IsAllowedToOperateAsync(Guid whoRequested, Guid userToOperateId)
+    {
+        if (whoRequested == userToOperateId)
+        {
+            return true;
+        }
+        
+        var user = await _userManager.FindByIdAsync(whoRequested.ToString());
+
+        if (user == null)
+        {
+            return false;
+        }
+        
+        return await _userManager.IsInRoleAsync(user, UserRoles.Admin);
     }
 }

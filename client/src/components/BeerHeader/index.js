@@ -2,8 +2,16 @@ import React from 'react';
 import {Button, Typography} from "@mui/material";
 import useStyle from "./styles";
 import {FormattedMessage} from "react-intl";
+import {appRoles} from "../../constants";
 
-const BeerHeader = ({currentBeer, handleAddingFavorite, handleRemovingFavorite}) => {
+const BeerHeader = (
+    {
+        currentBeer,
+        handleAddingFavorite,
+        handleRemovingFavorite,
+        role,
+        handleExportReviewsAsPdf
+    }) => {
     const classes = useStyle();
 
     return (
@@ -20,29 +28,46 @@ const BeerHeader = ({currentBeer, handleAddingFavorite, handleRemovingFavorite})
                 >
                     {currentBeer.tagline}
                 </Typography>
-                {currentBeer.is_favorite ?
-                    <Button
-                        variant="contained"
-                        className={classes.beerFavoritesButton}
-                        onClick={handleRemovingFavorite}
-                    >
-                        <FormattedMessage
-                            description="Remove from favorites button"
-                            defaultMessage="REMOVE FROM FAVORITES"
-                            id="beerDetails.removeFavoriteButton"
-                        />
-                    </Button> :
-                    <Button
-                        variant="contained"
-                        className={classes.beerFavoritesButton}
-                        onClick={handleAddingFavorite}
-                    >
-                        <FormattedMessage
-                            description="Add to favorites button"
-                            defaultMessage="ADD TO FAVORITES"
-                            id="beerDetails.addFavoriteButton"
-                        />
-                    </Button>}
+                <div>
+                    {currentBeer.is_favorite ?
+                        <Button
+                            variant="contained"
+                            className={classes.beerFavoritesButton}
+                            onClick={handleRemovingFavorite}
+                        >
+                            <FormattedMessage
+                                description="Remove from favorites button"
+                                defaultMessage="REMOVE FROM FAVORITES"
+                                id="beerDetails.removeFavoriteButton"
+                            />
+                        </Button> :
+                        <Button
+                            variant="contained"
+                            className={classes.beerFavoritesButton}
+                            onClick={handleAddingFavorite}
+                        >
+                            <FormattedMessage
+                                description="Add to favorites button"
+                                defaultMessage="ADD TO FAVORITES"
+                                id="beerDetails.addFavoriteButton"
+                            />
+                        </Button>}
+                    {
+                        role.toLowerCase() === appRoles.admin && <Button
+                            variant={"contained"}
+                            style={{
+                                marginLeft: "20px"
+                            }}
+                            onClick={handleExportReviewsAsPdf}
+                        >
+                            <FormattedMessage
+                                description="Export reviews as pdf"
+                                defaultMessage="Export reviews as pdf"
+                                id="beerDetails.export_pdf"
+                            />
+                        </Button>
+                    }
+                </div>
                 <Typography
                     variant="body1"
                 >

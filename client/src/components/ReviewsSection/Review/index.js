@@ -1,8 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Avatar, Typography} from "@mui/material";
+import {Avatar, IconButton, Typography} from "@mui/material";
 import {Rating} from "@mui/lab";
 import useStyle from './styles'
+import {useSelector} from "react-redux";
+import {selectUserId, selectUserRole} from "../../../redux/selectors";
+import ClearIcon from '@mui/icons-material/Clear';
+import {appRoles} from "../../../constants";
 
 const Review = (
     {
@@ -10,9 +14,14 @@ const Review = (
         rating,
         avatarUrl,
         postedOn,
-        username
+        username,
+        userId,
+        handleDialogOpening,
+        id
     }
 ) => {
+    const currentUserId = useSelector(selectUserId);
+    const currentUserRole = useSelector(selectUserRole);
     const classes = useStyle();
 
     return (
@@ -27,7 +36,15 @@ const Review = (
                     &nbsp;
                     <Typography variant={"body2"}>{new Date(postedOn).toLocaleString()}</Typography>
                 </div>
-                <Typography>{description}</Typography>
+                <div className={classes.main}>
+                    <Typography>{description}</Typography>
+                    {(currentUserRole.toLowerCase() === appRoles.admin || currentUserId === userId) && <IconButton
+                        className={classes.deleteIcon}
+                        onClick={() => handleDialogOpening(id)}
+                    >
+                        <ClearIcon/>
+                    </IconButton>}
+                </div>
                 <Rating value={rating} readOnly max={10}/>
             </div>
         </div>

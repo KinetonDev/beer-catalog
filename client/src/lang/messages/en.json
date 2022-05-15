@@ -63,6 +63,7 @@
   "about.body" : "Simple application for real fans of craft beer.",
 
   "beerDetails.addFavoriteButton" : "ADD TO FAVORITES",
+  "beerDetails.export_pdf" : "EXPORT REVIEWS AS PDF",
   "beerDetails.removeFavoriteButton" : "REMOVE FROM FAVORITES",
   "beerDetails.properties.header" : "Properties",
   "beerDetails.properties.abv" : "ABV",

@@ -63,6 +63,7 @@
   "about.body" : "Простое приложение для реальных любителей крафтового пива.",
 
   "beerDetails.addFavoriteButton" : "ДОБАВИТЬ В ЛЮБИМОЕ",
+  "beerDetails.export_pdf" : "ЭКСПОРТИРОВАТЬ ОТЗЫВЫ В ПДФ",
   "beerDetails.removeFavoriteButton" : "УДАЛИТЬ ИЗ ЛЮБИМОГО",
   "beerDetails.properties.header" : "Свойства",
   "beerDetails.properties.abv" : "ABV",

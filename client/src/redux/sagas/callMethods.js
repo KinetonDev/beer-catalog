@@ -153,6 +153,18 @@ export function createReview(payload, accessToken) {
     )
 }
 
+export function deleteReview(payload, accessToken) {
+    return call(
+        authorizedRequest,
+        {
+            url: createUrl(`reviews/${payload.id}`),
+            method: DELETE
+        },
+        requestWithFetch,
+        accessToken
+    )
+}
+
 export function getMe(_, accessToken) {
     return call(
         authorizedRequest,
@@ -197,3 +209,16 @@ export function refreshToken() {
         requestWithFetch
     );
 }
+
+export function exportReviewsPdf(payload, accessToken) {
+    return call(
+        authorizedRequest,
+        {
+            url: createUrl(`admin/reviewsPdf/${payload.beerId}`),
+            method: GET
+        },
+        requestWithFetch,
+        accessToken
+    );
+}
+
